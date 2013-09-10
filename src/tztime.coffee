@@ -9,6 +9,8 @@
 # adds many useful and arguably saner API enhancements, and makes it
 # time-zone-aware.
 #
+# ::TOC::
+#
 
 ## UMD WRAPPER ##
 define = ((root, module) ->
