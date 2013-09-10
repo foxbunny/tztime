@@ -176,6 +176,14 @@ define (require) ->
     # here, but are present in the native Date object, behave the same way as
     # in the native Date object.
     #
+    # One of the primary differences between the native methods and the ones
+    # implemented in TzTime is the fact that setters all return the instance.
+    # This is not the case with the native implementation.
+    #
+    # The `UTC*` methods behave slightly differently under the hood because of
+    # TzTime's time-zone-awareness, but should provide the same API and
+    # expected behavior.
+    #
 
     # #### `#getTimezoneOffset()`
     #
@@ -206,21 +214,13 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
-    setFullYear: () ->
-      Date::setFullYear.apply this, arguments
-      this
-
-    # #### `#setFullMonth(month [, date])`
+    # #### `#setMonth(month [, date])`
     #
     # Sets the month, and optionally date. The arguments are the same as for
     # the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    setMonth: () ->
-      Date::setMonth.apply this, arguments
-      this
-
     # #### `#setDate(date)`
     #
     # Sets the date. The argument is the same as for the native Date
@@ -228,6 +228,53 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
-    setDate: () ->
-      Date::setDate.apply this, arguments
-      this
+    # #### `#setHours(hours [, minutes, seconds, milliseconds])`
+    #
+    # Sets the hours, and optionally minutes, seconds and milliseconds if
+    # specified. The argumetns are the same as for the native Date prototype's
+    # method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setMinutes(minutes [, seconds, milliseconds])`
+    #
+    # Set the minutes and optionally seconds and milliseconds. The arguments
+    # are the same as for the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setSeconds(seconds [, milliseconds])
+    #
+    # Set the seconds, and optionally milliseconds. The arguments are the same
+    # as for the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setMilliseconds(milliseconds)`
+    #
+    # Sets the milliseconds. The argument is the same as for the native Date
+    # prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    ((proto) ->
+      methods = [
+        'setFullYear'
+        'setMonth'
+        'setDate'
+        'setHours'
+        'setMinutes'
+        'setSeconds'
+        'setMilliseconds'
+        'setTime'
+      ]
+
+      for method in methods
+        proto[method] = ((method) ->
+          ## Create a closure for `method` so it doesn't get overrun by
+          ## iteration.
+          () ->
+            Date.prototype[method].apply this, arguments
+            this
+        ) method
+    ) TzTime.prototype

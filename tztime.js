@@ -125,20 +125,21 @@ define(function(require) {
       return this.timezone = -v;
     };
 
-    TzTime.prototype.setFullYear = function() {
-      Date.prototype.setFullYear.apply(this, arguments);
-      return this;
-    };
-
-    TzTime.prototype.setMonth = function() {
-      Date.prototype.setMonth.apply(this, arguments);
-      return this;
-    };
-
-    TzTime.prototype.setDate = function() {
-      Date.prototype.setDate.apply(this, arguments);
-      return this;
-    };
+    (function(proto) {
+      var method, methods, _i, _len, _results;
+      methods = ['setFullYear', 'setMonth', 'setDate', 'setHours', 'setMinutes', 'setSeconds', 'setMilliseconds', 'setTime'];
+      _results = [];
+      for (_i = 0, _len = methods.length; _i < _len; _i++) {
+        method = methods[_i];
+        _results.push(proto[method] = (function(method) {
+          return function() {
+            Date.prototype[method].apply(this, arguments);
+            return this;
+          };
+        })(method));
+      }
+      return _results;
+    })(TzTime.prototype);
 
     return TzTime;
 

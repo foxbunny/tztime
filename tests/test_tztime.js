@@ -115,6 +115,91 @@ describe('TzTime', function() {
       return assert.equal(d.getDate(), 12);
     });
   });
+  describe('#setMonth()', function() {
+    it('should set month and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d1 = d.setMonth(9);
+      assert.equal(d.getMonth(), 9);
+      return assert.equal(d1, d);
+    });
+    return it('should set both month and date if passed both', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.setMonth(9, 12);
+      assert.equal(d.getMonth(), 9);
+      return assert.equal(d.getDate(), 12);
+    });
+  });
+  describe('#setDate()', function() {
+    return it('should set the date and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d1 = d.setDate(2);
+      assert.equal(d.getDate(), 2);
+      return assert.equal(d1, d);
+    });
+  });
+  describe('#setHours()', function() {
+    it('should set hours and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d1 = d.setHours(2);
+      assert.equal(d.getHours(), 2);
+      return assert.equal(d1, d);
+    });
+    return it('should set minutes, seconds, and milliseconds if given', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 500);
+      d.setHours(2, 2, 2, 2);
+      assert.equal(d.getHours(), 2);
+      assert.equal(d.getMinutes(), 2);
+      assert.equal(d.getSeconds(), 2);
+      return assert.equal(d.getMilliseconds(), 2);
+    });
+  });
+  describe('#setMinutes()', function() {
+    it('should set minutes and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d1 = d.setMinutes(2);
+      assert.equal(d.getMinutes(), 2);
+      return assert.equal(d1, d);
+    });
+    return it('should set seconds and milliseconds if given', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 500);
+      d.setMinutes(2, 2, 2);
+      assert.equal(d.getMinutes(), 2);
+      assert.equal(d.getSeconds(), 2);
+      return assert.equal(d.getMilliseconds(), 2);
+    });
+  });
+  describe('#setSeconds()', function() {
+    it('should set seconds and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d1 = d.setSeconds(2);
+      assert.equal(d.getSeconds(), 2);
+      return assert.equal(d1, d);
+    });
+    return it('should set milliseconds if given', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 500);
+      d.setSeconds(2, 2);
+      assert.equal(d.getSeconds(), 2);
+      return assert.equal(d.getMilliseconds(), 2);
+    });
+  });
+  describe('#setMilliseconds()', function() {
+    return it('should set milliseconds and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20, 500);
+      d1 = d.setMilliseconds(2);
+      assert.equal(d.getMilliseconds(), 2);
+      return assert.equal(d1, d);
+    });
+  });
   describe('#year', function() {
     it('should set year', function() {
       var d;
@@ -136,22 +221,6 @@ describe('TzTime', function() {
       y2 = d.year;
       assert.equal(y1, 2011);
       return assert.equal(y2, 2015);
-    });
-  });
-  describe('#setMonth()', function() {
-    it('should set month and return instance', function() {
-      var d, d1;
-      d = new TzTime(2013, 8, 1, 8, 20);
-      d1 = d.setMonth(9);
-      assert.equal(d.getMonth(), 9);
-      return assert.equal(d1, d);
-    });
-    return it('should set both month and date if passed both', function() {
-      var d;
-      d = new TzTime(2013, 8, 1, 8, 20);
-      d.setMonth(9, 12);
-      assert.equal(d.getMonth(), 9);
-      return assert.equal(d.getDate(), 12);
     });
   });
   describe('#month', function() {
@@ -185,15 +254,6 @@ describe('TzTime', function() {
       y2 = d.year;
       assert.equal(y1, 2012);
       return assert.equal(y2, 2014);
-    });
-  });
-  describe('#setDate()', function() {
-    return it('should set the date and return instance', function() {
-      var d, d1;
-      d = new TzTime(2013, 8, 1, 8, 20);
-      d1 = d.setDate(2);
-      assert.equal(d.getDate(), 2);
-      return assert.equal(d1, d);
     });
   });
   return describe('#date', function() {

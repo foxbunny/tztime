@@ -92,6 +92,75 @@ describe 'TzTime', () ->
       assert.equal d.getMonth(), 2
       assert.equal d.getDate(), 12
 
+  describe '#setMonth()', () ->
+    it 'should set month and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setMonth 9
+      assert.equal d.getMonth(), 9
+      assert.equal d1, d
+
+    it 'should set both month and date if passed both', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.setMonth 9, 12
+      assert.equal d.getMonth(), 9
+      assert.equal d.getDate(), 12
+
+  describe '#setDate()', () ->
+    it 'should set the date and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setDate 2
+      assert.equal d.getDate(), 2
+      assert.equal d1, d
+
+  describe '#setHours()', () ->
+    it 'should set hours and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setHours 2
+      assert.equal d.getHours(), 2
+      assert.equal d1, d
+
+    it 'should set minutes, seconds, and milliseconds if given', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d.setHours 2, 2, 2, 2
+      assert.equal d.getHours(), 2
+      assert.equal d.getMinutes(), 2
+      assert.equal d.getSeconds(), 2
+      assert.equal d.getMilliseconds(), 2
+
+  describe '#setMinutes()', () ->
+    it 'should set minutes and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setMinutes 2
+      assert.equal d.getMinutes(), 2
+      assert.equal d1, d
+
+    it 'should set seconds and milliseconds if given', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d.setMinutes 2, 2, 2
+      assert.equal d.getMinutes(), 2
+      assert.equal d.getSeconds(), 2
+      assert.equal d.getMilliseconds(), 2
+
+  describe '#setSeconds()', () ->
+    it 'should set seconds and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setSeconds 2
+      assert.equal d.getSeconds(), 2
+      assert.equal d1, d
+
+    it 'should set milliseconds if given', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d.setSeconds 2, 2
+      assert.equal d.getSeconds(), 2
+      assert.equal d.getMilliseconds(), 2
+
+  describe '#setMilliseconds()', () ->
+    it 'should set milliseconds and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d1 = d.setMilliseconds 2
+      assert.equal d.getMilliseconds(), 2
+      assert.equal d1, d
+
   describe '#year', () ->
     it 'should set year', () ->
       d = new TzTime 2013, 8, 1, 8, 20
@@ -110,19 +179,6 @@ describe 'TzTime', () ->
       y2 = d.year
       assert.equal y1, 2011
       assert.equal y2, 2015
-
-  describe '#setMonth()', () ->
-    it 'should set month and return instance', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
-      d1 = d.setMonth 9
-      assert.equal d.getMonth(), 9
-      assert.equal d1, d
-
-    it 'should set both month and date if passed both', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
-      d.setMonth 9, 12
-      assert.equal d.getMonth(), 9
-      assert.equal d.getDate(), 12
 
   describe '#month', () ->
     it 'should set month', () ->
@@ -151,13 +207,6 @@ describe 'TzTime', () ->
       y2 = d.year
       assert.equal y1, 2012
       assert.equal y2, 2014
-
-  describe '#setDate()', () ->
-    it 'should set the date and return instance', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
-      d1 = d.setDate 2
-      assert.equal d.getDate(), 2
-      assert.equal d1, d
 
   describe '#date', () ->
     it 'should set the date', () ->
