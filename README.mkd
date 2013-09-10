@@ -1,4 +1,12 @@
-# Create library template
+# TzTime
 
-This is a `volo create` template for CoffeeScript libraries.
+Time-zone-aware drop-in Date object replacement for JavaScript.
+
+This libary is still in eary phases of development, and most things are not yet
+implemented. Please be patient.
+
+## API documentation
+
+API documentation is available in the [doc directory](doc/tztime.mkd) in
+Markdown format.
 
