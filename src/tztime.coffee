@@ -119,10 +119,7 @@ define (require) ->
 
     # #### `#timezone`
     #
-    # This attribute is an accessor for the private `#__timezone__` property.
-    # It can be read and assigned normally and it correctly shifts the time of
-    # the underlying object. The value of the attribute is an UTC offset in
-    # minutes.
+    # The time zone offset in integer minutes from UTC.
     #
     # Unlike the native `#getTimezoneOffset()` method, these values are
     # calculated as positive integers from UTC towards East, and negative
@@ -146,6 +143,14 @@ define (require) ->
         @setMinutes @getMinutes() + diff
         @__timezone__ = v
         v
+
+    # #### `#year`
+    #
+    # Full integer year.
+    #
+    property 'year',
+      get: () -> @getFullYear()
+      set: (v) -> @setFullYear v
 
     # ### Methods
     #

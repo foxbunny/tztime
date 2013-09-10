@@ -92,3 +92,24 @@ describe 'TzTime', () ->
       assert.equal d.getMonth(), 2
       assert.equal d.getDate(), 12
 
+  describe '#year', () ->
+    it 'should set year', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.year = 2020
+      assert.equal d.getFullYear(), 2020
+
+    it 'should return year', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      assert.equal d.year, 2013
+
+    it 'can be used with -= and += operators', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.year -= 2
+      y1 = d.getFullYear()
+      d.year += 4
+      y2 = d.getFullYear()
+      assert.equal y1, 2011
+      assert.equal y2, 2015
+
+
+

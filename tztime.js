@@ -91,6 +91,15 @@ define(function(require) {
       }
     });
 
+    property('year', {
+      get: function() {
+        return this.getFullYear();
+      },
+      set: function(v) {
+        return this.setFullYear(v);
+      }
+    });
+
     TzTime.prototype.getTimezoneOffset = function() {
       return -this.timezone;
     };

@@ -98,7 +98,7 @@ describe('TzTime', function() {
       return assert.equal(d.timezone, -12);
     });
   });
-  return describe('#setFullYear()', function() {
+  describe('#setFullYear()', function() {
     it('should set the year and return instance', function() {
       var d, d1;
       d = new TzTime(2013, 8, 1, 8, 20);
@@ -113,6 +113,29 @@ describe('TzTime', function() {
       assert.equal(d.getFullYear(), 2015);
       assert.equal(d.getMonth(), 2);
       return assert.equal(d.getDate(), 12);
+    });
+  });
+  return describe('#year', function() {
+    it('should set year', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.year = 2020;
+      return assert.equal(d.getFullYear(), 2020);
+    });
+    it('should return year', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      return assert.equal(d.year, 2013);
+    });
+    return it('can be used with -= and += operators', function() {
+      var d, y1, y2;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.year -= 2;
+      y1 = d.getFullYear();
+      d.year += 4;
+      y2 = d.getFullYear();
+      assert.equal(y1, 2011);
+      return assert.equal(y2, 2015);
     });
   });
 });
