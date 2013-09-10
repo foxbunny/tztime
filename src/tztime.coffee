@@ -156,11 +156,11 @@ define (require) ->
       get: () -> @getDate()
       set: (v) -> @setDate v
 
-    # #### `#hour`
+    # #### `#hours`
     #
     # Hour in 24-hour format. The value is an integer between 0 and 23.
     #
-    property 'hour',
+    property 'hours',
       get: () -> @getHours()
       set: (v) -> @setHours v
 

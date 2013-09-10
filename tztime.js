@@ -106,7 +106,7 @@ define(function(require) {
       }
     });
 
-    property('hour', {
+    property('hours', {
       get: function() {
         return this.getHours();
       },

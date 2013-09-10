@@ -248,33 +248,33 @@ describe 'TzTime', () ->
   describe '#hour', () ->
     it 'should set the hour', () ->
       d = new TzTime 2013, 8, 1, 8, 20
-      d.hour = 2
+      d.hours = 2
       assert.equal d.getHours(), 2
 
     it 'should return hour', () ->
       d = new TzTime 2013, 8, 1, 8, 20
-      assert.equal d.hour, 8
+      assert.equal d.hours, 8
 
     it 'can be used with -= and += operators', () ->
       d = new TzTime 2013, 8, 1, 8, 20
-      d.hour -= 4
-      h1 = d.hour
-      d.hour += 12
-      h2 = d.hour
+      d.hours -= 4
+      h1 = d.hours
+      d.hours += 12
+      h2 = d.hours
       assert.equal h1, 4
       assert.equal h2, 16
 
     it 'should cross date boundaries', () ->
       d = new TzTime 2013, 8, 1, 8, 20
-      d.hour += 20
+      d.hours += 20
       assert.equal d.date, 2
 
     it 'should cross month boundaries', () ->
       d = new TzTime 2013, 8, 1, 8, 20
-      d.hour += 24 * 31
+      d.hours += 24 * 31
       assert.equal d.month, 9
 
     it 'should cross year boundaries', () ->
       d = new TzTime 2013, 8, 1, 8, 20
-      d.hour += 24 * 365
+      d.hours += 24 * 365
       assert.equal d.year, 2014
