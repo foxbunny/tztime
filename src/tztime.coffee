@@ -134,7 +134,7 @@ define (require) ->
 
     # #### `#year`
     #
-    # Full integer year. The value is an integer.
+    # Full integer year in instance's time zone. The value is an integer.
     #
     property 'year',
       get: () -> @getFullYear()
@@ -142,7 +142,7 @@ define (require) ->
 
     # #### `#month`
     #
-    # Month. The value is 0-index where 0 is January.
+    # Month in instance's time zone. The value is 0-index where 0 is January.
     #
     property 'month',
       get: () -> @getMonth()
@@ -150,7 +150,7 @@ define (require) ->
 
     # #### `#date`
     #
-    # Date. The value is an integer between 1 and 31.
+    # Date in instance's time zone. The value is an integer between 1 and 31.
     #
     property 'date',
       get: () -> @getDate()
@@ -158,7 +158,8 @@ define (require) ->
 
     # #### `#hours`
     #
-    # Hour in 24-hour format. The value is an integer between 0 and 23.
+    # Hours in 24-hour format in instance's time zone. The value is an integer
+    # between 0 and 23.
     #
     property 'hours',
       get: () -> @getHours()
