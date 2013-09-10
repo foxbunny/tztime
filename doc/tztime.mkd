@@ -12,9 +12,19 @@ time-zone-aware.
      + [`#year`](#year)
      + [`#month`](#month)
      + [`#date`](#date)
+     + [`#hours`](#hours)
+     + [`#minutes`](#minutes)
+     + [`#seconds`](#seconds)
    - [Methods](#methods)
      + [`#getTimezoneOffset()`](#gettimezoneoffset)
      + [`#setTimezoneOffset(v)`](#settimezoneoffset-v)
+     + [`#getFullYear()`](#getfullyear)
+     + [`#getMonth()`](#getmonth)
+     + [`#getDate()`](#getdate)
+     + [`#getHours()`](#gethours)
+     + [`#getMinutes()`](#getminutes)
+     + [`#getSeconds()`](#getseconds)
+     + [`#getMilliseconds()`](#getmilliseconds)
      + [`#setFullYear(year [, month, date])`](#setfullyear-year-month-date)
      + [`#setMonth(month [, date])`](#setmonth-month-date)
      + [`#setDate(date)`](#setdate-date)
@@ -97,15 +107,28 @@ offset in reverse, if you need to rely on such behavior.
 
 #### `#year` <a name="year"></a>
 
-Full integer year.
+Full integer year in instance's time zone. The value is an integer.
 
 #### `#month` <a name="month"></a>
 
-Month. The value is 0-index where 0 is January.
+Month in instance's time zone. The value is 0-index where 0 is January.
 
 #### `#date` <a name="date"></a>
 
-Date. The value is an integer between 1 and 31.
+Date in instance's time zone. The value is an integer between 1 and 31.
+
+#### `#hours` <a name="hours"></a>
+
+Hours in 24-hour format in instance's time zone. The value is an integer
+between 0 and 23.
+
+#### `#minutes` <a name="minutes"></a>
+
+Minutes in instace's time zone. The value is an integer between 0 and 59.
+
+#### `#seconds` <a name="seconds"></a>
+
+Seconds in instance's time zome. The value is an integer between 0 and 59.
 
 ### Methods <a name="methods"></a>
 
@@ -137,6 +160,35 @@ for the sake of compatibility with `#getTimezoneOffset()` but you are generally
 recommended to use the `#timezone` attribute instead.
 
 `v` should be a reverse offset from UTC in integer minutes.
+
+#### `#getFullYear()` <a name="getfullyear"></a>
+
+Returns the full integer year with century in the instance's time zone.
+
+#### `#getMonth()` <a name="getmonth"></a>
+
+Returns the 0-indexed integer month. 0 is January. The return value is in the
+instance's time zone.
+
+#### `#getDate()` <a name="getdate"></a>
+
+Returns the integer date (1-31) in the instance's time zone.
+
+#### `#getHours()` <a name="gethours"></a>
+
+Returns the 24-hour format hour (0-23) in the instance's time zone.
+
+#### `#getMinutes()` <a name="getminutes"></a>
+
+Returns the minutes (0-59) in the instance's time zone.
+
+#### `#getSeconds()` <a name="getseconds"></a>
+
+Returns the seconds (0-59) in the instance's time zone.
+
+#### `#getMilliseconds()` <a name="getmilliseconds"></a>
+
+Returns the milliseconds (0-999) in the instance's time zone.
 
 #### `#setFullYear(year [, month, date])` <a name="setfullyear-year-month-date"></a>
 
