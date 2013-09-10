@@ -13,7 +13,7 @@
 #
 
 ## UMD WRAPPER ##
-define = ((root, module) ->
+define = ((root) ->
   if typeof root.define is 'function' and root.define.amd
     root.define
   else
@@ -21,7 +21,7 @@ define = ((root, module) ->
       (factory) -> module.exports = factory()
     else
       (factory) -> root.TzTime = factory()
-) this, module
+) this
 
 
 define (require) ->

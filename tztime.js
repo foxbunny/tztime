@@ -6,7 +6,7 @@
 
 var define;
 
-define = (function(root, module) {
+define = (function(root) {
   if (typeof root.define === 'function' && root.define.amd) {
     return root.define;
   } else {
@@ -20,7 +20,7 @@ define = (function(root, module) {
       };
     }
   }
-})(this, module);
+})(this);
 
 define(function(require) {
   var TzTime;
