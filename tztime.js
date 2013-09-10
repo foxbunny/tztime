@@ -25,7 +25,7 @@ define = (function(root, module) {
 define(function(require) {
   var TzTime;
   return TzTime = (function() {
-    TzTime.prototype = Date.prototype;
+    var D;
 
     function TzTime(yr, mo, dy, hr, mi, se, ms) {
       var instance;
@@ -54,8 +54,16 @@ define(function(require) {
         default:
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
+      instance.constructor = TzTime;
+      instance.__proto__ = TzTime.prototype;
       return instance;
     }
+
+    D = function() {};
+
+    D.prototype = Date.prototype;
+
+    TzTime.prototype = new D();
 
     return TzTime;
 

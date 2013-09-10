@@ -29,9 +29,6 @@ define (require) ->
   # Crates a JavaScript Date object with enhanced API and time zone awareness.
   #
   class TzTime
-    # TzTime constructor inherits from the native Date prototype.
-    #
-    TzTime.prototype = Date.prototype
 
     # ### Constructor
     #
@@ -69,5 +66,15 @@ define (require) ->
         else
           instance = new Date yr, mo, dy, hr, mi, se, ms
 
+      ## Reset the constructor and prototype chain
+      instance.constructor = TzTime
+      instance.__proto__ = TzTime.prototype
+
       return instance
+
+    # TzTime constructor inherits from the native Date prototype.
+    #
+    D = () ->
+    D.prototype = Date.prototype
+    TzTime.prototype = new D()
 
