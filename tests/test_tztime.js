@@ -11,7 +11,7 @@ if (typeof require !== "undefined" && require !== null) {
 assert = chai.assert;
 
 describe('TzTime', function() {
-  return describe('constrcutor', function() {
+  describe('constrcutor', function() {
     it('should be identical to Date constructor', function() {
       var d1, d2;
       d1 = new TzTime(2013, 8, 1);
@@ -38,6 +38,64 @@ describe('TzTime', function() {
       d1 = new TzTime(2013, 8, 1);
       d2 = TzTime(2013, 8, 1);
       return assert.equal(d1.getTime(), d2.getTime());
+    });
+  });
+  describe('#timezone', function() {
+    it('is a number', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      return assert.equal(typeof d.timezone, 'number');
+    });
+    it('should be opposite of #getTimezoneOffset()', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      return assert.equal(d.getTimezoneOffset() + d.timezone, 0);
+    });
+    it('can be set by assigning', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.timezone = 12;
+      assert.equal(d.getTimezoneOffset() + d.timezone, 0);
+      return assert.equal(d.getTimezoneOffset(), -12);
+    });
+    it('should shift the time when set', function() {
+      var d, h1, h2;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.timezone = 0;
+      h1 = d.getHours();
+      d.timezone = 60;
+      h2 = d.getHours();
+      return assert.equal(h1 + 1, h2);
+    });
+    it('will convert floats to integers', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.timezone = 120.4;
+      return assert.equal(d.timezone, 120);
+    });
+    return it('can be set using -= and += operators', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.timezone = 0;
+      d.timezone += 12;
+      return assert.equal(d.timezone, 12);
+    });
+  });
+  describe('#getTimezoneOffset()', function() {
+    return it('should return the opposite of time zone offset', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.timezone = 12;
+      return assert.equal(d.getTimezoneOffset(), -12);
+    });
+  });
+  return describe('#setTimezoneOffset()', function() {
+    return it('should set the timezone using opposite of offset', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.timezone = 0;
+      d.setTimezoneOffset(12);
+      return assert.equal(d.timezone, -12);
     });
   });
 });

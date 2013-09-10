@@ -25,7 +25,11 @@ define = (function(root, module) {
 define(function(require) {
   var TzTime;
   return TzTime = (function() {
-    var D;
+    var D, property;
+
+    property = function(name, descriptor) {
+      return Object.defineProperty(TzTime.prototype, name, descriptor);
+    };
 
     function TzTime(yr, mo, dy, hr, mi, se, ms) {
       var instance;
@@ -54,6 +58,7 @@ define(function(require) {
         default:
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
+      instance.__timezone__ = -instance.getTimezoneOffset();
       instance.constructor = TzTime;
       instance.__proto__ = TzTime.prototype;
       return instance;
@@ -64,6 +69,33 @@ define(function(require) {
     D.prototype = Date.prototype;
 
     TzTime.prototype = new D();
+
+    property('timezone', {
+      get: function() {
+        return this.__timezone__;
+      },
+      set: function(v) {
+        var diff;
+        v = parseInt(v);
+        if (isNaN(v)) {
+          throw new TypeError("Time zone offset must be an integer.");
+        }
+        if ((-720 > v && v > 720)) {
+          throw new TypeError("Time zone offset out of bounds.");
+        }
+        diff = this.__timezone__ + v;
+        this.setMinutes(this.getMinutes() + diff);
+        return this.__timezone__ = v;
+      }
+    });
+
+    TzTime.prototype.getTimezoneOffset = function() {
+      return -this.timezone;
+    };
+
+    TzTime.prototype.setTimezoneOffset = function(v) {
+      return this.timezone = -v;
+    };
 
     return TzTime;
 
