@@ -11,7 +11,7 @@ if (typeof require !== "undefined" && require !== null) {
 assert = chai.assert;
 
 describe('TzTime', function() {
-  describe('constrcutor', function() {
+  describe('constructor', function() {
     it('should be identical to Date constructor', function() {
       var d1, d2;
       d1 = new TzTime(2013, 8, 1);

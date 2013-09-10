@@ -8,7 +8,7 @@ assert = chai.assert
 
 describe 'TzTime', () ->
 
-  describe 'constrcutor', () ->
+  describe 'constructor', () ->
     it 'should be identical to Date constructor', () ->
       d1 = new TzTime 2013, 8, 1
       d2 = new Date 2013, 8, 1
