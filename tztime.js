@@ -72,17 +72,10 @@ define(function(require) {
 
     property('timezone', {
       get: function() {
-        return this.__timezone__;
+        return -this.getTimezoneOffset();
       },
       set: function(v) {
-        v = parseInt(v);
-        if (isNaN(v)) {
-          throw new TypeError("Time zone offset must be an integer.");
-        }
-        if ((-720 > v && v > 720)) {
-          throw new TypeError("Time zone offset out of bounds.");
-        }
-        return this.__timezone__ = v;
+        return this.setTimezoneOffset(-v);
       }
     });
 
@@ -123,11 +116,18 @@ define(function(require) {
     });
 
     TzTime.prototype.getTimezoneOffset = function() {
-      return -this.timezone;
+      return -this.__timezone__;
     };
 
     TzTime.prototype.setTimezoneOffset = function(v) {
-      return this.timezone = -v;
+      v = parseInt(v);
+      if (isNaN(v)) {
+        throw new TypeError("Time zone offset must be an integer.");
+      }
+      if ((-720 > v && v > 720)) {
+        throw new TypeError("Time zone offset out of bounds.");
+      }
+      return this.__timezone__ = -v;
     };
 
     (function(proto) {

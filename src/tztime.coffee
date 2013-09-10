@@ -129,17 +129,8 @@ define (require) ->
     # the offset in reverse, if you need to rely on such behavior.
     #
     property 'timezone',
-      get: () -> @__timezone__
-      set: (v) ->
-        ## Note that the exceptions thrown here are not in the tests. This is
-        ## bacause Chai does not support exception assertions when we are using
-        ## accessors.
-        v = parseInt v
-        if isNaN v
-          throw new TypeError "Time zone offset must be an integer."
-        if -720 > v > 720
-          throw new TypeError "Time zone offset out of bounds."
-        @__timezone__ = v
+      get: () -> -@getTimezoneOffset()
+      set: (v) -> @setTimezoneOffset -v
 
     # #### `#year`
     #
@@ -198,7 +189,7 @@ define (require) ->
     # opposite of the actual UTC offset in integer minutes.
     #
     getTimezoneOffset: () ->
-      -@timezone
+      -@__timezone__
 
     # #### `#setTimezoneOffset(v)`
     #
@@ -210,8 +201,45 @@ define (require) ->
     # `v` should be a reverse offset from UTC in integer minutes.
     #
     setTimezoneOffset: (v) ->
-      @timezone = -v
+      ## Note that the exceptions thrown here are not in the tests. This is
+      ## bacause Chai does not support exception assertions when we are using
+      ## accessors.
+      v = parseInt v
+      if isNaN v
+        throw new TypeError "Time zone offset must be an integer."
+      if -720 > v > 720
+        throw new TypeError "Time zone offset out of bounds."
+      @__timezone__ = -v
 
+    # #### `#getFullYear()`
+    #
+    # Returns the full integer year with century in the instance's time zone.
+    #
+    # #### `#getMonth()`
+    #
+    # Returns the 0-indexed integer month. 0 is January. The return value is in
+    # the instance's time zone.
+    #
+    # #### `#getDate()`
+    #
+    # Returns the integer date (1-31) in the instance's time zone.
+    #
+    # #### `#getHours()`
+    #
+    # Returns the 24-hour format hour (0-23) in the instance's time zone.
+    #
+    # #### `#getMinutes()`
+    #
+    # Returns the minutes (0-59) in the instance's time zone.
+    #
+    # #### `#getSeconds()`
+    #
+    # Returns the seconds (0-59) in the instance's time zone.
+    #
+    # #### `#getMilliseconds()`
+    #
+    # Returns the milliseconds (0-999) in the instance's time zone.
+    #
     # #### `#setFullYear(year [, month, date])`
     #
     # Sets the year, and optionally month and date. The arguments are the same
