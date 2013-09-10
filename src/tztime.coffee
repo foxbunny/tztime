@@ -102,7 +102,22 @@ define (require) ->
     D.prototype = Date.prototype
     TzTime.prototype = new D()
 
-    # ### `#timezone`
+    # ### Attributes
+    #
+    # The TzTime prototype provides a number of methods that can be used to
+    # manipulate the objects with greater ease than with native Date methods.
+    # This is particularly true when incrementing or decrementing values. For
+    # example:
+    #
+    #     var d = new TzTime();
+    #     d.setHours(d.getHours() + 20);
+    #     d.hour += 12;
+    #
+    # Most of the attributes are accessors that call methods to set or get the
+    # values.
+    #
+
+    # #### `#timezone`
     #
     # This attribute is an accessor for the private `#__timezone__` property.
     # It can be read and assigned normally and it correctly shifts the time of
@@ -130,8 +145,18 @@ define (require) ->
         diff = @__timezone__ + v
         @setMinutes @getMinutes() + diff
         @__timezone__ = v
+        v
 
-    # ## `#getTimezoneOffset()`
+    # ### Methods
+    #
+    # The methods of the TzTime prototype are specifically designed to address
+    # either time-zone-awareness issues, or simply provide a somewhat better
+    # API over those of the native Date objects. Methods that are not listed
+    # here, but are present in the native Date object, behave the same way as
+    # in the native Date object.
+    #
+
+    # #### `#getTimezoneOffset()`
     #
     # This method is different from the native implementation. It returns the
     # actual time zone set on the TzTime instance instead of the local time
@@ -141,7 +166,7 @@ define (require) ->
     getTimezoneOffset: () ->
       -@timezone
 
-    # ## `setTimezoneOffset()`
+    # #### `setTimezoneOffset()`
     #
     # Sets the time zone using the reverse offset. This is a counterpart of
     # `#getTimezoneOffset()` that is missing in the native implementation. It
@@ -150,3 +175,4 @@ define (require) ->
     #
     setTimezoneOffset: (v) ->
       @timezone = -v
+

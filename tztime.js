@@ -85,7 +85,8 @@ define(function(require) {
         }
         diff = this.__timezone__ + v;
         this.setMinutes(this.getMinutes() + diff);
-        return this.__timezone__ = v;
+        this.__timezone__ = v;
+        return v;
       }
     });
 
