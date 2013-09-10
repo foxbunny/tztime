@@ -152,6 +152,14 @@ define (require) ->
       get: () -> @getFullYear()
       set: (v) -> @setFullYear v
 
+    # #### `#month`
+    #
+    # Month. The value is 0-index where 0 is January.
+    #
+    property 'month',
+      get: () -> @getMonth()
+      set: (v) -> @setMonth v
+
     # ### Methods
     #
     # The methods of the TzTime prototype are specifically designed to address

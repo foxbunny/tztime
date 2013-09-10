@@ -99,6 +99,15 @@ define(function(require) {
       }
     });
 
+    property('month', {
+      get: function() {
+        return this.getMonth();
+      },
+      set: function(v) {
+        return this.setMonth(v);
+      }
+    });
+
     TzTime.prototype.getTimezoneOffset = function() {
       return -this.timezone;
     };

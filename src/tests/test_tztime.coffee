@@ -105,9 +105,9 @@ describe 'TzTime', () ->
     it 'can be used with -= and += operators', () ->
       d = new TzTime 2013, 8, 1, 8, 20
       d.year -= 2
-      y1 = d.getFullYear()
+      y1 = d.year
       d.year += 4
-      y2 = d.getFullYear()
+      y2 = d.year
       assert.equal y1, 2011
       assert.equal y2, 2015
 
@@ -123,4 +123,32 @@ describe 'TzTime', () ->
       d.setMonth 9, 12
       assert.equal d.getMonth(), 9
       assert.equal d.getDate(), 12
+
+  describe '#month', () ->
+    it 'should set month', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.month = 9
+      assert.equal d.getMonth(), 9
+
+    it 'should return month', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      assert.equal d.month, 8
+
+    it 'can be used with -= and += operators', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.month -= 2
+      m1 = d.month
+      d.month += 4
+      m2 = d.month
+      assert.equal m1, 6
+      assert.equal m2, 10
+
+    it 'should adjust the year when incremented or decremented', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.month -= 12
+      y1 = d.year
+      d.month += 24
+      y2 = d.year
+      assert.equal y1, 2012
+      assert.equal y2, 2014
 

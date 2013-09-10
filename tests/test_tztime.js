@@ -131,14 +131,14 @@ describe('TzTime', function() {
       var d, y1, y2;
       d = new TzTime(2013, 8, 1, 8, 20);
       d.year -= 2;
-      y1 = d.getFullYear();
+      y1 = d.year;
       d.year += 4;
-      y2 = d.getFullYear();
+      y2 = d.year;
       assert.equal(y1, 2011);
       return assert.equal(y2, 2015);
     });
   });
-  return describe('#setMonth()', function() {
+  describe('#setMonth()', function() {
     it('should set month and return instance', function() {
       var d, d1;
       d = new TzTime(2013, 8, 1, 8, 20);
@@ -152,6 +152,39 @@ describe('TzTime', function() {
       d.setMonth(9, 12);
       assert.equal(d.getMonth(), 9);
       return assert.equal(d.getDate(), 12);
+    });
+  });
+  return describe('#month', function() {
+    it('should set month', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.month = 9;
+      return assert.equal(d.getMonth(), 9);
+    });
+    it('should return month', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      return assert.equal(d.month, 8);
+    });
+    it('can be used with -= and += operators', function() {
+      var d, m1, m2;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.month -= 2;
+      m1 = d.month;
+      d.month += 4;
+      m2 = d.month;
+      assert.equal(m1, 6);
+      return assert.equal(m2, 10);
+    });
+    return it('should adjust the year when incremented or decremented', function() {
+      var d, y1, y2;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.month -= 12;
+      y1 = d.year;
+      d.month += 24;
+      y2 = d.year;
+      assert.equal(y1, 2012);
+      return assert.equal(y2, 2014);
     });
   });
 });
