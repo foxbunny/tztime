@@ -11,11 +11,13 @@ time-zone-aware.
      + [`#timezone`](#timezone)
      + [`#year`](#year)
      + [`#month`](#month)
+     + [`#date`](#date)
    - [Methods](#methods)
      + [`#getTimezoneOffset()`](#gettimezoneoffset)
      + [`#setTimezoneOffset(v)`](#settimezoneoffset-v)
      + [`#setFullYear(year [, month, date])`](#setfullyear-year-month-date)
      + [`#setFullMonth(month [, date])`](#setfullmonth-month-date)
+     + [`#setDate(date)`](#setdate-date)
 
 
 ## `TzTime` <a name="tztime"></a>
@@ -97,6 +99,10 @@ Full integer year.
 
 Month. The value is 0-index where 0 is January.
 
+#### `#date` <a name="date"></a>
+
+Date. The value is an integer between 1 and 31.
+
 ### Methods <a name="methods"></a>
 
 The methods of the TzTime prototype are specifically designed to address either
@@ -131,5 +137,12 @@ The return value of this method is the TzTime object.
 
 Sets the month, and optionally date. The arguments are the same as for the
 native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### `#setDate(date)` <a name="setdate-date"></a>
+
+Sets the date. The argument is the same as for the native Date prototype's
+method.
 
 The return value of this method is the TzTime object.
