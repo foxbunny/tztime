@@ -190,7 +190,18 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
-    setFullYear: (args...) ->
-      Date::setFullYear.apply this, args
+    setFullYear: () ->
+      Date::setFullYear.apply this, arguments
+      this
+
+    # #### `#setFullMonth(month [, date])`
+    #
+    # Sets the month, and optionally date. The arguments are the same as for
+    # the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    setMonth: () ->
+      Date::setMonth.apply this, arguments
       this
 

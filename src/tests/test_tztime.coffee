@@ -111,5 +111,16 @@ describe 'TzTime', () ->
       assert.equal y1, 2011
       assert.equal y2, 2015
 
+  describe '#setMonth()', () ->
+    it 'should set month and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setMonth 9
+      assert.equal d.getMonth(), 9
+      assert.equal d1, d
 
+    it 'should set both month and date if passed both', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.setMonth 9, 12
+      assert.equal d.getMonth(), 9
+      assert.equal d.getDate(), 12
 

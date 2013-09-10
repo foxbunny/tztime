@@ -4,8 +4,7 @@
 @license LICENSE
 */
 
-var define,
-  __slice = [].slice;
+var define;
 
 define = (function(root, module) {
   if (typeof root.define === 'function' && root.define.amd) {
@@ -109,9 +108,12 @@ define(function(require) {
     };
 
     TzTime.prototype.setFullYear = function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      Date.prototype.setFullYear.apply(this, args);
+      Date.prototype.setFullYear.apply(this, arguments);
+      return this;
+    };
+
+    TzTime.prototype.setMonth = function() {
+      Date.prototype.setMonth.apply(this, arguments);
       return this;
     };
 
