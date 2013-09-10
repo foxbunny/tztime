@@ -166,12 +166,14 @@ define (require) ->
     getTimezoneOffset: () ->
       -@timezone
 
-    # #### `setTimezoneOffset()`
+    # #### `#setTimezoneOffset(v)`
     #
     # Sets the time zone using the reverse offset. This is a counterpart of
     # `#getTimezoneOffset()` that is missing in the native implementation. It
     # is here for the sake of compatibility with `#getTimezoneOffset()` but you
     # are generally recommended to use the `#timezone` attribute instead.
+    #
+    # `v` should be a reverse offset from UTC in integer minutes.
     #
     setTimezoneOffset: (v) ->
       @timezone = -v
