@@ -78,5 +78,17 @@ describe 'TzTime', () ->
       d.setTimezoneOffset 12
       assert.equal d.timezone, -12
 
+  describe '#setFullYear()', () ->
+    it 'should set the year and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setFullYear 2020
+      assert.equal d1, d
+      assert.equal d.getFullYear(), 2020
 
+    it 'should set mont and date if passed', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.setFullYear 2015, 2, 12
+      assert.equal d.getFullYear(), 2015
+      assert.equal d.getMonth(), 2
+      assert.equal d.getDate(), 12
 

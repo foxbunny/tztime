@@ -89,13 +89,30 @@ describe('TzTime', function() {
       return assert.equal(d.getTimezoneOffset(), -12);
     });
   });
-  return describe('#setTimezoneOffset()', function() {
+  describe('#setTimezoneOffset()', function() {
     return it('should set the timezone using opposite of offset', function() {
       var d;
       d = new TzTime(2013, 8, 1, 8, 20);
       d.timezone = 0;
       d.setTimezoneOffset(12);
       return assert.equal(d.timezone, -12);
+    });
+  });
+  return describe('#setFullYear()', function() {
+    it('should set the year and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d1 = d.setFullYear(2020);
+      assert.equal(d1, d);
+      return assert.equal(d.getFullYear(), 2020);
+    });
+    return it('should set mont and date if passed', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.setFullYear(2015, 2, 12);
+      assert.equal(d.getFullYear(), 2015);
+      assert.equal(d.getMonth(), 2);
+      return assert.equal(d.getDate(), 12);
     });
   });
 });

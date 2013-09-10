@@ -178,3 +178,14 @@ define (require) ->
     setTimezoneOffset: (v) ->
       @timezone = -v
 
+    # #### `#setFullYear(year [, month, date])`
+    #
+    # Sets the year, and optionally month and date. The arguments are the same
+    # as for the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    setFullYear: (args...) ->
+      Date::setFullYear.apply this, args
+      this
+

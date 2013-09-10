@@ -4,7 +4,8 @@
 @license LICENSE
 */
 
-var define;
+var define,
+  __slice = [].slice;
 
 define = (function(root, module) {
   if (typeof root.define === 'function' && root.define.amd) {
@@ -96,6 +97,13 @@ define(function(require) {
 
     TzTime.prototype.setTimezoneOffset = function(v) {
       return this.timezone = -v;
+    };
+
+    TzTime.prototype.setFullYear = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      Date.prototype.setFullYear.apply(this, args);
+      return this;
     };
 
     return TzTime;
