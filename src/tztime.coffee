@@ -139,10 +139,7 @@ define (require) ->
           throw new TypeError "Time zone offset must be an integer."
         if -720 > v > 720
           throw new TypeError "Time zone offset out of bounds."
-        diff = @__timezone__ + v
-        @setMinutes @getMinutes() + diff
         @__timezone__ = v
-        v
 
     # #### `#year`
     #
@@ -267,22 +264,40 @@ define (require) ->
     #
     ((proto) ->
       methods = [
-        'setFullYear'
-        'setMonth'
-        'setDate'
-        'setHours'
-        'setMinutes'
-        'setSeconds'
-        'setMilliseconds'
-        'setTime'
+        'FullYear'
+        'Month'
+        'Date'
+        'Hours'
+        'Minutes'
+        'Seconds'
+        'Milliseconds'
       ]
 
       for method in methods
-        proto[method] = ((method) ->
+        ## Create setters
+        proto['set' + method] = ((method) ->
           ## Create a closure for `method` so it doesn't get overrun by
           ## iteration.
           () ->
-            Date.prototype[method].apply this, arguments
+            ## Set using UTC version of the method
+            Date.prototype['setUTC' + method].apply this, arguments
+            ## Adjust for the timezone difference
+            utcmins = Date.prototype.getUTCMinutes.call this
+            delta = utcmins - @__timezone__
+            Date.prototype.setUTCMinutes.call this, delta
             this
+        ) method
+
+        ## Crate getters
+        proto['get' + method] = ((method) ->
+          ## Create a closure for `method` so it doesn't get overrun by
+          ## iteration.
+          () ->
+            ## Clone the `this` using plain Date object
+            d = new Date this.getTime()
+            ## Adjust for timezone difference
+            d.setUTCMinutes d.getUTCMinutes() + @__timezone__
+            ## Return the adjusted value
+            d['getUTC' + method]()
         ) method
     ) TzTime.prototype

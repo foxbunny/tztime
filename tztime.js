@@ -75,7 +75,6 @@ define(function(require) {
         return this.__timezone__;
       },
       set: function(v) {
-        var diff;
         v = parseInt(v);
         if (isNaN(v)) {
           throw new TypeError("Time zone offset must be an integer.");
@@ -83,10 +82,7 @@ define(function(require) {
         if ((-720 > v && v > 720)) {
           throw new TypeError("Time zone offset out of bounds.");
         }
-        diff = this.__timezone__ + v;
-        this.setMinutes(this.getMinutes() + diff);
-        this.__timezone__ = v;
-        return v;
+        return this.__timezone__ = v;
       }
     });
 
@@ -136,14 +132,26 @@ define(function(require) {
 
     (function(proto) {
       var method, methods, _i, _len, _results;
-      methods = ['setFullYear', 'setMonth', 'setDate', 'setHours', 'setMinutes', 'setSeconds', 'setMilliseconds', 'setTime'];
+      methods = ['FullYear', 'Month', 'Date', 'Hours', 'Minutes', 'Seconds', 'Milliseconds'];
       _results = [];
       for (_i = 0, _len = methods.length; _i < _len; _i++) {
         method = methods[_i];
-        _results.push(proto[method] = (function(method) {
+        proto['set' + method] = (function(method) {
           return function() {
-            Date.prototype[method].apply(this, arguments);
+            var delta, utcmins;
+            Date.prototype['setUTC' + method].apply(this, arguments);
+            utcmins = Date.prototype.getUTCMinutes.call(this);
+            delta = utcmins - this.__timezone__;
+            Date.prototype.setUTCMinutes.call(this, delta);
             return this;
+          };
+        })(method);
+        _results.push(proto['get' + method] = (function(method) {
+          return function() {
+            var d;
+            d = new Date(this.getTime());
+            d.setUTCMinutes(d.getUTCMinutes() + this.__timezone__);
+            return d['getUTC' + method]();
           };
         })(method));
       }
