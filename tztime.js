@@ -117,6 +117,15 @@ define(function(require) {
       }
     });
 
+    property('hour', {
+      get: function() {
+        return this.getHours();
+      },
+      set: function(v) {
+        return this.setHours(v);
+      }
+    });
+
     TzTime.prototype.getTimezoneOffset = function() {
       return -this.timezone;
     };

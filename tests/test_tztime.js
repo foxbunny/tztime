@@ -256,7 +256,7 @@ describe('TzTime', function() {
       return assert.equal(y2, 2014);
     });
   });
-  return describe('#date', function() {
+  describe('#date', function() {
     it('should set the date', function() {
       var d;
       d = new TzTime(2013, 8, 1, 8, 20);
@@ -297,6 +297,47 @@ describe('TzTime', function() {
       y2 = d.year;
       assert.equal(y1, 2014);
       return assert.equal(y2, 2012);
+    });
+  });
+  return describe('#hour', function() {
+    it('should set the hour', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.hour = 2;
+      return assert.equal(d.getHours(), 2);
+    });
+    it('should return hour', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      return assert.equal(d.hour, 8);
+    });
+    it('can be used with -= and += operators', function() {
+      var d, h1, h2;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.hour -= 4;
+      h1 = d.hour;
+      d.hour += 12;
+      h2 = d.hour;
+      assert.equal(h1, 4);
+      return assert.equal(h2, 16);
+    });
+    it('should cross date boundaries', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.hour += 20;
+      return assert.equal(d.date, 2);
+    });
+    it('should cross month boundaries', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.hour += 24 * 31;
+      return assert.equal(d.month, 9);
+    });
+    return it('should cross year boundaries', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.hour += 24 * 365;
+      return assert.equal(d.year, 2014);
     });
   });
 });

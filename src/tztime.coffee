@@ -146,7 +146,7 @@ define (require) ->
 
     # #### `#year`
     #
-    # Full integer year.
+    # Full integer year. The value is an integer.
     #
     property 'year',
       get: () -> @getFullYear()
@@ -167,6 +167,14 @@ define (require) ->
     property 'date',
       get: () -> @getDate()
       set: (v) -> @setDate v
+
+    # #### `#hour`
+    #
+    # Hour in 24-hour format. The value is an integer between 0 and 23.
+    #
+    property 'hour',
+      get: () -> @getHours()
+      set: (v) -> @setHours v
 
     # ### Methods
     #
