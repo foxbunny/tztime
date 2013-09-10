@@ -160,6 +160,14 @@ define (require) ->
       get: () -> @getMonth()
       set: (v) -> @setMonth v
 
+    # #### `#date`
+    #
+    # Date. The value is an integer between 1 and 31.
+    #
+    property 'date',
+      get: () -> @getDate()
+      set: (v) -> @setDate v
+
     # ### Methods
     #
     # The methods of the TzTime prototype are specifically designed to address

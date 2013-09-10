@@ -108,6 +108,15 @@ define(function(require) {
       }
     });
 
+    property('date', {
+      get: function() {
+        return this.getDate();
+      },
+      set: function(v) {
+        return this.setDate(v);
+      }
+    });
+
     TzTime.prototype.getTimezoneOffset = function() {
       return -this.timezone;
     };

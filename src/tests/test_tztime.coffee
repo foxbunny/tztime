@@ -159,3 +159,39 @@ describe 'TzTime', () ->
       assert.equal d.getDate(), 2
       assert.equal d1, d
 
+  describe '#date', () ->
+    it 'should set the date', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.date = 20
+      assert.equal d.getDate(), 20
+
+    it 'should return the date', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      assert.equal d.date, 1
+
+    it 'can be used with -= and += operators', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.date += 12
+      d1 = d.date
+      d.date -= 4
+      d2 = d.date
+      assert.equal d1, 13
+      assert.equal d2, 9
+
+    it 'should cross month boundaries when setting', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.date += 31
+      m1 = d.month
+      d.date -= 62
+      m2 = d.month
+      assert.equal m1, 9
+      assert.equal m2, 7
+
+    it 'should cross year boundaries when setting', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.date += 365
+      y1 = d.year
+      d.date -= 2 * 365
+      y2 = d.year
+      assert.equal y1, 2014
+      assert.equal y2, 2012
