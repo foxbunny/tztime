@@ -79,7 +79,7 @@ define (require) ->
         else
           instance = new Date yr, mo, dy, hr, mi, se, ms
 
-      # ### `#__timezone__`
+      # ### `#__timezone__` (private property)
       #
       # This property is a private property that stores the currently set
       # timezone offset. This property is used to calcualte the correct UTC
