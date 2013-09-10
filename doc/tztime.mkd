@@ -6,7 +6,7 @@ time-zone-aware.
 
  + [`TzTime`](#tztime)
    - [Constructor](#constructor)
-   - [`#__timezone__`](#timezone)
+   - [`#__timezone__` (private property)](#timezone__-private-property)
    - [Attributes](#attributes)
      + [`#timezone`](#timezone)
      + [`#year`](#year)
@@ -53,7 +53,7 @@ string which is compatible with `strptime` formatting.
 Unlike the JavaScript Date constructor, calling TzTime without the `new`
 keyword has the same behavior as calling it with it.
 
-### `#__timezone__` <a name="timezone"></a>
+### `#__timezone__` (private property) <a name="timezone__-private-property"></a>
 
 This property is a private property that stores the currently set timezone
 offset. This property is used to calcualte the correct UTC time. Please do not
