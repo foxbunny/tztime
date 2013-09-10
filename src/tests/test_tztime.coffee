@@ -65,6 +65,13 @@ describe 'TzTime', () ->
       d.timezone += 12
       assert.equal d.timezone, 12
 
+    it 'should be UTC time if set to 0', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.timezone = 0
+      d.setHours 8
+      assert.equal d.getUTCHours(), 8
+      assert.equal d.getHours(), 8
+
   describe '#getTimezoneOffset()', () ->
     it 'should return the opposite of time zone offset', () ->
       d = new TzTime 2013, 8, 1, 8, 20
@@ -120,7 +127,7 @@ describe 'TzTime', () ->
       assert.equal d1, d
 
     it 'should set minutes, seconds, and milliseconds if given', () ->
-      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.setHours 2, 2, 2, 2
       assert.equal d.getHours(), 2
       assert.equal d.getMinutes(), 2
@@ -135,7 +142,7 @@ describe 'TzTime', () ->
       assert.equal d1, d
 
     it 'should set seconds and milliseconds if given', () ->
-      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.setMinutes 2, 2, 2
       assert.equal d.getMinutes(), 2
       assert.equal d.getSeconds(), 2
@@ -149,21 +156,30 @@ describe 'TzTime', () ->
       assert.equal d1, d
 
     it 'should set milliseconds if given', () ->
-      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.setSeconds 2, 2
       assert.equal d.getSeconds(), 2
       assert.equal d.getMilliseconds(), 2
 
   describe '#setMilliseconds()', () ->
     it 'should set milliseconds and return instance', () ->
-      d = new TzTime 2013, 8, 1, 8, 20, 500
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d1 = d.setMilliseconds 2
       assert.equal d.getMilliseconds(), 2
       assert.equal d1, d
 
+  describe '#getHours()', () ->
+    it 'should give time in instance timezone', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      assert.equal d.getHours(), 8
+      d.timezone += 120
+      assert.equal d.getHours(), 10
+      d.timezone -= 300
+      assert.equal d.getHours(), 5
+
   describe '#year', () ->
     it 'should set year', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.year = 2020
       assert.equal d.getFullYear(), 2020
 
@@ -172,7 +188,7 @@ describe 'TzTime', () ->
       assert.equal d.year, 2013
 
     it 'can be used with -= and += operators', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.year -= 2
       y1 = d.year
       d.year += 4
@@ -182,16 +198,16 @@ describe 'TzTime', () ->
 
   describe '#month', () ->
     it 'should set month', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.month = 9
       assert.equal d.getMonth(), 9
 
     it 'should return month', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       assert.equal d.month, 8
 
     it 'can be used with -= and += operators', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.month -= 2
       m1 = d.month
       d.month += 4
@@ -200,7 +216,7 @@ describe 'TzTime', () ->
       assert.equal m2, 10
 
     it 'should adjust the year when incremented or decremented', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.month -= 12
       y1 = d.year
       d.month += 24
@@ -210,16 +226,16 @@ describe 'TzTime', () ->
 
   describe '#date', () ->
     it 'should set the date', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.date = 20
       assert.equal d.getDate(), 20
 
     it 'should return the date', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       assert.equal d.date, 1
 
     it 'can be used with -= and += operators', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.date += 12
       d1 = d.date
       d.date -= 4
@@ -228,7 +244,7 @@ describe 'TzTime', () ->
       assert.equal d2, 9
 
     it 'should cross month boundaries when setting', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.date += 31
       m1 = d.month
       d.date -= 62
@@ -237,7 +253,7 @@ describe 'TzTime', () ->
       assert.equal m2, 7
 
     it 'should cross year boundaries when setting', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.date += 365
       y1 = d.year
       d.date -= 2 * 365
@@ -245,18 +261,18 @@ describe 'TzTime', () ->
       assert.equal y1, 2014
       assert.equal y2, 2012
 
-  describe '#hour', () ->
+  describe '#hours', () ->
     it 'should set the hour', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.hours = 2
       assert.equal d.getHours(), 2
 
     it 'should return hour', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       assert.equal d.hours, 8
 
     it 'can be used with -= and += operators', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.hours -= 4
       h1 = d.hours
       d.hours += 12
@@ -265,16 +281,56 @@ describe 'TzTime', () ->
       assert.equal h2, 16
 
     it 'should cross date boundaries', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.hours += 20
       assert.equal d.date, 2
 
     it 'should cross month boundaries', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.hours += 24 * 31
       assert.equal d.month, 9
 
     it 'should cross year boundaries', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
       d.hours += 24 * 365
       assert.equal d.year, 2014
+
+  describe '#minutes', () ->
+    it 'should set minute', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.minutes = 21
+      assert.equal d.getMinutes(), 21
+
+    it 'should return minute', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      assert.equal d.minutes, 20
+
+    it 'can be used with -= and += operators', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.minutes -= 15
+      m1 = d.minutes
+      d.minutes += 20
+      m2 = d.minutes
+      assert.equal m1, 5
+      assert.equal m2, 25
+
+    it 'should cross hour boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.minutes += 50
+      assert.equal d.hours, 9
+
+    it 'should cross date boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.minutes += 60 * 24
+      assert.equal d.date, 2
+
+    it 'should cross month boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.minutes += 60 * 24 * 31
+      assert.equal d.month, 9
+
+    it 'should cross year boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.minutes += 60 * 24 * 365
+      assert.equal d.year, 2014
+

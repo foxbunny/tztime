@@ -115,6 +115,15 @@ define(function(require) {
       }
     });
 
+    property('minutes', {
+      get: function() {
+        return this.getMinutes();
+      },
+      set: function(v) {
+        return this.setMinutes(v);
+      }
+    });
+
     TzTime.prototype.getTimezoneOffset = function() {
       return -this.__timezone__;
     };

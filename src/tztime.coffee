@@ -165,6 +165,14 @@ define (require) ->
       get: () -> @getHours()
       set: (v) -> @setHours v
 
+    # #### `#minutes`
+    #
+    # Minutes in instace's time zone. The value is an integer between 0 and 59.
+    #
+    property 'minutes',
+      get: () -> @getMinutes()
+      set: (v) -> @setMinutes v
+
     # ### Methods
     #
     # The methods of the TzTime prototype are specifically designed to address
