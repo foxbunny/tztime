@@ -33,7 +33,7 @@ module.exports = {
     docs: {
       run: [
         "v.rm doc",
-        "node tools/extract_docs.js src doc"
+        "node tools/extract_docs.js src doc tests"
       ]
     },
     test: {
