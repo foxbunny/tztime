@@ -136,16 +136,14 @@ define(function(require) {
       _results = [];
       for (_i = 0, _len = methods.length; _i < _len; _i++) {
         method = methods[_i];
-        proto['set' + method] = (function(method) {
-          return function() {
-            var delta, utcmins;
-            Date.prototype['setUTC' + method].apply(this, arguments);
-            utcmins = Date.prototype.getUTCMinutes.call(this);
-            delta = utcmins - this.__timezone__;
-            Date.prototype.setUTCMinutes.call(this, delta);
-            return this;
-          };
-        })(method);
+        if (method !== 'Hours') {
+          proto['set' + method] = (function(method) {
+            return function() {
+              Date.prototype['setUTC' + method].apply(this, arguments);
+              return this;
+            };
+          })(method);
+        }
         _results.push(proto['get' + method] = (function(method) {
           return function() {
             var d;
@@ -157,6 +155,15 @@ define(function(require) {
       }
       return _results;
     })(TzTime.prototype);
+
+    TzTime.prototype.setHours = function() {
+      var delta, utcmins;
+      Date.prototype.setUTCHours.apply(this, arguments);
+      utcmins = Date.prototype.getUTCMinutes.call(this);
+      delta = utcmins - this.__timezone__;
+      Date.prototype.setUTCMinutes.call(this, delta);
+      return this;
+    };
 
     return TzTime;
 
