@@ -16,8 +16,12 @@ time-zone-aware.
      + [`#getTimezoneOffset()`](#gettimezoneoffset)
      + [`#setTimezoneOffset(v)`](#settimezoneoffset-v)
      + [`#setFullYear(year [, month, date])`](#setfullyear-year-month-date)
-     + [`#setFullMonth(month [, date])`](#setfullmonth-month-date)
+     + [`#setMonth(month [, date])`](#setmonth-month-date)
      + [`#setDate(date)`](#setdate-date)
+     + [`#setHours(hours [, minutes, seconds, milliseconds])`](#sethours-hours-minutes-seconds-milliseconds)
+     + [`#setMinutes(minutes [, seconds, milliseconds])`](#setminutes-minutes-seconds-milliseconds)
+     + [`#setSeconds(seconds [, milliseconds])](#setseconds-seconds-milliseconds)
+     + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
 
 
 ## `TzTime` <a name="tztime"></a>
@@ -110,6 +114,14 @@ time-zone-awareness issues, or simply provide a somewhat better API over those
 of the native Date objects. Methods that are not listed here, but are present
 in the native Date object, behave the same way as in the native Date object.
 
+One of the primary differences between the native methods and the ones
+implemented in TzTime is the fact that setters all return the instance. This is
+not the case with the native implementation.
+
+The `UTC*` methods behave slightly differently under the hood because of
+TzTime's time-zone-awareness, but should provide the same API and expected
+behavior.
+
 #### `#getTimezoneOffset()` <a name="gettimezoneoffset"></a>
 
 This method is different from the native implementation. It returns the actual
@@ -133,7 +145,7 @@ the native Date prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#setFullMonth(month [, date])` <a name="setfullmonth-month-date"></a>
+#### `#setMonth(month [, date])` <a name="setmonth-month-date"></a>
 
 Sets the month, and optionally date. The arguments are the same as for the
 native Date prototype's method.
@@ -144,5 +156,33 @@ The return value of this method is the TzTime object.
 
 Sets the date. The argument is the same as for the native Date prototype's
 method.
+
+The return value of this method is the TzTime object.
+
+#### `#setHours(hours [, minutes, seconds, milliseconds])` <a name="sethours-hours-minutes-seconds-milliseconds"></a>
+
+Sets the hours, and optionally minutes, seconds and milliseconds if specified.
+The argumetns are the same as for the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### `#setMinutes(minutes [, seconds, milliseconds])` <a name="setminutes-minutes-seconds-milliseconds"></a>
+
+Set the minutes and optionally seconds and milliseconds. The arguments are the
+same as for the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### `#setSeconds(seconds [, milliseconds]) <a name="setseconds-seconds-milliseconds"></a>
+
+Set the seconds, and optionally milliseconds. The arguments are the same as for
+the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### `#setMilliseconds(milliseconds)` <a name="setmilliseconds-milliseconds"></a>
+
+Sets the milliseconds. The argument is the same as for the native Date
+prototype's method.
 
 The return value of this method is the TzTime object.
