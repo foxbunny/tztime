@@ -154,7 +154,7 @@ describe('TzTime', function() {
       return assert.equal(d.getDate(), 12);
     });
   });
-  return describe('#month', function() {
+  describe('#month', function() {
     it('should set month', function() {
       var d;
       d = new TzTime(2013, 8, 1, 8, 20);
@@ -185,6 +185,15 @@ describe('TzTime', function() {
       y2 = d.year;
       assert.equal(y1, 2012);
       return assert.equal(y2, 2014);
+    });
+  });
+  return describe('#setDate()', function() {
+    return it('should set the date and return instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d1 = d.setDate(2);
+      assert.equal(d.getDate(), 2);
+      return assert.equal(d1, d);
     });
   });
 });

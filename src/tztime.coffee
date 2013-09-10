@@ -213,3 +213,13 @@ define (require) ->
       Date::setMonth.apply this, arguments
       this
 
+    # #### `#setDate(date)`
+    #
+    # Sets the date. The argument is the same as for the native Date
+    # prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    setDate: () ->
+      Date::setDate.apply this, arguments
+      this

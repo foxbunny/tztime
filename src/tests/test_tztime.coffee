@@ -152,3 +152,10 @@ describe 'TzTime', () ->
       assert.equal y1, 2012
       assert.equal y2, 2014
 
+  describe '#setDate()', () ->
+    it 'should set the date and return instance', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d1 = d.setDate 2
+      assert.equal d.getDate(), 2
+      assert.equal d1, d
+

@@ -126,6 +126,11 @@ define(function(require) {
       return this;
     };
 
+    TzTime.prototype.setDate = function() {
+      Date.prototype.setDate.apply(this, arguments);
+      return this;
+    };
+
     return TzTime;
 
   })();
