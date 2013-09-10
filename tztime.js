@@ -124,6 +124,15 @@ define(function(require) {
       }
     });
 
+    property('seconds', {
+      get: function() {
+        return this.getSeconds();
+      },
+      set: function(v) {
+        return this.setSeconds(v);
+      }
+    });
+
     TzTime.prototype.getTimezoneOffset = function() {
       return -this.__timezone__;
     };

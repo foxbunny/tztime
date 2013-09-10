@@ -359,7 +359,7 @@ describe('TzTime', function() {
       return assert.equal(d.year, 2014);
     });
   });
-  return describe('#minutes', function() {
+  describe('#minutes', function() {
     it('should set minute', function() {
       var d;
       d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
@@ -403,6 +403,59 @@ describe('TzTime', function() {
       var d;
       d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
       d.minutes += 60 * 24 * 365;
+      return assert.equal(d.year, 2014);
+    });
+  });
+  return describe('#seconds', function() {
+    it('should set seconds', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.seconds = 21;
+      return assert.equal(d.getSeconds(), 21);
+    });
+    it('should return seconds', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      return assert.equal(d.seconds, 1);
+    });
+    it('can be used with -= and += operators', function() {
+      var d, s1, s2;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.seconds += 20;
+      s1 = d.seconds;
+      d.seconds -= 5;
+      s2 = d.seconds;
+      assert.equal(s1, 21);
+      return assert.equal(s2, 16);
+    });
+    it('should cross minutes boundary', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.seconds += 60;
+      return assert.equal(d.minutes, 21);
+    });
+    it('should cross hours boundary', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.seconds += 60 * 60;
+      return assert.equal(d.hours, 9);
+    });
+    it('should cross date boundary', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.seconds += 60 * 60 * 24;
+      return assert.equal(d.date, 2);
+    });
+    it('should cross month boundary', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.seconds += 60 * 60 * 24 * 31;
+      return assert.equal(d.month, 9);
+    });
+    return it('should cross year boundary', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.seconds += 60 * 60 * 24 * 365;
       return assert.equal(d.year, 2014);
     });
   });

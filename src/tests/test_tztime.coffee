@@ -334,3 +334,47 @@ describe 'TzTime', () ->
       d.minutes += 60 * 24 * 365
       assert.equal d.year, 2014
 
+  describe '#seconds', () ->
+    it 'should set seconds', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.seconds = 21
+      assert.equal d.getSeconds(), 21
+
+    it 'should return seconds', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      assert.equal d.seconds, 1
+
+    it 'can be used with -= and += operators', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.seconds += 20
+      s1 = d.seconds
+      d.seconds -= 5
+      s2 = d.seconds
+      assert.equal s1, 21
+      assert.equal s2, 16
+
+    it 'should cross minutes boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.seconds += 60
+      assert.equal d.minutes, 21
+
+    it 'should cross hours boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.seconds += 60 * 60
+      assert.equal d.hours, 9
+
+    it 'should cross date boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.seconds += 60 * 60 * 24
+      assert.equal d.date, 2
+
+    it 'should cross month boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.seconds += 60 * 60 * 24 * 31
+      assert.equal d.month, 9
+
+    it 'should cross year boundary', () ->
+      d = new TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.seconds += 60 * 60 * 24 * 365
+      assert.equal d.year, 2014
+

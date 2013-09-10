@@ -173,6 +173,15 @@ define (require) ->
       get: () -> @getMinutes()
       set: (v) -> @setMinutes v
 
+    # #### `#seconds`
+    #
+    # Seconds in instance's time zome. The value is an integer between 0 and
+    # 59.
+    #
+    property 'seconds',
+      get: () -> @getSeconds()
+      set: (v) -> @setSeconds v
+
     # ### Methods
     #
     # The methods of the TzTime prototype are specifically designed to address
