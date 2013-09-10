@@ -7,9 +7,15 @@ time-zone-aware.
  + [`TzTime`](#tztime)
    - [Constructor](#constructor)
    - [`#__timezone__`](#timezone)
-   - [`#timezone`](#timezone)
- + [`#getTimezoneOffset()`](#gettimezoneoffset)
- + [`setTimezoneOffset()`](#settimezoneoffset)
+   - [Attributes](#attributes)
+     + [`#timezone`](#timezone)
+     + [`#year`](#year)
+     + [`#month`](#month)
+   - [Methods](#methods)
+     + [`#getTimezoneOffset()`](#gettimezoneoffset)
+     + [`#setTimezoneOffset(v)`](#settimezoneoffset-v)
+     + [`#setFullYear(year [, month, date])`](#setfullyear-year-month-date)
+     + [`#setFullMonth(month [, date])`](#setfullmonth-month-date)
 
 
 ## `TzTime` <a name="tztime"></a>
@@ -58,11 +64,23 @@ To set the time zone use either `#timezone` attribute, or
 
 TzTime constructor inherits from the native Date prototype.
 
-### `#timezone` <a name="timezone"></a>
+### Attributes <a name="attributes"></a>
 
-This attribute is an accessor for the private `#__timezone__` property. It can
-be read and assigned normally and it correctly shifts the time of the
-underlying object. The value of the attribute is an UTC offset in minutes.
+The TzTime prototype provides a number of methods that can be used to
+manipulate the objects with greater ease than with native Date methods. This is
+particularly true when incrementing or decrementing values. For example:
+
+    var d = new TzTime();
+    d.setHours(d.getHours() + 20);
+    d.hour += 12;
+
+
+Most of the attributes are accessors that call methods to set or get the
+values.
+
+#### `#timezone` <a name="timezone"></a>
+
+The time zone offset in integer minutes from UTC.
 
 Unlike the native `#getTimezoneOffset()` method, these values are calculated as
 positive integers from UTC towards East, and negative towards West, as is usual
@@ -71,16 +89,47 @@ for time zones.
 The `#getTimezoneOffset()` method retains the native behavior of giving the
 offset in reverse, if you need to rely on such behavior.
 
-## `#getTimezoneOffset()` <a name="gettimezoneoffset"></a>
+#### `#year` <a name="year"></a>
+
+Full integer year.
+
+#### `#month` <a name="month"></a>
+
+Month. The value is 0-index where 0 is January.
+
+### Methods <a name="methods"></a>
+
+The methods of the TzTime prototype are specifically designed to address either
+time-zone-awareness issues, or simply provide a somewhat better API over those
+of the native Date objects. Methods that are not listed here, but are present
+in the native Date object, behave the same way as in the native Date object.
+
+#### `#getTimezoneOffset()` <a name="gettimezoneoffset"></a>
 
 This method is different from the native implementation. It returns the actual
 time zone set on the TzTime instance instead of the local time zone of the
 platform. Like the native implementation, it returns the opposite of the actual
 UTC offset in integer minutes.
 
-## `setTimezoneOffset()` <a name="settimezoneoffset"></a>
+#### `#setTimezoneOffset(v)` <a name="settimezoneoffset-v"></a>
 
 Sets the time zone using the reverse offset. This is a counterpart of
 `#getTimezoneOffset()` that is missing in the native implementation. It is here
 for the sake of compatibility with `#getTimezoneOffset()` but you are generally
 recommended to use the `#timezone` attribute instead.
+
+`v` should be a reverse offset from UTC in integer minutes.
+
+#### `#setFullYear(year [, month, date])` <a name="setfullyear-year-month-date"></a>
+
+Sets the year, and optionally month and date. The arguments are the same as for
+the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### `#setFullMonth(month [, date])` <a name="setfullmonth-month-date"></a>
+
+Sets the month, and optionally date. The arguments are the same as for the
+native Date prototype's method.
+
+The return value of this method is the TzTime object.
