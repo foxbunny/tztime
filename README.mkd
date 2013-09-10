@@ -1,0 +1,4 @@
+# Create library template
+
+This is a `volo create` template for CoffeeScript libraries.
+

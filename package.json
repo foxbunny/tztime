@@ -1,0 +1,42 @@
+{
+  "name" : "",
+  "description" : "",
+  "homepage" : "",
+  "keywords" : [],
+  "author" : "",
+  "bugs": {
+    "url": "",
+    "email": ""
+  },
+  "license": {
+    "type": "",
+    "url": ""
+  },
+  "dependencies" : {
+  },
+  "devDependencies": {
+    "volo": "*",
+    "coffee-script": "1.6.3",
+    "dahelpers": ">=0.2.1",
+    "mocha": "*",
+    "chai": "*"
+  },
+  "main": "",
+  "volo": {
+    "dependencies": {
+    },
+    "ignore": [
+      "package.json",
+      ".gitignore",
+      "CHANGES.mkd",
+      "README.mkd",
+      "LICENSE",
+      "volofile",
+      "tests",
+      "tools",
+      "doc",
+      "src"
+    ]
+  },
+  "version" : "0.0.1"
+}

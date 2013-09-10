@@ -1,0 +1,42 @@
+/*jslint node: true */
+'use strict';
+
+var quietFlag = {'q': 'quiet'};
+
+var useConsole = function(namedArgs) {
+    return {useConsole: !namedArgs.quiet};
+};
+
+module.exports = {
+    compile: {
+        flags: quietFlag,
+        run: function(d, v, namedArgs) {
+            d.resolve(v.spawn(
+                'node',
+                ['node_modules/coffee-script/bin/coffee', '-o', '.', 
+                '-bc', 'src'], 
+                useConsole(namedArgs)
+            ));
+        }
+    },
+    watch: {
+        flags: quietFlag,
+        run: function(d, v, namedArgs) {
+            d.resolve(v.spawn(
+                'node', 
+                ['node_modules/coffee-script/bin/coffee', '-o', '.', 
+                '-bcw', 'src'], 
+                useConsole(namedArgs)
+            ));
+        }
+    },
+    docs: {
+      run: [
+        "v.rm doc",
+        "node tools/extract_docs.js src doc"
+      ]
+    },
+    test: {
+      run: 'n.mocha tests/*.js -C -R spec'
+    }
+};
