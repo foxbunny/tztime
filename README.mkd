@@ -104,6 +104,11 @@ works as expected. There is also a `timezone` attribute that you can use.
 
     v.getUTCHours(); // still 14
 
+## More?
+
+Yes, the current order of business is to port
+[DatetimeJS](https://github.com/foxbunny/datetimejs) to TzTime, make everything
+nice and tidy, and time-zoney.
 
 ## Design of TzTime and performance
 
