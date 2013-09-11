@@ -57,10 +57,16 @@ define (require) ->
     #
     # There are a few non-standard forms added.
     #
-    # One is the same as the longest standard form, with the additon of time
-    # zone offset as last argument.
-    #
     #     new TimeZone(year, month, day, hour, minute, second, millsecond, tz);
+    #     new TimeZone(dateObject);
+    #     new TimeZone(tzTimeObject);
+    #
+    # The `tz` argument is a time zone UTC offset in integer minutes (postive
+    # towards East, and negative towards West).
+    #
+    # The `dateObject` and `tzTimeObject` are Date and TzTime objects
+    # respectively. Constructor will return a completely new instance of those
+    # objects and, in case of TzTime objects, also retain the time zone offset.
     #
     # The last argument is an integer offset from UTC in minutes (positive
     # towards East, negative towards West).

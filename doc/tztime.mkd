@@ -32,6 +32,12 @@ time-zone-aware.
      + [`#setMinutes(minutes [, seconds, milliseconds])`](#setminutes-minutes-seconds-milliseconds)
      + [`#setSeconds(seconds [, milliseconds])](#setseconds-seconds-milliseconds)
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
+   - [`TzTime.utils`](#tztime-utils)
+   - [`TzTime.utils.repeat(s, count)`](#tztime-utils-repeat-s-count)
+   - [`TzTime.utils.reverse(s)`](#tztime-utils-reverse-s)
+   - [`TzTime.utils.pad(i, [digits, tail])`](#tztime-utils-pad-i-digits-tail)
+   - [`TzTime.utils.cycle(i, max, [zeroIndex])`](#tztime-utils-cycle-i-max-zeroindex)
+   - [`TzTime.utils.hour24(h, [pm])`](#tztime-utils-hour24-h-pm)
 
 
 ## `TzTime` <a name="tztime"></a>
@@ -58,13 +64,22 @@ constructor arguments. Please refer to [Date
 /developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 for more information.
 
-One non-standard form is added:
+There are a few non-standard forms added.
 
-    new TzTime(dateString, format)
+    new TimeZone(year, month, day, hour, minute, second, millsecond, tz);
+    new TimeZone(dateObject);
+    new TimeZone(tzTimeObject);
 
 
-The non-standard form will parse teh `dateString` using supplied `format`
-string which is compatible with `strptime` formatting.
+The `tz` argument is a time zone UTC offset in integer minutes (postive towards
+East, and negative towards West).
+
+The `dateObject` and `tzTimeObject` are Date and TzTime objects respectively.
+Constructor will return a completely new instance of those objects and, in case
+of TzTime objects, also retain the time zone offset.
+
+The last argument is an integer offset from UTC in minutes (positive towards
+East, negative towards West).
 
 Unlike the JavaScript Date constructor, calling TzTime without the `new`
 keyword has the same behavior as calling it with it.
@@ -238,3 +253,83 @@ Sets the milliseconds. The argument is the same as for the native Date
 prototype's method.
 
 The return value of this method is the TzTime object.
+
+### `TzTime.utils` <a name="tztime-utils"></a>
+
+Utility functions for micro-formatting.
+
+The `TzTime.utils` contains a few utility methods that are used to perform
+formatting and calculation tasks, mainly used by `strptime` and `strftime`
+functions.
+
+### `TzTime.utils.repeat(s, count)` <a name="tztime-utils-repeat-s-count"></a>
+
+Repeat string `s` `count` times.
+
+### `TzTime.utils.reverse(s)` <a name="tztime-utils-reverse-s"></a>
+
+Reverses a string.
+
+### `TzTime.utils.pad(i, [digits, tail])` <a name="tztime-utils-pad-i-digits-tail"></a>
+
+Zero-pads a number `i`.
+
+`digits` argument specifies the total number of digits. If omitted, it will
+default to 3 for no particular reason. :)
+
+If `tail` argument is specified, the number will be considered a float, and
+will zero-padded from the tail as well. The `tail` should be the number of
+fractional digits after the dot.
+
+Tail is `false` by default. If you pass it a 0, it will floor the number
+instead of not tailing, by removing the fractional part.
+
+Example:
+
+    datetime.utils.pad(12, 4);
+    // returns '0012'
+
+
+    datetime.utils.pad(2.3, 5);
+    // 002.3
+
+
+    datetime.utils.pad(2.3, 5, 0);
+    // 00002
+
+
+    datetime.utils.pad(2.3, 2, 2);
+    // 02.30
+
+
+### `TzTime.utils.cycle(i, max, [zeroIndex])` <a name="tztime-utils-cycle-i-max-zeroindex"></a>
+
+Keeps the number `i` within the `max` range. The range starts at 0 if
+`zeroIndex` is `true` or 1 if `zeroIndex` is `false` (default).
+
+Example:
+
+    TzTime.utils.cycle(4, 12);
+    // Returns 4
+
+
+    TzTime.utils.cycle(13, 12);
+    // Returns 1
+
+
+    TzTime.utils.cycle(13, 12, true);
+    // Returns 1
+
+
+    TzTime.utils.cycle(12, 12, true);
+    // Returns 0
+
+
+    TzTime.utils.cycle(12, 12, false);
+    // Returns 12
+
+
+### `TzTime.utils.hour24(h, [pm])` <a name="tztime-utils-hour24-h-pm"></a>
+
+Converts the `h` hour into 24-hour format. The `pm` is `true` if the hour is
+PM. The `pm` argument defaults to `false`.
