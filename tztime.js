@@ -24,7 +24,7 @@ define = (function(root) {
 
 define(function(require) {
   var TzTime;
-  return TzTime = (function() {
+  TzTime = (function() {
     var D, property;
 
     property = function(name, descriptor) {
@@ -186,4 +186,55 @@ define(function(require) {
     return TzTime;
 
   })();
+  TzTime.utils = {
+    repeat: function(s, count) {
+      return new Array(count + 1).join(s);
+    },
+    reverse: function(s) {
+      return s.split('').reverse().join('');
+    },
+    pad: function(i, digits, tail) {
+      var h, t, _ref;
+      if (digits == null) {
+        digits = 3;
+      }
+      if (tail == null) {
+        tail = false;
+      }
+      if (tail === false) {
+        return (TzTime.utils.repeat('0', digits) + i).slice(-digits);
+      } else {
+        _ref = i.toString().split('.'), h = _ref[0], t = _ref[1];
+        if (tail === 0) {
+          return TzTime.utils.pad(h, digits, false);
+        } else {
+          t || (t = '0');
+          h = TzTime.utils.pad(h, digits, false);
+          t = TzTime.utils.pad(TzTime.utils.reverse(t), tail, false);
+          t = TzTime.utils.reverse(t);
+          return [h, t].join('.');
+        }
+      }
+    },
+    cycle: function(i, max, zeroIndex) {
+      if (zeroIndex == null) {
+        zeroIndex = false;
+      }
+      return i % max || (zeroIndex ? 0 : max);
+    },
+    hour24: function(h, pm) {
+      if (pm == null) {
+        pm = false;
+      }
+      h += (pm ? 12 : 0);
+      if (h === 12) {
+        return 0;
+      }
+      if (h === 24) {
+        return 12;
+      }
+      return h;
+    }
+  };
+  return TzTime;
 });

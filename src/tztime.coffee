@@ -350,3 +350,107 @@ define (require) ->
       delta = utcmins - @__timezone__
       Date.prototype.setUTCMinutes.call this, delta
       this
+
+  # ### `TzTime.utils`
+  #
+  # Utility functions for micro-formatting.
+  #
+  # The `TzTime.utils` contains a few utility methods that are used to perform
+  # formatting and calculation tasks, mainly used by `strptime` and `strftime`
+  # functions.
+  #
+  TzTime.utils =
+
+    # ### `TzTime.utils.repeat(s, count)`
+    #
+    # Repeat string `s` `count` times.
+    #
+    repeat: (s, count) ->
+      new Array(count + 1).join s
+
+    # ### `TzTime.utils.reverse(s)`
+    #
+    # Reverses a string.
+    #
+    reverse: (s) ->
+      s.split('').reverse().join('')
+
+    # ### `TzTime.utils.pad(i, [digits, tail])`
+    #
+    # Zero-pads a number `i`.
+    #
+    # `digits` argument specifies the total number of digits. If omitted, it will
+    # default to 3 for no particular reason. :)
+    #
+    # If `tail` argument is specified, the number will be considered a float, and
+    # will zero-padded from the tail as well. The `tail` should be the number of
+    # fractional digits after the dot.
+    #
+    # Tail is `false` by default. If you pass it a 0, it will floor the number
+    # instead of not tailing, by removing the fractional part.
+    #
+    # Example:
+    #
+    #     datetime.utils.pad(12, 4);
+    #     // returns '0012'
+    #
+    #     datetime.utils.pad(2.3, 5);
+    #     // 002.3
+    #
+    #     datetime.utils.pad(2.3, 5, 0);
+    #     // 00002
+    #
+    #     datetime.utils.pad(2.3, 2, 2);
+    #     // 02.30
+    #
+    pad: (i, digits=3, tail=false) ->
+      if tail is false
+        (TzTime.utils.repeat('0', digits) + i).slice -digits
+      else
+        [h, t] = i.toString().split('.')
+        if tail is 0
+          TzTime.utils.pad h, digits, false
+        else
+          t or= '0'
+          h = TzTime.utils.pad h, digits, false
+          t = TzTime.utils.pad TzTime.utils.reverse(t), tail, false
+          t = TzTime.utils.reverse t
+          [h, t].join('.')
+
+    # ### `TzTime.utils.cycle(i, max, [zeroIndex])`
+    #
+    # Keeps the number `i` within the `max` range. The range starts at 0 if
+    # `zeroIndex` is `true` or 1 if `zeroIndex` is `false` (default).
+    #
+    # Example:
+    #
+    #     TzTime.utils.cycle(4, 12);
+    #     // Returns 4
+    #
+    #     TzTime.utils.cycle(13, 12);
+    #     // Returns 1
+    #
+    #     TzTime.utils.cycle(13, 12, true);
+    #     // Returns 1
+    #
+    #     TzTime.utils.cycle(12, 12, true);
+    #     // Returns 0
+    #
+    #     TzTime.utils.cycle(12, 12, false);
+    #     // Returns 12
+    #
+    cycle: (i, max, zeroIndex=false) ->
+      i % max or if zeroIndex then 0 else max
+
+    # ### `TzTime.utils.hour24(h, [pm])`
+    #
+    # Converts the `h` hour into 24-hour format. The `pm` is `true` if the hour
+    # is PM. The `pm` argument defaults to `false`.
+    #
+    hour24: (h, pm=false) ->
+      h += (if pm then 12 else 0)
+      return 0 if h is 12
+      return 12 if h is 24
+      h
+
+  TzTime
