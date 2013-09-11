@@ -104,6 +104,12 @@ works as expected. There is also a `timezone` attribute that you can use.
 
     v.getUTCHours(); // still 14
 
+Time zone support is completely invisible if you don't use it. The constructor
+will always create new instances in local time zone of the platform unless the
+time zone is passed to it, and the instances will remain in local time zone as
+long as you don't modify the timezone attribute, or use the time zone offset 
+setter. There is plenty to gain even without the time zone support.
+
 ## More?
 
 Yes, the current order of business is to port
