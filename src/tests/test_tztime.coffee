@@ -31,6 +31,10 @@ describe 'TzTime', () ->
       d2 = TzTime 2013, 8, 1
       assert.equal d1.getTime(), d2.getTime()
 
+    it 'should accept the timezone as last argument', () ->
+      d = new TzTime 2013, 8, 1, 12, 45, 39, 0, 360
+      assert.equal d.timezone, 360
+
   describe '#timezone', () ->
     it 'is a number', () ->
       d = new TzTime 2013, 8, 1, 8, 20

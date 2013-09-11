@@ -33,11 +33,16 @@ describe('TzTime', function() {
       d = new TzTime(2013, 8, 1);
       return assert.ok(d instanceof Date);
     });
-    return it('should be usable withough the new keyword', function() {
+    it('should be usable withough the new keyword', function() {
       var d1, d2;
       d1 = new TzTime(2013, 8, 1);
       d2 = TzTime(2013, 8, 1);
       return assert.equal(d1.getTime(), d2.getTime());
+    });
+    return it('should accept the timezone as last argument', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 12, 45, 39, 0, 360);
+      return assert.equal(d.timezone, 360);
     });
   });
   describe('#timezone', function() {

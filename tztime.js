@@ -31,7 +31,7 @@ define(function(require) {
       return Object.defineProperty(TzTime.prototype, name, descriptor);
     };
 
-    function TzTime(yr, mo, dy, hr, mi, se, ms) {
+    function TzTime(yr, mo, dy, hr, mi, se, ms, tz) {
       var instance;
       if (hr == null) {
         hr = 0;
@@ -44,6 +44,9 @@ define(function(require) {
       }
       if (ms == null) {
         ms = 0;
+      }
+      if (tz == null) {
+        tz = null;
       }
       switch (arguments.length) {
         case 0:
@@ -61,6 +64,9 @@ define(function(require) {
       instance.__timezone__ = -instance.getTimezoneOffset();
       instance.constructor = TzTime;
       instance.__proto__ = TzTime.prototype;
+      if (tz != null) {
+        instance.timezone = tz;
+      }
       return instance;
     }
 

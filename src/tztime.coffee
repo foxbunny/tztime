@@ -55,17 +55,20 @@ define (require) ->
     # documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
     # for more information.
     #
-    # One non-standard form is added:
+    # There are a few non-standard forms added.
     #
-    #     new TzTime(dateString, format)
+    # One is the same as the longest standard form, with the additon of time
+    # zone offset as last argument.
     #
-    # The non-standard form will parse teh `dateString` using supplied `format`
-    # string which is compatible with `strptime` formatting.
+    #     new TimeZone(year, month, day, hour, minute, second, millsecond, tz);
+    #
+    # The last argument is an integer offset from UTC in minutes (positive
+    # towards East, negative towards West).
     #
     # Unlike the JavaScript Date constructor, calling TzTime without the `new`
     # keyword has the same behavior as calling it with it.
     #
-    constructor: (yr, mo, dy, hr=0, mi=0, se=0, ms=0) ->
+    constructor: (yr, mo, dy, hr=0, mi=0, se=0, ms=0, tz=null) ->
 
       ## Because of the way native Date constructor works, we must resort to
       ## argument-counting.
@@ -93,6 +96,8 @@ define (require) ->
       ## Reset the constructor and prototype chain
       instance.constructor = TzTime
       instance.__proto__ = TzTime.prototype
+
+      instance.timezone = tz if tz?
 
       return instance
 
