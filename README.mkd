@@ -71,8 +71,8 @@ The attributes can be assigned as you would expect:
     v.year = 2014;
     v.minutes = 20;
 
-You can also use the `-=` and `+=` operators (nor more `.addDays()` and
-similar.
+You can also use the `-=` and `+=` operators (no more `.addDays()` and
+similar).
 
     v.date += 20;
 
