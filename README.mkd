@@ -122,12 +122,12 @@ Unfortunately, to get all the goodies to the table, a few design decisions have
 been made that impact the performance. 
 
 One of the decisions was to overload the local time getters (`#getHours()` et
-al) to compensate for time zone difference, and the UTC getters should be left
-intact. This was done to keep TzTime object 100% compatible with the Date
-object (e.g., time zone change does not shift the local time of the instance).
-To achieve this, the getters all create a clone of the object using Date
-constructor, and shift the time zone of the clone before delegating to clone's
-getters. Needless to say, this makes the TzTime getters extremely slow.
+al) to compensate for time zone difference, and leave the  UTC getters alone.
+This was done to keep TzTime object 100% compatible with the Date object (e.g.,
+time zone change does not shift the local time of the instance).  To achieve
+this, the getters all create a clone of the object using Date constructor, and
+shift the time zone of the clone before delegating to clone's getters. Needless
+to say, this makes the TzTime getters extremely slow.
 
 Another decision was to make the TzTime constructor instantiate a Date object
 internally so it can reuse as much of the Date prototype as possible, maintain
