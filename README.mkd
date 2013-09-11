@@ -5,6 +5,166 @@ Time-zone-aware drop-in Date object replacement for JavaScript.
 This libary is still in eary phases of development, and most things are not yet
 implemented. Please be patient.
 
+## Why another freaking date/time library?
+
+The JavaScript's native Date constructor is just _that_ horrible. There are as
+many solutions to this horror as there are developers, it seems, but there is
+always room for another, too.
+
+TzTime does things a wee bit differently by providing a completely new
+constructor that fixes many of the Date constructor's quirks. It also provides
+full support for time zones. Finally, it retains close to 100% API
+compatibility, making it a drop-in replacement for many use cases.
+
+## TzTime features
+
+Here is an incomplete list of key features:
+
+### Better constructor
+
+The TzTime constructor doesn't require the `new` keyword.
+
+    var v = TzTime(2013, 8, 1);
+
+It will also take an instance and return a clone.
+
+    var v1 = TzTime(v);
+    v1.getTime() === v.getTime();  // true
+    v1 === v; // false
+
+It can also take a Date instance and return a TzTime object.
+
+    var d = Date(2013, 8, 1);
+    var v2 = TzTime(d);
+
+When using the longest form, it accepts time zone offset as well.
+
+    var v3 = TzTime(2013, 8, 1, 12, 45, 0, 0, -120);
+
+Crated instances are instances of both TzTime and Date.
+
+    v3 instanceof TzTime; // true
+    v3 instanceof Date; // true
+
+Code that works with Date instances should work with with TzTime instances
+(sans the time zone support).
+
+### Accessor attributes
+
+You no longer have to use getters and setters to get the values (if you don't
+like them).
+
+    var v = TzTime(2013, 8, 1, 12, 45, 9, 123, -120);
+
+    v.year;         // 2013
+    v.month;        // 8
+    v.date;         // 1
+    v.hours;        // 12
+    v.minutes;      // 45
+    v.seconds;      // 9
+    v.milliseconds; // 123
+    v.timezone;     // -120
+    // (and more on their way)
+
+The attributes can be assigned as you would expect:
+
+    v.year = 2014;
+    v.minutes = 20;
+
+You can also use the `-=` and `+=` operators (nor more `.addDays()` and
+similar.
+
+    v.date += 20;
+
+They behave just like the getter-setter combo to shift the date/time by desired
+number.
+
+    v.hours += 24 * 365; // shifts the date by 1 year
+
+Compare that to:
+
+    v.setHours(v.getHours() + 24 * 365);
+
+The setter-getter combo still works if you prefer that.
+
+### Time zone support
+
+Yes, for real. The time zone support is finally available in JavaScript, and
+it's simpler than you'd think.
+
+The `getTimezoneOffset()` now has a `setTimezoneOffset()` counterpart that
+works as expected. There is also a `timezone` attribute that you can use.
+
+    var v = TzTime(2013, 8, 1, 12, 45, 9, 123, -120);
+
+    v.getUTCHours(); // 14
+
+    v.timezone = 120;
+    v.hours; // 16 (was 12)
+
+    v.getUTCHours(); // still 14
+
+
+## Design of TzTime and performance
+
+Unfortunately, to get all the goodies to the table, a few design decisions have
+been made that impact the performance. 
+
+One of the decisions was to overload the local time getters (`#getHours()` et
+al) to compensate for time zone difference, and the UTC getters should be left
+intact. This was done to keep TzTime object 100% compatible with the Date
+object (e.g., time zone change does not shift the local time of the instance).
+To achieve this, the getters all create a clone of the object using Date
+constructor, and shift the time zone of the clone before delegating to clone's
+getters. Needless to say, this makes the TzTime getters extremely slow.
+
+Another decision was to make the TzTime constructor instantiate a Date object
+internally so it can reuse as much of the Date prototype as possible, maintain
+the same API as the Date constructor, and still add features to it. This made
+the constructor code a bit more complex and therefore slower.
+
+Here are some numbers to illustrate the performance issues that you might
+have. The tests were performed with a simple loop ran over Date and TzTime
+objects. The loop looks like this:
+
+    (function() { 
+        var start = Date.now(); 
+        for (var i = 1000000; i; i -= 1) { 
+            /*** OPERATION ***/
+        } 
+        var end = Date.now(); 
+        console.log(end - start); 
+    }());
+
+The `o` object appearing in the Operation column is a Date or TzTime object.
+They were created with respective constructors without any arguments. `O` in
+the Operation column is a constructor.
+
+Times are shown in milliseconds.
+
+Here are the results in Google Chrome 29.0.1547.66:
+
+    Operation                   Date            TzTime          Delta %
+    ------------------------------------------------------------------------
+    o.getHours()                172             734             427%
+    o.setHours(5)               498             628             126%
+    new O()                     308             483             157%
+
+Here are the results in FireFox 23.0.1:
+
+    Operation                   Date            TzTime          Delta %
+    ------------------------------------------------------------------------
+    o.getHours()                156             1432            917%
+    o.setHours(5)               423             1561            369%
+    new O()                     486             2530            521%
+
+As you can see, performance is quite horrible at the moment, especially in
+Firefox. The question now is, is the performance hit justified in face of
+possible benefits? For most applications, I believe it is. Especially
+applications that need time zone support.
+
+The performance issues will be addressed at a later date, though.
+
 ## API documentation
 
 API documentation is available in the [doc directory](doc/tztime.mkd) in
