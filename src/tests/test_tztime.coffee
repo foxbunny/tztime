@@ -55,6 +55,13 @@ describe 'TzTime', () ->
       assert.equal d1.getTime(), d3.getTime()
       assert.equal d1.getTime(), d4.getTime()
 
+    it 'should retain timezone when passed TzTime instance', () ->
+      d = new TzTime 2013, 8, 1
+      d.timezone = -240
+      d1 = new TzTime d
+      assert.equal d1.timezone, -240
+      assert.equal d1.getHours(), d.getHours()
+
   describe '#timezone', () ->
     it 'is a number', () ->
       d = new TzTime 2013, 8, 1, 8, 20

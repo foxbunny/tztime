@@ -48,7 +48,7 @@ describe('TzTime', function() {
       d = new TzTime(2013, 8, 1, 12, 45, 39, 0, 360);
       return assert.equal(d.timezone, 360);
     });
-    return it('should create a new instance if passed Date or TzTime obj', function() {
+    it('should create a new instance if passed Date or TzTime obj', function() {
       var d1, d2, d3, d4;
       d1 = new Date(2013, 8, 1);
       d2 = new TzTime(2013, 8, 1);
@@ -63,6 +63,14 @@ describe('TzTime', function() {
       assert.equal(d1.getTime(), d2.getTime());
       assert.equal(d1.getTime(), d3.getTime());
       return assert.equal(d1.getTime(), d4.getTime());
+    });
+    return it('should retain timezone when passed TzTime instance', function() {
+      var d, d1;
+      d = new TzTime(2013, 8, 1);
+      d.timezone = -240;
+      d1 = new TzTime(d);
+      assert.equal(d1.timezone, -240);
+      return assert.equal(d1.getHours(), d.getHours());
     });
   });
   describe('#timezone', function() {

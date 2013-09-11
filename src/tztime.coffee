@@ -76,7 +76,10 @@ define (require) ->
         when 0
           instance = new Date()
         when 1
-          if yr instanceof Date
+          if yr instanceof TzTime
+            instance = new Date yr.getTime()
+            tz = yr.timezone
+          else if yr instanceof Date
             instance = new Date yr.getTime()
           else
             instance = new Date yr
