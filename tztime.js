@@ -53,7 +53,11 @@ define(function(require) {
           instance = new Date();
           break;
         case 1:
-          instance = new Date(yr);
+          if (yr instanceof Date) {
+            instance = new Date(yr.getTime());
+          } else {
+            instance = new Date(yr);
+          }
           break;
         case 2:
           throw new Error("Not implemented yet");

@@ -27,13 +27,33 @@ describe 'TzTime', () ->
       assert.ok d instanceof Date
 
     it 'should be usable withough the new keyword', () ->
+      d = TzTime 2013, 8, 1
+      assert.equal typeof d, 'object'
+      assert.equal d.constructor, TzTime
+      assert.ok d instanceof TzTime
+      assert.ok d instanceof Date
+
       d1 = new TzTime 2013, 8, 1
-      d2 = TzTime 2013, 8, 1
-      assert.equal d1.getTime(), d2.getTime()
+      assert.equal d.getTime(), d1.getTime()
 
     it 'should accept the timezone as last argument', () ->
       d = new TzTime 2013, 8, 1, 12, 45, 39, 0, 360
       assert.equal d.timezone, 360
+
+    it 'should create a new instance if passed Date or TzTime obj', () ->
+      d1 = new Date 2013, 8, 1
+      d2 = new TzTime 2013, 8, 1
+      d3 = new TzTime d1
+      d4 = new TzTime d2
+      assert.notEqual d1, d2
+      assert.notEqual d1, d3
+      assert.notEqual d1, d4
+      assert.notEqual d2, d3
+      assert.notEqual d2, d4
+      assert.notEqual d3, d4
+      assert.equal d1.getTime(), d2.getTime()
+      assert.equal d1.getTime(), d3.getTime()
+      assert.equal d1.getTime(), d4.getTime()
 
   describe '#timezone', () ->
     it 'is a number', () ->

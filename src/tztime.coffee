@@ -76,7 +76,10 @@ define (require) ->
         when 0
           instance = new Date()
         when 1
-          instance = new Date yr
+          if yr instanceof Date
+            instance = new Date yr.getTime()
+          else
+            instance = new Date yr
         when 2
           throw new Error "Not implemented yet"
         else
