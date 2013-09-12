@@ -60,7 +60,6 @@ describe 'TzTime', () ->
       d.timezone = -240
       d1 = new TzTime d
       assert.equal d1.timezone, -240
-      assert.equal d1.getHours(), d.getHours()
 
   describe '#timezone', () ->
     it 'is a number', () ->
@@ -76,6 +75,30 @@ describe 'TzTime', () ->
       d.timezone = 12
       assert.equal d.getTimezoneOffset() + d.timezone, 0
       assert.equal d.getTimezoneOffset(), -12
+
+    it 'should work correctly', () ->
+      pzone = TzTime.platformZone
+      d = new TzTime 2013, 8, 1, 8, 20  ## 8:20am in pzone
+      utchr = d.getUTCHours()
+      lochr = d.getHours()
+
+      ## Establish that d's time zone is platform zone (by default)
+      assert.equal d.timezone, pzone
+
+      ## Move the timezone by +2 hours.
+      d.timezone = pzone + 120
+
+      ## Establish that the local and UTC hours are correct
+      assert.equal d.getUTCHours(), utchr
+      assert.equal d.getHours(), lochr + 2
+
+      ## Set hours
+      d.setHours(d.getHours() - 2)
+
+      ## Establish that setHour() has changed the UTC time
+      assert.equal d.timezone, pzone + 120
+      assert.equal d.getHours(), lochr
+      assert.equal d.getUTCHours(), utchr - 2
 
     it 'should shift the time when set', () ->
       d = new TzTime 2013, 8, 1, 8, 20

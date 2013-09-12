@@ -69,8 +69,7 @@ describe('TzTime', function() {
       d = new TzTime(2013, 8, 1);
       d.timezone = -240;
       d1 = new TzTime(d);
-      assert.equal(d1.timezone, -240);
-      return assert.equal(d1.getHours(), d.getHours());
+      return assert.equal(d1.timezone, -240);
     });
   });
   describe('#timezone', function() {
@@ -90,6 +89,21 @@ describe('TzTime', function() {
       d.timezone = 12;
       assert.equal(d.getTimezoneOffset() + d.timezone, 0);
       return assert.equal(d.getTimezoneOffset(), -12);
+    });
+    it('should work correctly', function() {
+      var d, lochr, pzone, utchr;
+      pzone = TzTime.platformZone;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      utchr = d.getUTCHours();
+      lochr = d.getHours();
+      assert.equal(d.timezone, pzone);
+      d.timezone = pzone + 120;
+      assert.equal(d.getUTCHours(), utchr);
+      assert.equal(d.getHours(), lochr + 2);
+      d.setHours(d.getHours() - 2);
+      assert.equal(d.timezone, pzone + 120);
+      assert.equal(d.getHours(), lochr);
+      return assert.equal(d.getUTCHours(), utchr - 2);
     });
     it('should shift the time when set', function() {
       var d, h1, h2;
