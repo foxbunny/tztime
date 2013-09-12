@@ -184,7 +184,7 @@ define(function(require) {
 
     (function(proto) {
       var method, methods, _i, _len, _results;
-      methods = ['FullYear', 'Month', 'Date', 'Hours'];
+      methods = ['FullYear', 'Month', 'Date', 'Day', 'Hours'];
       _results = [];
       for (_i = 0, _len = methods.length; _i < _len; _i++) {
         method = methods[_i];

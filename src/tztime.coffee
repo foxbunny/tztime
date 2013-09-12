@@ -372,6 +372,7 @@ define (require) ->
         'FullYear'
         'Month'
         'Date'
+        'Day'
         'Hours'
       ]
 
