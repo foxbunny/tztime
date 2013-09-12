@@ -43,6 +43,11 @@ define (require) ->
     property  = (name, descriptor) ->
       Object.defineProperty TzTime.prototype, name, descriptor
 
+    ## Wrapper to make defining static accessors easier
+    staticProperty  = (name, descriptor) ->
+      Object.defineProperty TzTime, name, descriptor
+
+
     # ### Constructor
     #
     #     new TzTime();
@@ -374,6 +379,14 @@ define (require) ->
             this
         ) method
     ) TzTime.prototype
+
+    # ### `TzTime.platformZone'
+    #
+    # Gets the time zone offset of the platform. This is a read-only attribute.
+    #
+    staticProperty 'platformZone',
+      get: () -> -(new Date().getTimezoneOffset())
+      set: () ->
 
   # ### `TzTime.utils`
   #

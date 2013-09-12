@@ -25,10 +25,14 @@ define = (function(root) {
 define(function(require) {
   var TzTime;
   TzTime = (function() {
-    var D, property;
+    var D, property, staticProperty;
 
     property = function(name, descriptor) {
       return Object.defineProperty(TzTime.prototype, name, descriptor);
+    };
+
+    staticProperty = function(name, descriptor) {
+      return Object.defineProperty(TzTime, name, descriptor);
     };
 
     function TzTime(yr, mo, dy, hr, mi, se, ms, tz) {
@@ -204,6 +208,13 @@ define(function(require) {
       }
       return _results;
     })(TzTime.prototype);
+
+    staticProperty('platformZone', {
+      get: function() {
+        return -(new Date().getTimezoneOffset());
+      },
+      set: function() {}
+    });
 
     return TzTime;
 
