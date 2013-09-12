@@ -126,6 +126,15 @@ define(function(require) {
       }
     });
 
+    property('day', {
+      get: function() {
+        return this.getDay();
+      },
+      set: function() {
+        throw new TypeError("Cannot assign to day");
+      }
+    });
+
     property('hours', {
       get: function() {
         return this.getHours();

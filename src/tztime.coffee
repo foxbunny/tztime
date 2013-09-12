@@ -175,7 +175,10 @@ define (require) ->
 
     # #### `#month`
     #
-    # Month in instance's time zone. The value is 0-index where 0 is January.
+    # Month in instance's time zone. The value is an integer between 0 and 11
+    # where 0 is January.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
     #
     property 'month',
       get: () -> @getMonth()
@@ -185,14 +188,29 @@ define (require) ->
     #
     # Date in instance's time zone. The value is an integer between 1 and 31.
     #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
     property 'date',
       get: () -> @getDate()
       set: (v) -> @setDate v
+
+    # #### `#day`
+    #
+    # Day of week in instance's time zone. The value is an integer between 0
+    # and 6 where 0 is Sunday and 6 is Saturday.
+    #
+    # This is a read-only attribute.
+    #
+    property 'day',
+      get: () -> @getDay()
+      set: () -> throw new TypeError "Cannot assign to day"
 
     # #### `#hours`
     #
     # Hours in 24-hour format in instance's time zone. The value is an integer
     # between 0 and 23.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
     #
     property 'hours',
       get: () -> @getHours()
@@ -202,6 +220,8 @@ define (require) ->
     #
     # Minutes in instace's time zone. The value is an integer between 0 and 59.
     #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
     property 'minutes',
       get: () -> @getMinutes()
       set: (v) -> @setMinutes v
@@ -210,6 +230,8 @@ define (require) ->
     #
     # Seconds in instance's time zome. The value is an integer between 0 and
     # 59.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
     #
     property 'seconds',
       get: () -> @getSeconds()
