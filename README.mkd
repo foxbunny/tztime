@@ -97,18 +97,21 @@ works as expected. There is also a `timezone` attribute that you can use.
 
     var v = TzTime(2013, 8, 1, 12, 45, 9, 123, -120);
 
-    v.getUTCHours(); // 14
+    v.getUTCHours() == 14; // true
 
     v.timezone = 120;
-    v.hours; // 16 (was 12)
+    v.hours == 12; // Hours remain constant, we have just change the time zone
 
-    v.getUTCHours(); // still 14
+    v.getUTCHours() == 10; // true
 
 Time zone support is completely invisible if you don't use it. The constructor
 will always create new instances in local time zone of the platform unless the
-time zone is passed to it, and the instances will remain in local time zone as
-long as you don't modify the timezone attribute, or use the time zone offset 
-setter. There is plenty to gain even without the time zone support.
+time zone is passed to it, and the instances will remain in local time zone _of
+the platform_ as long as you don't modify the timezone attribute, or use the
+time zone offset setter. Note, however, that once you modify the time zone of
+the instance, the code that expects the date and time to be in platform time
+zone will no longer function as expected. However, the time zone offset getter
+will still work correctly.
 
 ## More?
 

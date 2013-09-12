@@ -32,6 +32,7 @@ time-zone-aware.
      + [`#setMinutes(minutes [, seconds, milliseconds])`](#setminutes-minutes-seconds-milliseconds)
      + [`#setSeconds(seconds [, milliseconds])](#setseconds-seconds-milliseconds)
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
+   - [`TzTime.platformZone'](#tztime-platformzone)
    - [`TzTime.utils`](#tztime-utils)
    - [`TzTime.utils.repeat(s, count)`](#tztime-utils-repeat-s-count)
    - [`TzTime.utils.reverse(s)`](#tztime-utils-reverse-s)
@@ -119,6 +120,10 @@ for time zones.
 
 The `#getTimezoneOffset()` method retains the native behavior of giving the
 offset in reverse, if you need to rely on such behavior.
+
+The semantic of setting the time zone is changing just the time zone without
+changing the local _time_. When setting the timezone, the local time of the
+instance remains the same, while the UTC time of the instance is shifted.
 
 #### `#year` <a name="year"></a>
 
@@ -253,6 +258,10 @@ Sets the milliseconds. The argument is the same as for the native Date
 prototype's method.
 
 The return value of this method is the TzTime object.
+
+### `TzTime.platformZone' <a name="tztime-platformzone"></a>
+
+Gets the time zone offset of the platform. This is a read-only attribute.
 
 ### `TzTime.utils` <a name="tztime-utils"></a>
 

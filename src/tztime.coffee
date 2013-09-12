@@ -153,6 +153,11 @@ define (require) ->
     # The `#getTimezoneOffset()` method retains the native behavior of giving
     # the offset in reverse, if you need to rely on such behavior.
     #
+    # The semantic of setting the time zone is changing just the time zone
+    # without changing the local _time_. When setting the timezone, the local
+    # time of the instance remains the same, while the UTC time of the instance
+    # is shifted.
+    #
     property 'timezone',
       get: () -> -@getTimezoneOffset()
       set: (v) -> @setTimezoneOffset -v
