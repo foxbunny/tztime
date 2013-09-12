@@ -89,13 +89,21 @@ define (require) ->
         when 1
           if yr instanceof TzTime
             instance = new Date yr.getTime()
-            tz = yr.timezone
+            instance.__timezone__ = yr.timezone
           else if yr instanceof Date
             instance = new Date yr.getTime()
           else
             instance = new Date yr
         when 2
           throw new Error "Not implemented yet"
+        when 8
+          ## When time zone is passed as an argument, first create the the unix
+          ## epoch using other arguments as if they were UTC, then shift the
+          ## unix epoch by the time zone offset in milliseconds.
+          t = Date.UTC yr, mo, dy, hr, mi, se, ms
+          t -= tz * 60 * 1000
+          instance = new Date t
+          instance.__timezone__ = tz
         else
           instance = new Date yr, mo, dy, hr, mi, se, ms
 
@@ -108,12 +116,7 @@ define (require) ->
       # To set the time zone use either `#timezone` attribute, or
       # `#setTimezoneOffset()` method.
       #
-      if tz?
-        instance.__timezone__ = tz
-        delta = tz - TzTime.platformZone
-        instance.setUTCMinutes instance.getUTCMinutes() - delta
-      else
-        instance.__timezone__ = -instance.getTimezoneOffset()
+      instance.__timezone__ or= -instance.getTimezoneOffset()
 
       ## Reset the constructor and prototype chain
       instance.constructor = TzTime

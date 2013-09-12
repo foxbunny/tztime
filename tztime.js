@@ -36,7 +36,7 @@ define(function(require) {
     };
 
     function TzTime(yr, mo, dy, hr, mi, se, ms, tz) {
-      var delta, instance;
+      var instance, t;
       if (hr == null) {
         hr = 0;
       }
@@ -59,7 +59,7 @@ define(function(require) {
         case 1:
           if (yr instanceof TzTime) {
             instance = new Date(yr.getTime());
-            tz = yr.timezone;
+            instance.__timezone__ = yr.timezone;
           } else if (yr instanceof Date) {
             instance = new Date(yr.getTime());
           } else {
@@ -69,16 +69,16 @@ define(function(require) {
         case 2:
           throw new Error("Not implemented yet");
           break;
+        case 8:
+          t = Date.UTC(yr, mo, dy, hr, mi, se, ms);
+          t -= tz * 60 * 1000;
+          instance = new Date(t);
+          instance.__timezone__ = tz;
+          break;
         default:
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
-      if (tz != null) {
-        instance.__timezone__ = tz;
-        delta = tz - TzTime.platformZone;
-        instance.setUTCMinutes(instance.getUTCMinutes() - delta);
-      } else {
-        instance.__timezone__ = -instance.getTimezoneOffset();
-      }
+      instance.__timezone__ || (instance.__timezone__ = -instance.getTimezoneOffset());
       instance.constructor = TzTime;
       instance.__proto__ = TzTime.prototype;
       return instance;
