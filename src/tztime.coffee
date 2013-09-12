@@ -331,19 +331,19 @@ define (require) ->
         'Month'
         'Date'
         'Hours'
-        'Minutes'
-        'Seconds'
-        'Milliseconds'
       ]
 
       for method in methods
         ## Create setters
-        if method isnt 'Hours'
-          proto['set' + method] = ((method) ->
-            () ->
-              Date.prototype['setUTC' + method].apply this, arguments
-              this
-          ) method
+        proto['set' + method] = ((method) ->
+          () ->
+            Date.prototype['setUTC' + method].apply this, arguments
+            ## Adjust for the timezone difference
+            utcmins = Date.prototype.getUTCMinutes.call this
+            delta = utcmins - @__timezone__
+            Date.prototype.setUTCMinutes.call this, delta
+            this
+        ) method
 
         ## Crate getters
         proto['get' + method] = ((method) ->
@@ -359,14 +359,21 @@ define (require) ->
         ) method
     ) TzTime.prototype
 
-    setHours: () ->
-      ## Set using UTC version of the method
-      Date::setUTCHours.apply this, arguments
-      ## Adjust for the timezone difference
-      utcmins = Date.prototype.getUTCMinutes.call this
-      delta = utcmins - @__timezone__
-      Date.prototype.setUTCMinutes.call this, delta
-      this
+    ((proto) ->
+      methods = [
+        'Minutes',
+        'Seconds',
+        'Milliseconds'
+      ]
+
+      for method in methods
+        ## Create setters
+        proto['set' + method] = ((method) ->
+          () ->
+            Date.prototype['setUTC' + method].apply this, arguments
+            this
+        ) method
+    ) TzTime.prototype
 
   # ### `TzTime.utils`
   #
