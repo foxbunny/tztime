@@ -36,7 +36,7 @@ define(function(require) {
     };
 
     function TzTime(yr, mo, dy, hr, mi, se, ms, tz) {
-      var instance;
+      var delta, instance;
       if (hr == null) {
         hr = 0;
       }
@@ -72,12 +72,15 @@ define(function(require) {
         default:
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
-      instance.__timezone__ = -instance.getTimezoneOffset();
+      if (tz != null) {
+        instance.__timezone__ = tz;
+        delta = tz - TzTime.platformZone;
+        instance.setUTCMinutes(instance.getUTCMinutes() - delta);
+      } else {
+        instance.__timezone__ = -instance.getTimezoneOffset();
+      }
       instance.constructor = TzTime;
       instance.__proto__ = TzTime.prototype;
-      if (tz != null) {
-        instance.timezone = tz;
-      }
       return instance;
     }
 
@@ -155,6 +158,7 @@ define(function(require) {
     };
 
     TzTime.prototype.setTimezoneOffset = function(v) {
+      var delta;
       v = parseInt(v);
       if (isNaN(v)) {
         throw new TypeError("Time zone offset must be an integer.");
@@ -162,7 +166,11 @@ define(function(require) {
       if ((-720 > v && v > 720)) {
         throw new TypeError("Time zone offset out of bounds.");
       }
-      return this.__timezone__ = -v;
+      v = -v;
+      delta = v - this.__timezone__;
+      this.__timezone__ = v;
+      this.setUTCMinutes(this.getUTCMinutes() - delta);
+      return this;
     };
 
     (function(proto) {

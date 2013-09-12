@@ -40,6 +40,13 @@ describe 'TzTime', () ->
       d = new TzTime 2013, 8, 1, 12, 45, 39, 0, 360
       assert.equal d.timezone, 360
 
+    it 'should set correct time zone when passed it', () ->
+      offset = 6 * 60  # 6 hours
+      d = new TzTime 2013, 8, 1, 12, 45, 39, 0, offset
+      hours = d.getHours()
+      assert.equal hours, 12
+      assert.equal d.getUTCHours(), hours - 6
+
     it 'should create a new instance if passed Date or TzTime obj', () ->
       d1 = new Date 2013, 8, 1
       d2 = new TzTime 2013, 8, 1
@@ -76,37 +83,40 @@ describe 'TzTime', () ->
       assert.equal d.getTimezoneOffset() + d.timezone, 0
       assert.equal d.getTimezoneOffset(), -12
 
-    it 'should work correctly', () ->
-      pzone = TzTime.platformZone
-      d = new TzTime 2013, 8, 1, 8, 20  ## 8:20am in pzone
-      utchr = d.getUTCHours()
-      lochr = d.getHours()
-
-      ## Establish that d's time zone is platform zone (by default)
-      assert.equal d.timezone, pzone
-
-      ## Move the timezone by +2 hours.
-      d.timezone = pzone + 120
-
-      ## Establish that the local and UTC hours are correct
-      assert.equal d.getUTCHours(), utchr
-      assert.equal d.getHours(), lochr + 2
-
-      ## Set hours
-      d.setHours(d.getHours() - 2)
-
-      ## Establish that setHour() has changed the UTC time
-      assert.equal d.timezone, pzone + 120
-      assert.equal d.getHours(), lochr
-      assert.equal d.getUTCHours(), utchr - 2
-
-    it 'should shift the time when set', () ->
-      d = new TzTime 2013, 8, 1, 8, 20
+    it 'should not shift the time when set', () ->
+      offset = -120
+      d = new TzTime 2013, 8, 1, 8, 20, 0, 0, offset
       d.timezone = 0
       h1 = d.getHours()
+      uh1 = d.getUTCHours()
       d.timezone = 60
       h2 = d.getHours()
-      assert.equal h1 + 1, h2
+      uh2 = d.getUTCHours()
+      assert.equal h1, h2
+      assert.notEqual uh1, uh2
+
+    it 'should give same UTC and local time when set to 0', () ->
+      d = new TzTime 2013, 8, 1, 8, 20
+      d.timezone = 0
+      assert.equal d.getHours(), d.getUTCHours()
+
+    it 'should generally work correctly', () ->
+      pzone = TzTime.platformZone
+      pzhours = pzone / 60
+      d = new TzTime 2013, 8, 1, 8, 20  ## 8:20am in pzone
+
+      utch1 = d.getUTCHours()
+      loch1 = d.getHours()
+
+      assert.equal utch1, loch1 - pzhours
+
+      d.timezone = pzone + 120  ## + 2 hours
+
+      utch2 = d.getUTCHours()
+      loch2 = d.getHours()
+
+      assert.equal loch2, loch1  ## local time remains the same
+      assert.equal utch2, utch1 - 2  ## UTC has been shifted -2 hr
 
     it 'will convert floats to integers', () ->
       d = new TzTime 2013, 8, 1, 8, 20

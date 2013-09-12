@@ -48,6 +48,14 @@ describe('TzTime', function() {
       d = new TzTime(2013, 8, 1, 12, 45, 39, 0, 360);
       return assert.equal(d.timezone, 360);
     });
+    it('should set correct time zone when passed it', function() {
+      var d, hours, offset;
+      offset = 6 * 60;
+      d = new TzTime(2013, 8, 1, 12, 45, 39, 0, offset);
+      hours = d.getHours();
+      assert.equal(hours, 12);
+      return assert.equal(d.getUTCHours(), hours - 6);
+    });
     it('should create a new instance if passed Date or TzTime obj', function() {
       var d1, d2, d3, d4;
       d1 = new Date(2013, 8, 1);
@@ -90,29 +98,38 @@ describe('TzTime', function() {
       assert.equal(d.getTimezoneOffset() + d.timezone, 0);
       return assert.equal(d.getTimezoneOffset(), -12);
     });
-    it('should work correctly', function() {
-      var d, lochr, pzone, utchr;
-      pzone = TzTime.platformZone;
-      d = new TzTime(2013, 8, 1, 8, 20);
-      utchr = d.getUTCHours();
-      lochr = d.getHours();
-      assert.equal(d.timezone, pzone);
-      d.timezone = pzone + 120;
-      assert.equal(d.getUTCHours(), utchr);
-      assert.equal(d.getHours(), lochr + 2);
-      d.setHours(d.getHours() - 2);
-      assert.equal(d.timezone, pzone + 120);
-      assert.equal(d.getHours(), lochr);
-      return assert.equal(d.getUTCHours(), utchr - 2);
-    });
-    it('should shift the time when set', function() {
-      var d, h1, h2;
-      d = new TzTime(2013, 8, 1, 8, 20);
+    it('should not shift the time when set', function() {
+      var d, h1, h2, offset, uh1, uh2;
+      offset = -120;
+      d = new TzTime(2013, 8, 1, 8, 20, 0, 0, offset);
       d.timezone = 0;
       h1 = d.getHours();
+      uh1 = d.getUTCHours();
       d.timezone = 60;
       h2 = d.getHours();
-      return assert.equal(h1 + 1, h2);
+      uh2 = d.getUTCHours();
+      assert.equal(h1, h2);
+      return assert.notEqual(uh1, uh2);
+    });
+    it('should give same UTC and local time when set to 0', function() {
+      var d;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      d.timezone = 0;
+      return assert.equal(d.getHours(), d.getUTCHours());
+    });
+    it('should generally work correctly', function() {
+      var d, loch1, loch2, pzhours, pzone, utch1, utch2;
+      pzone = TzTime.platformZone;
+      pzhours = pzone / 60;
+      d = new TzTime(2013, 8, 1, 8, 20);
+      utch1 = d.getUTCHours();
+      loch1 = d.getHours();
+      assert.equal(utch1, loch1 - pzhours);
+      d.timezone = pzone + 120;
+      utch2 = d.getUTCHours();
+      loch2 = d.getHours();
+      assert.equal(loch2, loch1);
+      return assert.equal(utch2, utch1 - 2);
     });
     it('will convert floats to integers', function() {
       var d;

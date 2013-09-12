@@ -108,13 +108,16 @@ define (require) ->
       # To set the time zone use either `#timezone` attribute, or
       # `#setTimezoneOffset()` method.
       #
-      instance.__timezone__ = -instance.getTimezoneOffset()
+      if tz?
+        instance.__timezone__ = tz
+        delta = tz - TzTime.platformZone
+        instance.setUTCMinutes instance.getUTCMinutes() - delta
+      else
+        instance.__timezone__ = -instance.getTimezoneOffset()
 
       ## Reset the constructor and prototype chain
       instance.constructor = TzTime
       instance.__proto__ = TzTime.prototype
-
-      instance.timezone = tz if tz?
 
       return instance
 
@@ -249,7 +252,11 @@ define (require) ->
         throw new TypeError "Time zone offset must be an integer."
       if -720 > v > 720
         throw new TypeError "Time zone offset out of bounds."
-      @__timezone__ = -v
+      v = -v
+      delta = v - @__timezone__
+      @__timezone__ = v
+      @setUTCMinutes @getUTCMinutes() - delta
+      this
 
     # #### `#getFullYear()`
     #
