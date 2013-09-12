@@ -237,6 +237,97 @@ define (require) ->
       get: () -> @getSeconds()
       set: (v) -> @setSeconds v
 
+    # #### `#milliseconds'
+    #
+    # Milliseconds in instance's time zone. The value is an integer between 0
+    # and 999.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    property 'milliseconds',
+      get: () -> @getMilliseconds()
+      set: (v) -> @setMilliseconds v
+
+    # #### `#utcYear'
+    #
+    # The full year with century in UTC time zone. The value is an integer.
+    #
+    property 'utcYear',
+      get: () -> @getUTCFullYear()
+      set: (v) -> @setUTCFullYear v
+
+    # #### `#utcMonth`
+    #
+    # Month in UTC time zone. The value is an integer between 0 and 11 where 0
+    # is January.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    property 'utcMonth',
+      get: () -> @getUTCMonth()
+      set: (v) -> @setUTCMonth v
+
+    # #### `#utcDate`
+    #
+    # Date in UTC time zone. The value is an integer between 1 and 31.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    property 'utcDate',
+      get: () -> @getUTCDate()
+      set: (v) -> @setUTCDate v
+
+    # #### `#utcDay`
+    #
+    # Day of week in UTC time zone. The value is an integer between 0 and 6
+    # where 0 is Sunday, and 6 is Saturday.
+    #
+    # This is a read-only attribute.
+    #
+    property 'utcDay',
+      get: () -> @getUTCDay()
+      set: () -> throw new TypeError "Cannot assign to utcDay"
+
+    # #### `#utcHours`
+    #
+    # Hours in UTC time zone. The value is an integer between 0 and 23.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    property 'utcHours',
+      get: () -> @getUTCHours()
+      set: (v) -> @setUTCHours v
+
+    # #### `#utcMinutes`
+    #
+    # Minutes in UTC time zone. The value is an integer between 0 and 59.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    property 'utcMinutes',
+      get: () -> @getUTCMinutes()
+      set: (v) -> @setUTCMinutes v
+
+    # #### `#utcSeconds`
+    #
+    # Seconds in UTC time zone. The value is an integer between 0 and 59.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    property 'utcSeconds',
+      get: () -> @getUTCSeconds()
+      set: (v) -> @setUTCSeconds v
+
+    # #### `#utcMilliseconds`
+    #
+    # Milliseconds in UTC time zone. The value is an integer between 0 and 999.
+    #
+    # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    property 'utcMilliseconds',
+      get: () -> @getUTCMilliseconds()
+      set: (v) -> @setUTCMilliseconds v
+
     # ### Methods
     #
     # The methods of the TzTime prototype are specifically designed to address
@@ -300,6 +391,11 @@ define (require) ->
     # #### `#getDate()`
     #
     # Returns the integer date (1-31) in the instance's time zone.
+    #
+    # #### `#getDay()`
+    #
+    # Returns the integer day of week (0-6) in instace's time zone. 0 is
+    # Sunday, and 6 is Saturday.
     #
     # #### `#getHours()`
     #
@@ -374,6 +470,7 @@ define (require) ->
         'Date'
         'Day'
         'Hours'
+        'Minutes'
       ]
 
       for method in methods
@@ -417,13 +514,14 @@ define (require) ->
         ) method
     ) TzTime.prototype
 
+
     # ### `TzTime.platformZone'
     #
     # Gets the time zone offset of the platform. This is a read-only attribute.
     #
     staticProperty 'platformZone',
       get: () -> -(new Date().getTimezoneOffset())
-      set: () ->
+      set: () -> throw new TypeError "Cannot assign to platformZone"
 
   # ### `TzTime.utils`
   #

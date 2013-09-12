@@ -162,6 +162,87 @@ define(function(require) {
       }
     });
 
+    property('milliseconds', {
+      get: function() {
+        return this.getMilliseconds();
+      },
+      set: function(v) {
+        return this.setMilliseconds(v);
+      }
+    });
+
+    property('utcYear', {
+      get: function() {
+        return this.getUTCFullYear();
+      },
+      set: function(v) {
+        return this.setUTCFullYear(v);
+      }
+    });
+
+    property('utcMonth', {
+      get: function() {
+        return this.getUTCMonth();
+      },
+      set: function(v) {
+        return this.setUTCMonth(v);
+      }
+    });
+
+    property('utcDate', {
+      get: function() {
+        return this.getUTCDate();
+      },
+      set: function(v) {
+        return this.setUTCDate(v);
+      }
+    });
+
+    property('utcDay', {
+      get: function() {
+        return this.getUTCDay();
+      },
+      set: function() {
+        throw new TypeError("Cannot assign to utcDay");
+      }
+    });
+
+    property('utcHours', {
+      get: function() {
+        return this.getUTCHours();
+      },
+      set: function(v) {
+        return this.setUTCHours(v);
+      }
+    });
+
+    property('utcMinutes', {
+      get: function() {
+        return this.getUTCMinutes();
+      },
+      set: function(v) {
+        return this.setUTCMinutes(v);
+      }
+    });
+
+    property('utcSeconds', {
+      get: function() {
+        return this.getUTCSeconds();
+      },
+      set: function(v) {
+        return this.setUTCSeconds(v);
+      }
+    });
+
+    property('utcMilliseconds', {
+      get: function() {
+        return this.getUTCMilliseconds();
+      },
+      set: function(v) {
+        return this.setUTCMilliseconds(v);
+      }
+    });
+
     TzTime.prototype.getTimezoneOffset = function() {
       return -this.__timezone__;
     };
@@ -184,7 +265,7 @@ define(function(require) {
 
     (function(proto) {
       var method, methods, _i, _len, _results;
-      methods = ['FullYear', 'Month', 'Date', 'Day', 'Hours'];
+      methods = ['FullYear', 'Month', 'Date', 'Day', 'Hours', 'Minutes'];
       _results = [];
       for (_i = 0, _len = methods.length; _i < _len; _i++) {
         method = methods[_i];
@@ -229,7 +310,9 @@ define(function(require) {
       get: function() {
         return -(new Date().getTimezoneOffset());
       },
-      set: function() {}
+      set: function() {
+        throw new TypeError("Cannot assign to platformZone");
+      }
     });
 
     return TzTime;

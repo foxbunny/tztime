@@ -347,6 +347,11 @@ describe 'TzTime', () ->
       equal y1, 2014
       equal y2, 2012
 
+  describe '#day', () ->
+    it 'should return the day of week', () ->
+      d = TzTime 2013, 8, 1, 8, 20, 1, 500  ## Sunday
+      equal d.day, 0
+
   describe '#hours', () ->
     it 'should set the hour', () ->
       d = TzTime 2013, 8, 1, 8, 20, 1, 500
@@ -463,4 +468,115 @@ describe 'TzTime', () ->
       d = TzTime 2013, 8, 1, 8, 20, 1, 500
       d.seconds += 60 * 60 * 24 * 365
       equal d.year, 2014
+
+  describe '#milliseconds', () ->
+    it 'should return milliseconds', () ->
+      d = TzTime 2013, 8, 1, 8, 20, 1, 500
+      equal d.milliseconds, 500
+
+    it 'should set milliseconds', () ->
+      d = TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.milliseconds = 430
+      equal d.milliseconds, 430
+
+    it 'can be used with -= and += operators', () ->
+      d = TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.milliseconds += 10
+      equal d.milliseconds, 510
+      d.milliseconds -= 20
+      equal d.milliseconds, 490
+
+    it 'should cross second boundary', () ->
+      d = TzTime 2013, 8, 1, 8, 20, 1, 500
+      d.milliseconds += 500
+      equal d.seconds, 2
+
+  describe '#utcYear', () ->
+    it 'should return the UTC year', () ->
+      d = TzTime 2013, 0, 1, 0, 0, 0, 0, 60
+      equal d.year, 2013
+      equal d.utcYear, 2012
+
+    it 'should set the UTC year', () ->
+      d = TzTime 2013, 0, 1, 0, 0, 0, 0, 60
+      d.utcYear = 2013
+      equal d.year, 2014
+
+  describe '#utcMonth', () ->
+    it 'should return the UTC month', () ->
+      d = TzTime 2013, 1, 1, 0, 0, 0, 0, 60
+      equal d.month, 1
+      equal d.utcMonth, 0
+
+    it 'should set the UTC month', () ->
+      d = TzTime 2013, 1, 1, 0, 0, 0, 0, 60
+      d.utcMonth = 1
+      equal d.month, 2
+
+  describe '#utcDate', () ->
+    it 'should return the UTC date', () ->
+      d = TzTime 2013, 1, 2, 0, 0, 0, 0, 60
+      equal d.date, 2
+      equal d.utcDate, 1
+
+    it 'should set the UTC date', () ->
+      d = TzTime 2013, 1, 2, 0, 0, 0, 0, 60
+      d.utcDate = 2
+      console.log
+      equal d.date, 3
+
+  describe '#utcDay', () ->
+    it 'should return the UTC day of week', () ->
+      d = TzTime 2013, 1, 2, 0, 0, 0, 0, 60
+      equal d.day, 6
+      equal d.utcDay, 5
+
+  describe '#utcHours', () ->
+    it 'should return the UTC hours', () ->
+      d = TzTime 2013, 1, 2, 1, 0, 0, 0, 60
+      equal d.hours, 1
+      equal d.utcHours, 0
+
+    it 'should set the UTC hours', () ->
+      d = TzTime 2013, 1, 2, 1, 0, 0, 0, 60
+      d.utcHours = 1
+      equal d.hours, 2
+
+  describe '#utcMinutes', () ->
+    it 'should return the UTC minutes', () ->
+      d = TzTime 2013, 1, 2, 1, 35, 0, 0, 30
+      equal d.minutes, 35
+      equal d.utcMinutes, 5
+
+    it 'should set the UTC minutes', () ->
+      d = TzTime 2013, 1, 2, 1, 35, 0, 0, 30
+      d.utcMinutes = 15
+      equal d.minutes, 45
+
+  describe '#utcSeconds', () ->
+    it 'should return the UTC seconds', () ->
+      ## And yes, the UTC seconds are not differnt from normal seconds but we
+      ## still need to make sure the accessor works.
+      d = TzTime 2013, 1, 2, 1, 35, 7, 0, 30
+      equal d.seconds, 7
+      equal d.utcSeconds, 7
+
+    it 'should set the UTC seconds', () ->
+      d = TzTime 2013, 1, 2, 1, 35, 7, 0, 30
+      d.utcSeconds = 12
+      equal d.seconds, 12
+
+  describe '#utcMilliseconds', () ->
+    it 'should return the UTC milliseconds', () ->
+      ## Again, just making sure the accessors work
+      d = TzTime 2013, 1, 2, 1, 35, 7, 224, 30
+      equal d.milliseconds, 224
+      equal d.utcMilliseconds, 224
+
+    it 'shoul set the UTC milliseconds', () ->
+      d = TzTime 2013, 1, 2, 1, 35, 7, 224, 30
+      d.utcMilliseconds = 433
+      equal d.milliseconds, 433
+
+
 

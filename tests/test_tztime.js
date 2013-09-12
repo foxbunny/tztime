@@ -421,6 +421,13 @@ describe('TzTime', function() {
       return equal(y2, 2012);
     });
   });
+  describe('#day', function() {
+    return it('should return the day of week', function() {
+      var d;
+      d = TzTime(2013, 8, 1, 8, 20, 1, 500);
+      return equal(d.day, 0);
+    });
+  });
   describe('#hours', function() {
     it('should set the hour', function() {
       var d;
@@ -560,6 +567,140 @@ describe('TzTime', function() {
       d = TzTime(2013, 8, 1, 8, 20, 1, 500);
       d.seconds += 60 * 60 * 24 * 365;
       return equal(d.year, 2014);
+    });
+  });
+  describe('#milliseconds', function() {
+    it('should return milliseconds', function() {
+      var d;
+      d = TzTime(2013, 8, 1, 8, 20, 1, 500);
+      return equal(d.milliseconds, 500);
+    });
+    it('should set milliseconds', function() {
+      var d;
+      d = TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.milliseconds = 430;
+      return equal(d.milliseconds, 430);
+    });
+    it('can be used with -= and += operators', function() {
+      var d;
+      d = TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.milliseconds += 10;
+      equal(d.milliseconds, 510);
+      d.milliseconds -= 20;
+      return equal(d.milliseconds, 490);
+    });
+    return it('should cross second boundary', function() {
+      var d;
+      d = TzTime(2013, 8, 1, 8, 20, 1, 500);
+      d.milliseconds += 500;
+      return equal(d.seconds, 2);
+    });
+  });
+  describe('#utcYear', function() {
+    it('should return the UTC year', function() {
+      var d;
+      d = TzTime(2013, 0, 1, 0, 0, 0, 0, 60);
+      equal(d.year, 2013);
+      return equal(d.utcYear, 2012);
+    });
+    return it('should set the UTC year', function() {
+      var d;
+      d = TzTime(2013, 0, 1, 0, 0, 0, 0, 60);
+      d.utcYear = 2013;
+      return equal(d.year, 2014);
+    });
+  });
+  describe('#utcMonth', function() {
+    it('should return the UTC month', function() {
+      var d;
+      d = TzTime(2013, 1, 1, 0, 0, 0, 0, 60);
+      equal(d.month, 1);
+      return equal(d.utcMonth, 0);
+    });
+    return it('should set the UTC month', function() {
+      var d;
+      d = TzTime(2013, 1, 1, 0, 0, 0, 0, 60);
+      d.utcMonth = 1;
+      return equal(d.month, 2);
+    });
+  });
+  describe('#utcDate', function() {
+    it('should return the UTC date', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 0, 0, 0, 0, 60);
+      equal(d.date, 2);
+      return equal(d.utcDate, 1);
+    });
+    return it('should set the UTC date', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 0, 0, 0, 0, 60);
+      d.utcDate = 2;
+      console.log;
+      return equal(d.date, 3);
+    });
+  });
+  describe('#utcDay', function() {
+    return it('should return the UTC day of week', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 0, 0, 0, 0, 60);
+      equal(d.day, 6);
+      return equal(d.utcDay, 5);
+    });
+  });
+  describe('#utcHours', function() {
+    it('should return the UTC hours', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 0, 0, 0, 60);
+      equal(d.hours, 1);
+      return equal(d.utcHours, 0);
+    });
+    return it('should set the UTC hours', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 0, 0, 0, 60);
+      d.utcHours = 1;
+      return equal(d.hours, 2);
+    });
+  });
+  describe('#utcMinutes', function() {
+    it('should return the UTC minutes', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 35, 0, 0, 30);
+      equal(d.minutes, 35);
+      return equal(d.utcMinutes, 5);
+    });
+    return it('should set the UTC minutes', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 35, 0, 0, 30);
+      d.utcMinutes = 15;
+      return equal(d.minutes, 45);
+    });
+  });
+  describe('#utcSeconds', function() {
+    it('should return the UTC seconds', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 35, 7, 0, 30);
+      equal(d.seconds, 7);
+      return equal(d.utcSeconds, 7);
+    });
+    return it('should set the UTC seconds', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 35, 7, 0, 30);
+      d.utcSeconds = 12;
+      return equal(d.seconds, 12);
+    });
+  });
+  return describe('#utcMilliseconds', function() {
+    it('should return the UTC milliseconds', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 35, 7, 224, 30);
+      equal(d.milliseconds, 224);
+      return equal(d.utcMilliseconds, 224);
+    });
+    return it('shoul set the UTC milliseconds', function() {
+      var d;
+      d = TzTime(2013, 1, 2, 1, 35, 7, 224, 30);
+      d.utcMilliseconds = 433;
+      return equal(d.milliseconds, 433);
     });
   });
 });
