@@ -12,15 +12,26 @@ time-zone-aware.
      + [`#year`](#year)
      + [`#month`](#month)
      + [`#date`](#date)
+     + [`#day`](#day)
      + [`#hours`](#hours)
      + [`#minutes`](#minutes)
      + [`#seconds`](#seconds)
+     + [`#milliseconds'](#milliseconds)
+     + [`#utcYear'](#utcyear)
+     + [`#utcMonth`](#utcmonth)
+     + [`#utcDate`](#utcdate)
+     + [`#utcDay`](#utcday)
+     + [`#utcHours`](#utchours)
+     + [`#utcMinutes`](#utcminutes)
+     + [`#utcSeconds`](#utcseconds)
+     + [`#utcMilliseconds`](#utcmilliseconds)
    - [Methods](#methods)
      + [`#getTimezoneOffset()`](#gettimezoneoffset)
      + [`#setTimezoneOffset(v)`](#settimezoneoffset-v)
      + [`#getFullYear()`](#getfullyear)
      + [`#getMonth()`](#getmonth)
      + [`#getDate()`](#getdate)
+     + [`#getDay()`](#getday)
      + [`#getHours()`](#gethours)
      + [`#getMinutes()`](#getminutes)
      + [`#getSeconds()`](#getseconds)
@@ -131,24 +142,97 @@ Full integer year in instance's time zone. The value is an integer.
 
 #### `#month` <a name="month"></a>
 
-Month in instance's time zone. The value is 0-index where 0 is January.
+Month in instance's time zone. The value is an integer between 0 and 11 where 0
+is January.
+
+Setting values outside the rage will adjust other attributes accordingly.
 
 #### `#date` <a name="date"></a>
 
 Date in instance's time zone. The value is an integer between 1 and 31.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#day` <a name="day"></a>
+
+Day of week in instance's time zone. The value is an integer between 0 and 6
+where 0 is Sunday and 6 is Saturday.
+
+This is a read-only attribute.
 
 #### `#hours` <a name="hours"></a>
 
 Hours in 24-hour format in instance's time zone. The value is an integer
 between 0 and 23.
 
+Setting values outside the rage will adjust other attributes accordingly.
+
 #### `#minutes` <a name="minutes"></a>
 
 Minutes in instace's time zone. The value is an integer between 0 and 59.
 
+Setting values outside the rage will adjust other attributes accordingly.
+
 #### `#seconds` <a name="seconds"></a>
 
 Seconds in instance's time zome. The value is an integer between 0 and 59.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#milliseconds' <a name="milliseconds"></a>
+
+Milliseconds in instance's time zone. The value is an integer between 0 and
+999.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#utcYear' <a name="utcyear"></a>
+
+The full year with century in UTC time zone. The value is an integer.
+
+#### `#utcMonth` <a name="utcmonth"></a>
+
+Month in UTC time zone. The value is an integer between 0 and 11 where 0 is
+January.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#utcDate` <a name="utcdate"></a>
+
+Date in UTC time zone. The value is an integer between 1 and 31.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#utcDay` <a name="utcday"></a>
+
+Day of week in UTC time zone. The value is an integer between 0 and 6 where 0
+is Sunday, and 6 is Saturday.
+
+This is a read-only attribute.
+
+#### `#utcHours` <a name="utchours"></a>
+
+Hours in UTC time zone. The value is an integer between 0 and 23.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#utcMinutes` <a name="utcminutes"></a>
+
+Minutes in UTC time zone. The value is an integer between 0 and 59.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#utcSeconds` <a name="utcseconds"></a>
+
+Seconds in UTC time zone. The value is an integer between 0 and 59.
+
+Setting values outside the rage will adjust other attributes accordingly.
+
+#### `#utcMilliseconds` <a name="utcmilliseconds"></a>
+
+Milliseconds in UTC time zone. The value is an integer between 0 and 999.
+
+Setting values outside the rage will adjust other attributes accordingly.
 
 ### Methods <a name="methods"></a>
 
@@ -193,6 +277,11 @@ instance's time zone.
 #### `#getDate()` <a name="getdate"></a>
 
 Returns the integer date (1-31) in the instance's time zone.
+
+#### `#getDay()` <a name="getday"></a>
+
+Returns the integer day of week (0-6) in instace's time zone. 0 is Sunday, and
+6 is Saturday.
 
 #### `#getHours()` <a name="gethours"></a>
 
