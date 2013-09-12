@@ -392,11 +392,10 @@ define (require) ->
           ## Create a closure for `method` so it doesn't get overrun by
           ## iteration.
           () ->
-            ## Clone the `this` using plain Date object
-            d = new Date this.getTime()
-            ## Adjust for timezone difference
-            d.setUTCMinutes d.getUTCMinutes() + @__timezone__
-            ## Return the adjusted value
+            ## Create a clone of the instance using Date constructor and time
+            ## shifted by the time zone offset, then use the UTC getter to
+            ## return the value.
+            d = new Date @getTime() + @timezone * 60 * 1000
             d['getUTC' + method]()
         ) method
     ) TzTime.prototype

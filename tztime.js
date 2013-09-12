@@ -201,8 +201,7 @@ define(function(require) {
         _results.push(proto['get' + method] = (function(method) {
           return function() {
             var d;
-            d = new Date(this.getTime());
-            d.setUTCMinutes(d.getUTCMinutes() + this.__timezone__);
+            d = new Date(this.getTime() + this.timezone * 60 * 1000);
             return d['getUTC' + method]();
           };
         })(method));
