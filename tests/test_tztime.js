@@ -635,7 +635,6 @@ describe('TzTime', function() {
       var d;
       d = TzTime(2013, 1, 2, 0, 0, 0, 0, 60);
       d.utcDate = 2;
-      console.log;
       return equal(d.date, 3);
     });
   });

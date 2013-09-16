@@ -522,7 +522,6 @@ describe 'TzTime', () ->
     it 'should set the UTC date', () ->
       d = TzTime 2013, 1, 2, 0, 0, 0, 0, 60
       d.utcDate = 2
-      console.log
       equal d.date, 3
 
   describe '#utcDay', () ->

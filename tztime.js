@@ -25,7 +25,7 @@ define = (function(root) {
 define(function(require) {
   var TzTime;
   TzTime = (function() {
-    var D, property, staticProperty;
+    var D, METHODS, NON_TZ_AWARE_GETTERS, NON_TZ_AWARE_SETTERS, TZ_AWARE_METHODS, m, property, staticProperty, wrap, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
 
     property = function(name, descriptor) {
       return Object.defineProperty(TzTime.prototype, name, descriptor);
@@ -34,6 +34,21 @@ define(function(require) {
     staticProperty = function(name, descriptor) {
       return Object.defineProperty(TzTime, name, descriptor);
     };
+
+    wrap = function(name) {
+      return TzTime.prototype[name] = function() {
+        var _ref;
+        return (_ref = this.__date__)[name].apply(_ref, arguments);
+      };
+    };
+
+    METHODS = ['FullYear', 'Month', 'Date', 'Day', 'Hours', 'Minutes', 'Seconds', 'Milliseconds'];
+
+    TZ_AWARE_METHODS = ['FullYear', 'Month', 'Date', 'Day', 'Hours', 'Minutes'];
+
+    NON_TZ_AWARE_GETTERS = ['Seconds', 'Milliseconds'];
+
+    NON_TZ_AWARE_SETTERS = ['Minutes', 'Seconds', 'Milliseconds'];
 
     function TzTime(yr, mo, dy, hr, mi, se, ms, tz) {
       var instance, t;
@@ -52,6 +67,13 @@ define(function(require) {
       if (tz == null) {
         tz = null;
       }
+      if (!(this instanceof TzTime)) {
+        return (function(func, args, ctor) {
+          ctor.prototype = func.prototype;
+          var child = new ctor, result = func.apply(child, args);
+          return Object(result) === result ? result : child;
+        })(TzTime, arguments, function(){});
+      }
       switch (arguments.length) {
         case 0:
           instance = new Date();
@@ -59,7 +81,7 @@ define(function(require) {
         case 1:
           if (yr instanceof TzTime) {
             instance = new Date(yr.getTime());
-            instance.__timezone__ = yr.timezone;
+            this.__timezone__ = yr.timezone;
           } else if (yr instanceof Date) {
             instance = new Date(yr.getTime());
           } else {
@@ -73,15 +95,14 @@ define(function(require) {
           t = Date.UTC(yr, mo, dy, hr, mi, se, ms);
           t -= tz * 60 * 1000;
           instance = new Date(t);
-          instance.__timezone__ = tz;
+          this.__timezone__ = tz;
           break;
         default:
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
-      instance.__timezone__ || (instance.__timezone__ = -instance.getTimezoneOffset());
-      instance.constructor = TzTime;
-      instance.__proto__ = TzTime.prototype;
-      return instance;
+      this.__timezone__ || (this.__timezone__ = -instance.getTimezoneOffset());
+      this.__date__ = instance;
+      this.constructor = TzTime;
     }
 
     D = function() {};
@@ -263,47 +284,58 @@ define(function(require) {
       return this;
     };
 
+    _ref = ['toDateString', 'toISOString', 'toJSON', 'toLocaleDateString', 'toLocaleString', 'toLocaleTimeString', 'toString', 'toTimeString', 'toUTCString', 'valueOf', 'getTime', 'setTime'];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      m = _ref[_i];
+      wrap(m);
+    }
+
+    if (m !== 'Day') {
+      for (_j = 0, _len1 = METHODS.length; _j < _len1; _j++) {
+        m = METHODS[_j];
+        wrap('setUTC' + m);
+      }
+    }
+
+    for (_k = 0, _len2 = METHODS.length; _k < _len2; _k++) {
+      m = METHODS[_k];
+      wrap('getUTC' + m);
+    }
+
+    for (_l = 0, _len3 = NON_TZ_AWARE_GETTERS.length; _l < _len3; _l++) {
+      m = NON_TZ_AWARE_GETTERS[_l];
+      wrap('get' + m);
+    }
+
+    for (_m = 0, _len4 = NON_TZ_AWARE_SETTERS.length; _m < _len4; _m++) {
+      m = NON_TZ_AWARE_SETTERS[_m];
+      wrap('set' + m);
+    }
+
     (function(proto) {
-      var method, methods, _i, _len, _results;
-      methods = ['FullYear', 'Month', 'Date', 'Day', 'Hours', 'Minutes'];
-      _results = [];
-      for (_i = 0, _len = methods.length; _i < _len; _i++) {
-        method = methods[_i];
-        proto['set' + method] = (function(method) {
-          return function() {
-            var delta, utcmins;
-            Date.prototype['setUTC' + method].apply(this, arguments);
-            utcmins = Date.prototype.getUTCMinutes.call(this);
-            delta = utcmins - this.__timezone__;
-            Date.prototype.setUTCMinutes.call(this, delta);
-            return this;
-          };
-        })(method);
-        _results.push(proto['get' + method] = (function(method) {
+      var method, _len5, _n;
+      for (_n = 0, _len5 = TZ_AWARE_METHODS.length; _n < _len5; _n++) {
+        method = TZ_AWARE_METHODS[_n];
+        if (!(method === 'Day' || method === 'Minutes')) {
+          proto['set' + method] = (function(method) {
+            return function() {
+              var delta, time;
+              this['setUTC' + method].apply(this, arguments);
+              time = this.getTime();
+              delta = time - this.timezone * 60 * 1000;
+              this.setTime(delta);
+              return this;
+            };
+          })(method);
+        }
+        proto['get' + method] = (function(method) {
           return function() {
             var d;
             d = new Date(this.getTime() + this.timezone * 60 * 1000);
             return d['getUTC' + method]();
           };
-        })(method));
+        })(method);
       }
-      return _results;
-    })(TzTime.prototype);
-
-    (function(proto) {
-      var method, methods, _i, _len, _results;
-      methods = ['Minutes', 'Seconds', 'Milliseconds'];
-      _results = [];
-      for (_i = 0, _len = methods.length; _i < _len; _i++) {
-        method = methods[_i];
-        _results.push(proto['set' + method] = (function(method) {
-          return function() {
-            Date.prototype['setUTC' + method].apply(this, arguments);
-            return this;
-          };
-        })(method));
-      }
-      return _results;
     })(TzTime.prototype);
 
     staticProperty('platformZone', {

@@ -47,6 +47,42 @@ define (require) ->
     staticProperty  = (name, descriptor) ->
       Object.defineProperty TzTime, name, descriptor
 
+    ## Create a method on `TzTime.prototype` that wraps the native method
+    wrap = (name) ->
+      TzTime.prototype[name] = () ->
+        @__date__[name] arguments...
+
+    ## All setter and getter methods without the `set` and `get` parts.
+    METHODS = [
+      'FullYear'
+      'Month'
+      'Date'
+      'Day'
+      'Hours'
+      'Minutes'
+      'Seconds'
+      'Milliseconds'
+    ]
+
+    TZ_AWARE_METHODS = [
+      'FullYear'
+      'Month'
+      'Date'
+      'Day'
+      'Hours'
+      'Minutes'
+    ]
+
+    NON_TZ_AWARE_GETTERS = [
+      'Seconds'
+      'Milliseconds'
+    ]
+
+    NON_TZ_AWARE_SETTERS = [
+      'Minutes',
+      'Seconds',
+      'Milliseconds'
+    ]
 
     # ### Constructor
     #
@@ -81,6 +117,9 @@ define (require) ->
     #
     constructor: (yr, mo, dy, hr=0, mi=0, se=0, ms=0, tz=null) ->
 
+      if not (this instanceof TzTime)
+        return new TzTime arguments...
+
       ## Because of the way native Date constructor works, we must resort to
       ## argument-counting.
       switch arguments.length
@@ -89,7 +128,7 @@ define (require) ->
         when 1
           if yr instanceof TzTime
             instance = new Date yr.getTime()
-            instance.__timezone__ = yr.timezone
+            @__timezone__ = yr.timezone
           else if yr instanceof Date
             instance = new Date yr.getTime()
           else
@@ -103,7 +142,7 @@ define (require) ->
           t = Date.UTC yr, mo, dy, hr, mi, se, ms
           t -= tz * 60 * 1000
           instance = new Date t
-          instance.__timezone__ = tz
+          @__timezone__ = tz
         else
           instance = new Date yr, mo, dy, hr, mi, se, ms
 
@@ -116,13 +155,16 @@ define (require) ->
       # To set the time zone use either `#timezone` attribute, or
       # `#setTimezoneOffset()` method.
       #
-      instance.__timezone__ or= -instance.getTimezoneOffset()
+      @__timezone__ or= -instance.getTimezoneOffset()
 
-      ## Reset the constructor and prototype chain
-      instance.constructor = TzTime
-      instance.__proto__ = TzTime.prototype
+      # ### `#__date__` (private property)
+      #
+      # This is a reference to the underlaying Date object that is queried to
+      # return all values necessary for TzTime object to function.
+      #
+      @__date__ = instance
 
-      return instance
+      @constructor = TzTime
 
     # TzTime constructor inherits from the native Date prototype.
     #
@@ -463,27 +505,39 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
-    ((proto) ->
-      methods = [
-        'FullYear'
-        'Month'
-        'Date'
-        'Day'
-        'Hours'
-        'Minutes'
-      ]
+    wrap m for m in [
+      'toDateString'
+      'toISOString'
+      'toJSON'
+      'toLocaleDateString'
+      'toLocaleString'
+      'toLocaleTimeString'
+      'toString'
+      'toTimeString'
+      'toUTCString'
+      'valueOf'
+      'getTime'
+      'setTime'
+    ]
 
-      for method in methods
+    wrap 'setUTC' + m for m in METHODS if m isnt 'Day'
+    wrap 'getUTC' + m for m in METHODS
+    wrap 'get' + m for m in NON_TZ_AWARE_GETTERS
+    wrap 'set' + m for m in NON_TZ_AWARE_SETTERS
+
+    ((proto) ->
+      for method in TZ_AWARE_METHODS
         ## Create setters
         proto['set' + method] = ((method) ->
           () ->
-            Date.prototype['setUTC' + method].apply this, arguments
+            this['setUTC' + method] arguments...
             ## Adjust for the timezone difference
-            utcmins = Date.prototype.getUTCMinutes.call this
-            delta = utcmins - @__timezone__
-            Date.prototype.setUTCMinutes.call this, delta
+            time = @getTime()
+            delta = time - @timezone * 60 * 1000
+            @setTime delta
+            ## Return the instance
             this
-        ) method
+        ) method if not (method in ['Day', 'Minutes'])
 
         ## Crate getters
         proto['get' + method] = ((method) ->
@@ -496,24 +550,9 @@ define (require) ->
             d = new Date @getTime() + @timezone * 60 * 1000
             d['getUTC' + method]()
         ) method
+
+      return
     ) TzTime.prototype
-
-    ((proto) ->
-      methods = [
-        'Minutes',
-        'Seconds',
-        'Milliseconds'
-      ]
-
-      for method in methods
-        ## Create setters
-        proto['set' + method] = ((method) ->
-          () ->
-            Date.prototype['setUTC' + method].apply this, arguments
-            this
-        ) method
-    ) TzTime.prototype
-
 
     # ### `TzTime.platformZone'
     #
