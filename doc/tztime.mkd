@@ -45,7 +45,8 @@ time-zone-aware.
      + [`#setMinutes(minutes [, seconds, milliseconds])`](#setminutes-minutes-seconds-milliseconds)
      + [`#setSeconds(seconds [, milliseconds])`](#setseconds-seconds-milliseconds)
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
-     + [`#strftime([format])`](#strftime-format)
+     + [`#toFormat([format])`](#toformat-format)
+     + [`strftime([format])`](#strftime-format)
    - [`TzTime.platformZone`](#tztime-platformzone)
    - [Settings](#settings)
      + [`TzTime.DAY_MS`](#tztime-day_ms)
@@ -374,7 +375,7 @@ prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#strftime([format])` <a name="strftime-format"></a>
+#### `#toFormat([format])` <a name="toformat-format"></a>
 
 Formats date and time using `format` formatting string. The formatting uses
 strftime-compatible syntax with follwing tokens:
@@ -412,10 +413,14 @@ Because of the formatting token usage, you may safely mix non-date strings in
 the formatting string. For example:
 
     var t = new TzTime();
-    t.strftime('On %b %d at %i:%M %p');
+    t.toFormat('On %b %d at %i:%M %p');
 
 
 If `format` string is omitted, `TzTime.DEFAULT_FORMAT` setting is used.
+
+#### `strftime([format])` <a name="strftime-format"></a>
+
+Alias for `#toFormat` method.
 
 ### `TzTime.platformZone` <a name="tztime-platformzone"></a>
 
