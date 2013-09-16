@@ -122,6 +122,13 @@ method.
     v.toFormat('At %i:%M %p on %B %D');
     // 'At 12:45 p.m. on September 1'
 
+### Strptime parsing
+
+The native `Date.parse` method has been replaced by strptime-powered
+`TzTime.parse`:
+
+    var v = TzTime.parse('2013-09-19 4:30 p.m.', '%Y-%m-%d %i:%M %p');
+
 ## More?
 
 Yes, the current order of business is to port
