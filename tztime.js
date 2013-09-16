@@ -38,7 +38,7 @@ define(function(require) {
     wrap = function(name) {
       return TzTime.prototype[name] = function() {
         var _ref;
-        return (_ref = this.__date__)[name].apply(_ref, arguments);
+        return (_ref = this.__datetime__)[name].apply(_ref, arguments);
       };
     };
 
@@ -101,7 +101,7 @@ define(function(require) {
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
       this.__tz__ || (this.__tz__ = -instance.getTimezoneOffset());
-      this.__date__ = instance;
+      this.__datetime__ = instance;
       this.constructor = TzTime;
     }
 

@@ -8,7 +8,7 @@ time-zone-aware.
    - [Constructor](#constructor)
    - [Private properties](#private-properties)
      + [`#__tz__`](#tz)
-     + [`#__date__`](#date)
+     + [`#__datetime__`](#datetime)
    - [Attributes](#attributes)
      + [`#timezone`](#timezone)
      + [`#year`](#year)
@@ -112,7 +112,7 @@ the correct UTC time. Please do not override this property.
 To set the time zone use either `#timezone` attribute, or
 `#setTimezoneOffset()` method.
 
-#### `#__date__` <a name="date"></a>
+#### `#__datetime__` <a name="datetime"></a>
 
 This is a reference to the underlaying Date object that is queried to return
 all values necessary for TzTime object to function.

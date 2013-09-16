@@ -50,7 +50,7 @@ define (require) ->
     ## Create a method on `TzTime.prototype` that wraps the native method
     wrap = (name) ->
       TzTime.prototype[name] = () ->
-        @__date__[name] arguments...
+        @__datetime__[name] arguments...
 
     ## All setter and getter methods without the `set` and `get` parts.
     METHODS = [
@@ -163,12 +163,12 @@ define (require) ->
       #
       @__tz__ or= -instance.getTimezoneOffset()
 
-      # #### `#__date__`
+      # #### `#__datetime__`
       #
       # This is a reference to the underlaying Date object that is queried to
       # return all values necessary for TzTime object to function.
       #
-      @__date__ = instance
+      @__datetime__ = instance
 
       @constructor = TzTime
 
