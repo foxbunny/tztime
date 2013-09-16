@@ -49,7 +49,7 @@ time-zone-aware.
    - [`TzTime.platformZone`](#tztime-platformzone)
    - [Settings](#settings)
      + [`TzTime.DAY_MS`](#tztime-day_ms)
- + [`datetime.REGEXP_CHARS`](#datetime-regexp_chars)
+     + [`TzTime.REGEXP_CHARS`](#tztime-regexp_chars)
      + [`TzTime.MONTHS`](#tztime-months)
      + [`TzTime.MNTH`](#tztime-mnth)
      + [`TzTime.DAYS`](#tztime-days)
@@ -427,7 +427,7 @@ Gets the time zone offset of the platform. This is a read-only attribute.
 
 Number of milliseconds in a day
 
-## `datetime.REGEXP_CHARS` <a name="datetime-regexp_chars"></a>
+#### `TzTime.REGEXP_CHARS` <a name="tztime-regexp_chars"></a>
 
 Array of regexp characters that should be escaped in a format string when
 parsing dates and times.

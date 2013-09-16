@@ -627,7 +627,7 @@ define (require) ->
   #
   TzTime.DAY_MS = DAY_MS = 86400000
 
-  # ## `datetime.REGEXP_CHARS`
+  # #### `TzTime.REGEXP_CHARS`
   #
   # Array of regexp characters that should be escaped in a format string when
   # parsing dates and times.
