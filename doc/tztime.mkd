@@ -47,8 +47,8 @@ time-zone-aware.
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
    - [`TzTime.platformZone`](#tztime-platformzone)
    - [`TzTime.utils`](#tztime-utils)
-   - [`TzTime.utils.repeat(s, count)`](#tztime-utils-repeat-s-count)
-   - [`TzTime.utils.reverse(s)`](#tztime-utils-reverse-s)
+   - [`#repeat(s, count)`](#repeat-s-count)
+   - [`#reverse(s)`](#reverse-s)
      + [`#pad(i, [digits, tail])`](#pad-i-digits-tail)
      + [`#cycle(i, max, [zeroIndex])`](#cycle-i-max-zeroindex)
      + [`#hour24(h, [pm])`](#hour24-h-pm)
@@ -372,11 +372,11 @@ The `TzTime.utils` contains a few utility methods that are used to perform
 formatting and calculation tasks, mainly used by `strptime` and `strftime`
 functions.
 
-### `TzTime.utils.repeat(s, count)` <a name="tztime-utils-repeat-s-count"></a>
+### `#repeat(s, count)` <a name="repeat-s-count"></a>
 
 Repeat string `s` `count` times.
 
-### `TzTime.utils.reverse(s)` <a name="tztime-utils-reverse-s"></a>
+### `#reverse(s)` <a name="reverse-s"></a>
 
 Reverses a string.
 

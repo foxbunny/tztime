@@ -578,14 +578,14 @@ define (require) ->
   #
   TzTime.utils =
 
-    # ### `TzTime.utils.repeat(s, count)`
+    # #### `#repeat(s, count)`
     #
     # Repeat string `s` `count` times.
     #
     repeat: (s, count) ->
       new Array(count + 1).join s
 
-    # ### `TzTime.utils.reverse(s)`
+    # #### `#reverse(s)`
     #
     # Reverses a string.
     #
