@@ -113,6 +113,15 @@ the instance, the code that expects the date and time to be in platform time
 zone will no longer function as expected. However, the time zone offset getter
 will still work correctly.
 
+### Strftime formatting
+
+TzTime offers reliable strftime formatting using the non-native `strftime()`
+method.
+
+    var v = TzTime(2013, 8, 1, 12, 45, 9, 123, -120);
+    v.strftime('At %i:%M %p on %B %D');
+    // 'At 12:45 p.m. on September 1'
+
 ## More?
 
 Yes, the current order of business is to port
