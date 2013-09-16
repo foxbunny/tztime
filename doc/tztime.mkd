@@ -45,10 +45,24 @@ time-zone-aware.
      + [`#setMinutes(minutes [, seconds, milliseconds])`](#setminutes-minutes-seconds-milliseconds)
      + [`#setSeconds(seconds [, milliseconds])`](#setseconds-seconds-milliseconds)
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
+     + [`#strftime([format])`](#strftime-format)
    - [`TzTime.platformZone`](#tztime-platformzone)
+   - [Settings](#settings)
+     + [`TzTime.DAY_MS`](#tztime-day_ms)
+ + [`datetime.REGEXP_CHARS`](#datetime-regexp_chars)
+     + [`TzTime.MONTHS`](#tztime-months)
+     + [`TzTime.MNTH`](#tztime-mnth)
+     + [`TzTime.DAYS`](#tztime-days)
+     + [`TzTime.DY`](#tztime-dy)
+     + [`TzTime.AM`](#tztime-am)
+     + [`TzTime.PM`](#tztime-pm)
+     + [`TzTime.WEEK_START`](#tztime-week_start)
+     + [`TzTime.FORMAT_TOKENS`](#tztime-format_tokens)
+     + [`TzTime.PARSE_RECIPES`](#tztime-parse_recipes)
+     + [`TzTime.DEFAULT_FORMAT`](#tztime-default_format)
    - [`TzTime.utils`](#tztime-utils)
-   - [`#repeat(s, count)`](#repeat-s-count)
-   - [`#reverse(s)`](#reverse-s)
+     + [`#repeat(s, count)`](#repeat-s-count)
+     + [`#reverse(s)`](#reverse-s)
      + [`#pad(i, [digits, tail])`](#pad-i-digits-tail)
      + [`#cycle(i, max, [zeroIndex])`](#cycle-i-max-zeroindex)
      + [`#hour24(h, [pm])`](#hour24-h-pm)
@@ -360,9 +374,114 @@ prototype's method.
 
 The return value of this method is the TzTime object.
 
+#### `#strftime([format])` <a name="strftime-format"></a>
+
+Formats date and time using `format` formatting string. The formatting uses
+strftime-compatible syntax with follwing tokens:
+
+ + %a - Short week day name (e.g. 'Sun', 'Mon'...)
+ + %A - Long week day name (e.g., 'Sunday', 'Monday'...)
+ + %b - Short month name (e.g., 'Jan', 'Feb'...)
+ + %B - Full month name (e.g., 'January', 'February'...)
+ + %c - Locale-formatted date and time (platform-dependent)
+ + %d - Zero-padded date (e.g, 02, 31...)
+ + %D - Non-zero-padded date (e.g., 2, 31...)
+ + %f - Zero-padded decimal seconds (e.g., 04.23, 23.50)
+ + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
+ + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
+ + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
+ + %j - Zero-padded day of year (e.g., 002, 145, 364...)
+ + %m - Zero-padded month (e.g., 01, 02...)
+ + %M - Zero-padded minutes (e.g., 01, 12, 59...)
+ + %n - Non-zero-padded month (e.g., 1, 2...)
+ + %N - Non-zero-padded minutes (e.g., 1, 12, 59)
+ + %p - AM/PM (a.m. and p.m.)
+ + %s - Non-zero-padded seconds (e.g., 1, 2, 50...)
+ + %S - Zero-padded seconds (e.g., 01, 02, 50...)
+ + %r - Milliseconds (e.g., 1, 24, 500...)
+ + %w - Numeric week day where 0 is Sunday (e.g., 0, 1...)
+ + %y - Zero-padded year without the century part (e.g., 01, 13, 99...)
+ + %Y - Full year (e.g., 2001, 2013, 2099...)
+ + %z - Timezone in +HHMM or -HHMM format (e.g., +0200, -0530)
+ + %x - Locale-formatted date (platform dependent)
+ + %X - Locale-formatted time (platform dependent)
+ + %% - Literal percent character %
+
+
+Because of the formatting token usage, you may safely mix non-date strings in
+the formatting string. For example:
+
+    var t = new TzTime();
+    t.strftime('On %b %d at %i:%M %p');
+
+
+If `format` string is omitted, `TzTime.DEFAULT_FORMAT` setting is used.
+
 ### `TzTime.platformZone` <a name="tztime-platformzone"></a>
 
 Gets the time zone offset of the platform. This is a read-only attribute.
+
+### Settings <a name="settings"></a>
+
+#### `TzTime.DAY_MS` <a name="tztime-day_ms"></a>
+
+Number of milliseconds in a day
+
+## `datetime.REGEXP_CHARS` <a name="datetime-regexp_chars"></a>
+
+Array of regexp characters that should be escaped in a format string when
+parsing dates and times.
+
+#### `TzTime.MONTHS` <a name="tztime-months"></a>
+
+Month names
+
+#### `TzTime.MNTH` <a name="tztime-mnth"></a>
+
+Short month names (three-letter abbreviations).
+
+#### `TzTime.DAYS` <a name="tztime-days"></a>
+
+Week day names, starting with Sunday.
+
+#### `TzTime.DY` <a name="tztime-dy"></a>
+
+Abbreviated week day names.
+
+#### `TzTime.AM` <a name="tztime-am"></a>
+
+Ante-meridiem shorthand
+
+#### `TzTime.PM` <a name="tztime-pm"></a>
+
+Post-meridiem shorthand
+
+#### `TzTime.WEEK_START` <a name="tztime-week_start"></a>
+
+Day the week starts on. 0 is Sunday, 1 is Monday, and so on.
+
+#### `TzTime.FORMAT_TOKENS` <a name="tztime-format_tokens"></a>
+
+Definitions of formatting tokens used by the `#strftime()` method. All format
+functions are applied to a `Date` object so the `Date` methods can be called on
+`this`.
+
+#### `TzTime.PARSE_RECIPES` <a name="tztime-parse_recipes"></a>
+
+Functions for parsing the date.
+
+Each parser recipe corresponds to a format token. The recipe will return a
+piece of regexp that will match the token within the string, and a function
+that will convert the match.
+
+The converter function will take the matched string, and a meta object. The
+meta object is later used as source of information for building the final
+`Date` object.
+
+#### `TzTime.DEFAULT_FORMAT` <a name="tztime-default_format"></a>
+
+The default format string for formatting and parsing functions. Default is
+'%Y-%m-%dT%H:%M:%f%z'.
 
 ### `TzTime.utils` <a name="tztime-utils"></a>
 
@@ -372,11 +491,11 @@ The `TzTime.utils` contains a few utility methods that are used to perform
 formatting and calculation tasks, mainly used by `strptime` and `strftime`
 functions.
 
-### `#repeat(s, count)` <a name="repeat-s-count"></a>
+#### `#repeat(s, count)` <a name="repeat-s-count"></a>
 
 Repeat string `s` `count` times.
 
-### `#reverse(s)` <a name="reverse-s"></a>
+#### `#reverse(s)` <a name="reverse-s"></a>
 
 Reverses a string.
 

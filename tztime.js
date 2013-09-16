@@ -23,7 +23,7 @@ define = (function(root) {
 })(this);
 
 define(function(require) {
-  var TzTime;
+  var DAY_MS, TzTime;
   TzTime = (function() {
     var D, METHODS, NON_TZ_AWARE_GETTERS, NON_TZ_AWARE_SETTERS, TZ_AWARE_METHODS, m, property, staticProperty, wrap, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
 
@@ -338,6 +338,23 @@ define(function(require) {
       }
     })(TzTime.prototype);
 
+    TzTime.prototype.strftime = function(format) {
+      var r, token,
+        _this = this;
+      if (format == null) {
+        format = TzTime.DEFAULT_FORMAT;
+      }
+      for (token in TzTime.FORMAT_TOKENS) {
+        r = new RegExp(token, 'g');
+        format = format.replace(r, function() {
+          return TzTime.FORMAT_TOKENS[token].call(_this);
+        });
+      }
+      return format;
+    };
+
+    TzTime.prototype.toISOFormat = function() {};
+
     staticProperty('platformZone', {
       get: function() {
         return -(new Date().getTimezoneOffset());
@@ -350,6 +367,306 @@ define(function(require) {
     return TzTime;
 
   })();
+  TzTime.DAY_MS = DAY_MS = 86400000;
+  TzTime.REGEXP_CHARS = '^$[]().{}+*?|'.split('');
+  TzTime.MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  TzTime.MNTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  TzTime.DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  TzTime.DY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  TzTime.AM = 'a.m.';
+  TzTime.PM = 'p.m.';
+  TzTime.WEEK_START = 0;
+  TzTime.FORMAT_TOKENS = {
+    '%a': function() {
+      return TzTime.DY[this.day];
+    },
+    '%A': function() {
+      return TzTime.DAYS[this.day];
+    },
+    '%b': function() {
+      return TzTime.MNTH[this.month];
+    },
+    '%B': function() {
+      return TzTime.MONTHS[this.month];
+    },
+    '%c': function() {
+      return this.toLocaleString();
+    },
+    '%d': function() {
+      return TzTime.utils.pad(this.date, 2);
+    },
+    '%D': function() {
+      return "" + this.date;
+    },
+    '%f': function() {
+      var fs;
+      fs = Math.round((this.seconds + this.milliseconds / 1000) * 100) / 100;
+      return TzTime.utils.pad(fs, 2, 2);
+    },
+    '%H': function() {
+      return TzTime.utils.pad(this.hours, 2);
+    },
+    '%i': function() {
+      return TzTime.utils.cycle(this.hours, 12);
+    },
+    '%I': function() {
+      return TzTime.utils.pad(TzTime.utils.cycle(this.hours, 12), 2);
+    },
+    '%j': function() {
+      var firstOfYear;
+      firstOfYear = new TzTime(this.year, 0, 1);
+      return TzTime.utils.pad(Math.ceil((this - firstOfYear) / TzTime.DAY_MS), 3);
+    },
+    '%m': function() {
+      return TzTime.utils.pad(this.month + 1, 2);
+    },
+    '%M': function() {
+      return TzTime.utils.pad(this.minutes, 2);
+    },
+    '%n': function() {
+      return "" + (this.month + 1);
+    },
+    '%N': function() {
+      return "" + this.minutes;
+    },
+    '%p': function() {
+      return (function(h) {
+        if ((0 <= h && h < 12)) {
+          return TzTime.AM;
+        } else {
+          return TzTime.PM;
+        }
+      })(this.hours);
+    },
+    '%s': function() {
+      return "" + this.seconds;
+    },
+    '%S': function() {
+      return TzTime.utils.pad(this.seconds, 2);
+    },
+    '%r': function() {
+      return "" + this.milliseconds;
+    },
+    '%w': function() {
+      return "" + this.day;
+    },
+    '%y': function() {
+      return ("" + this.year).slice(-2);
+    },
+    '%Y': function() {
+      return "" + this.year;
+    },
+    '%x': function() {
+      return this.toLocaleDateString();
+    },
+    '%X': function() {
+      return this.toLocaleTimeString();
+    },
+    '%z': function() {
+      var pfx, tz;
+      pfx = this.timezone >= 0 ? '+' : '-';
+      tz = Math.abs(this.timezone);
+      return "" + pfx + (TzTime.utils.pad(~~(tz / 60), 2)) + (TzTime.utils.pad(tz % 60, 2));
+    },
+    '%%': function() {
+      return '%';
+    },
+    '%U': function() {
+      return '';
+    },
+    '%Z': function() {
+      return '';
+    }
+  };
+  TzTime.PARSE_RECIPES = {
+    '%b': function() {
+      return {
+        re: "" + (TzTime.MNTH.join('|')),
+        fn: function(s, meta) {
+          var mlc, mo;
+          mlc = (function() {
+            var _i, _len, _ref, _results;
+            _ref = TzTime.MNTH;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              mo = _ref[_i];
+              _results.push(mo.toLowerCase());
+            }
+            return _results;
+          })();
+          return meta.month = mlc.indexOf(s.toLowerCase());
+        }
+      };
+    },
+    '%B': function() {
+      return {
+        re: "" + (TzTime.MONTHS.join('|')),
+        fn: function(s, meta) {
+          var mlc, mo;
+          mlc = (function() {
+            var _i, _len, _ref, _results;
+            _ref = TzTime.MONTHS;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              mo = _ref[_i];
+              _results.push(mo.toLowerCase());
+            }
+            return _results;
+          })();
+          return meta.month = mlc.indexOf(s.toLowerCase());
+        }
+      };
+    },
+    '%d': function() {
+      return {
+        re: '[0-2][0-9]|3[01]',
+        fn: function(s, meta) {
+          return meta.date = parseInt(s, 10);
+        }
+      };
+    },
+    '%D': function() {
+      return {
+        re: '3[01]|[12]?\\d',
+        fn: function(s, meta) {
+          return meta.date = parseInt(s, 10);
+        }
+      };
+    },
+    '%f': function() {
+      return {
+        re: '\\d{2}\\.\\d{2}',
+        fn: function(s, meta) {
+          s = parseFloat(s);
+          meta.second = ~~s;
+          return meta.millisecond = (s - ~~s) * 1000;
+        }
+      };
+    },
+    '%H': function() {
+      return {
+        re: '[0-1]\\d|2[0-3]',
+        fn: function(s, meta) {
+          return meta.hour = parseInt(s, 10);
+        }
+      };
+    },
+    '%i': function() {
+      return {
+        re: '1[0-2]|\\d',
+        fn: function(s, meta) {
+          return meta.hour = parseInt(s, 10);
+        }
+      };
+    },
+    '%I': function() {
+      return {
+        re: '0\\d|1[0-2]',
+        fn: function(s, meta) {
+          return meta.hour = parseInt(s, 10);
+        }
+      };
+    },
+    '%m': function() {
+      return {
+        re: '0\\d|1[0-2]',
+        fn: function(s, meta) {
+          return meta.month = parseInt(s, 10) - 1;
+        }
+      };
+    },
+    '%M': function() {
+      return {
+        re: '[0-5]\\d',
+        fn: function(s, meta) {
+          return meta.minute = parseInt(s, 10);
+        }
+      };
+    },
+    '%n': function() {
+      return {
+        re: '1[0-2]|\\d',
+        fn: function(s, meta) {
+          return meta.month = parseInt(s, 10) - 1;
+        }
+      };
+    },
+    '%N': function() {
+      return {
+        re: '[1-5]?\\d',
+        fn: function(s, meta) {
+          return meta.minute = parseInt(s, 10);
+        }
+      };
+    },
+    '%p': function() {
+      return {
+        re: "" + (TzTime.PM.replace(/\./g, '\\.')) + "|" + (TzTime.AM.replace(/\./g, '\\.')),
+        fn: function(s, meta) {
+          return meta.timeAdjust = TzTime.PM.toLowerCase() === s.toLowerCase();
+        }
+      };
+    },
+    '%s': function() {
+      return {
+        re: '[1-5]?\\d',
+        fn: function(s, meta) {
+          return meta.second = parseInt(s, 10);
+        }
+      };
+    },
+    '%S': function() {
+      return {
+        re: '[0-5]\\d',
+        fn: function(s, meta) {
+          return meta.second = parseInt(s, 10);
+        }
+      };
+    },
+    '%r': function() {
+      return {
+        re: '\\d{1,3}',
+        fn: function(s, meta) {
+          return meta.millisecond = parseInt(s, 10);
+        }
+      };
+    },
+    '%y': function() {
+      return {
+        re: '\\d{2}',
+        fn: function(s, meta) {
+          var c;
+          c = (new Date()).getFullYear().toString().slice(0, 2);
+          return meta.year = parseInt(c + s, 10);
+        }
+      };
+    },
+    '%Y': function() {
+      return {
+        re: '\\d{4}',
+        fn: function(s, meta) {
+          return meta.year = parseInt(s, 10);
+        }
+      };
+    },
+    '%z': function() {
+      return {
+        re: '[+-](?1[01]|0\\d)[0-5]\\d|Z',
+        fn: function(s, meta) {
+          var h, m, mult;
+          if (s === 'Z') {
+            return meta.timezone = 0;
+          } else {
+            mult = s[0] === '-' ? 1 : -1;
+            h = parseInt(s.slice(1, 3), 10);
+            m = parseInt(s.slice(3, 5), 10);
+            return meta.timezone = -mult * (h * 60) + m;
+          }
+        }
+      };
+    }
+  };
+  TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z';
   TzTime.utils = {
     repeat: function(s, count) {
       return new Array(count + 1).join(s);

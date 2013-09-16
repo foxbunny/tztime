@@ -560,6 +560,56 @@ define (require) ->
       return
     ) TzTime.prototype
 
+    # #### `#strftime([format])`
+    #
+    # Formats date and time using `format` formatting string. The formatting
+    # uses strftime-compatible syntax with follwing tokens:
+    #
+    #  + %a - Short week day name (e.g. 'Sun', 'Mon'...)
+    #  + %A - Long week day name (e.g., 'Sunday', 'Monday'...)
+    #  + %b - Short month name (e.g., 'Jan', 'Feb'...)
+    #  + %B - Full month name (e.g., 'January', 'February'...)
+    #  + %c - Locale-formatted date and time (platform-dependent)
+    #  + %d - Zero-padded date (e.g, 02, 31...)
+    #  + %D - Non-zero-padded date (e.g., 2, 31...)
+    #  + %f - Zero-padded decimal seconds (e.g., 04.23, 23.50)
+    #  + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
+    #  + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
+    #  + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
+    #  + %j - Zero-padded day of year (e.g., 002, 145, 364...)
+    #  + %m - Zero-padded month (e.g., 01, 02...)
+    #  + %M - Zero-padded minutes (e.g., 01, 12, 59...)
+    #  + %n - Non-zero-padded month (e.g., 1, 2...)
+    #  + %N - Non-zero-padded minutes (e.g., 1, 12, 59)
+    #  + %p - AM/PM (a.m. and p.m.)
+    #  + %s - Non-zero-padded seconds (e.g., 1, 2, 50...)
+    #  + %S - Zero-padded seconds (e.g., 01, 02, 50...)
+    #  + %r - Milliseconds (e.g., 1, 24, 500...)
+    #  + %w - Numeric week day where 0 is Sunday (e.g., 0, 1...)
+    #  + %y - Zero-padded year without the century part (e.g., 01, 13, 99...)
+    #  + %Y - Full year (e.g., 2001, 2013, 2099...)
+    #  + %z - Timezone in +HHMM or -HHMM format (e.g., +0200, -0530)
+    #  + %x - Locale-formatted date (platform dependent)
+    #  + %X - Locale-formatted time (platform dependent)
+    #  + %% - Literal percent character %
+    #
+    # Because of the formatting token usage, you may safely mix non-date strings
+    # in the formatting string. For example:
+    #
+    #     var t = new TzTime();
+    #     t.strftime('On %b %d at %i:%M %p');
+    #
+    # If `format` string is omitted, `TzTime.DEFAULT_FORMAT` setting is used.
+    #
+    strftime: (format=TzTime.DEFAULT_FORMAT) ->
+      for token of TzTime.FORMAT_TOKENS
+        r = new RegExp token, 'g'
+        format = format.replace r, () =>
+          TzTime.FORMAT_TOKENS[token].call this
+      format
+
+    toISOFormat: () ->
+
     # ### `TzTime.platformZone`
     #
     # Gets the time zone offset of the platform. This is a read-only attribute.
@@ -567,6 +617,318 @@ define (require) ->
     staticProperty 'platformZone',
       get: () -> -(new Date().getTimezoneOffset())
       set: () -> throw new TypeError "Cannot assign to platformZone"
+
+  # ### Settings
+  #
+
+  # #### `TzTime.DAY_MS`
+  #
+  # Number of milliseconds in a day
+  #
+  TzTime.DAY_MS = DAY_MS = 86400000
+
+  # ## `datetime.REGEXP_CHARS`
+  #
+  # Array of regexp characters that should be escaped in a format string when
+  # parsing dates and times.
+  #
+  TzTime.REGEXP_CHARS = '^$[]().{}+*?|'.split ''
+
+  # #### `TzTime.MONTHS`
+  #
+  # Month names
+  #
+  TzTime.MONTHS = [
+    'January'
+    'February'
+    'March'
+    'April'
+    'May'
+    'June'
+    'July'
+    'August'
+    'September'
+    'October'
+    'November'
+    'December'
+  ]
+
+  # #### `TzTime.MNTH`
+  #
+  # Short month names (three-letter abbreviations).
+  #
+  TzTime.MNTH = [
+    'Jan'
+    'Feb'
+    'Mar'
+    'Apr'
+    'May'
+    'Jun'
+    'Jul'
+    'Aug'
+    'Sep'
+    'Oct'
+    'Nov'
+    'Dec'
+  ]
+
+  # #### `TzTime.DAYS`
+  #
+  # Week day names, starting with Sunday.
+  #
+  TzTime.DAYS = [
+    'Sunday'
+    'Monday'
+    'Tuesday'
+    'Wednesday'
+    'Thursday'
+    'Friday'
+    'Saturday'
+  ]
+
+  # #### `TzTime.DY`
+  #
+  # Abbreviated week day names.
+  #
+  TzTime.DY = [
+    'Sun'
+    'Mon'
+    'Tue'
+    'Wed'
+    'Thu'
+    'Fri'
+    'Sat'
+  ]
+
+  # #### `TzTime.AM`
+  #
+  # Ante-meridiem shorthand
+  #
+  TzTime.AM = 'a.m.'
+
+  # #### `TzTime.PM`
+  #
+  # Post-meridiem shorthand
+  #
+  TzTime.PM = 'p.m.'
+
+
+  # #### `TzTime.WEEK_START`
+  #
+  # Day the week starts on. 0 is Sunday, 1 is Monday, and so on.
+  #
+  TzTime.WEEK_START = 0
+
+  # #### `TzTime.FORMAT_TOKENS`
+  #
+  # Definitions of formatting tokens used by the `#strftime()` method. All
+  # format functions are applied to a `Date` object so the `Date` methods can
+  # be called on `this`.
+  #
+  TzTime.FORMAT_TOKENS =
+    ## Shorthand day-of-week name
+    '%a': () -> TzTime.DY[@day]
+
+    ## Full day-of-week name
+    '%A': () -> TzTime.DAYS[@day]
+
+    ## Shorthand three-letter month name
+    '%b': () -> TzTime.MNTH[@month]
+
+    ## Full month name
+    '%B': () -> TzTime.MONTHS[@month]
+
+    ## Locale-formatted date and time (dependent on browser/platform/device),
+    ## here added for compatibility reasons.
+    '%c': () -> @toLocaleString()
+
+    ## Zero-padded date (day of month)
+    '%d': () -> TzTime.utils.pad @date, 2
+
+    ## * Non-zero-padded date (day of month)
+    '%D': () -> "#{@date}"
+
+    ## Zero-padded seconds with decimal part
+    '%f': () ->
+      fs = Math.round((@seconds + @milliseconds / 1000) * 100) / 100
+      TzTime.utils.pad fs, 2, 2
+
+    ## Zero-padded hour in 24-hour format
+    '%H': () -> TzTime.utils.pad @hours, 2
+
+    ## * Non-zero-padded hour in 12-hour format
+    '%i': () -> TzTime.utils.cycle @hours, 12
+
+    ## Zero-padded hour in 12-hour format
+    '%I': () -> TzTime.utils.pad TzTime.utils.cycle(@hours, 12), 2
+
+    ## Zero-padded day of year
+    '%j': () ->
+      firstOfYear = new TzTime @year, 0, 1
+      TzTime.utils.pad Math.ceil((this - firstOfYear) / TzTime.DAY_MS), 3
+
+    ## Zero-padded numeric month
+    '%m': () -> TzTime.utils.pad @month + 1, 2
+
+    ## Zero-padded minutes
+    '%M': () -> TzTime.utils.pad @minutes, 2
+
+    ## * Non-zero-padded numeric month
+    '%n': () -> "#{@month + 1}"
+
+    ## * Non-zero-padded minutes
+    '%N': () -> "#{@minutes}"
+
+    ## am/pm
+    '%p': () ->
+      ((h) ->
+        if 0 <= h < 12 then TzTime.AM else TzTime.PM
+      ) @hours
+
+    ## Non-zero-padded seconds
+    '%s': () -> "#{@seconds}"
+
+    ## Zero-padded seconds
+    '%S': () -> TzTime.utils.pad @seconds, 2
+
+    ## Milliseconds
+    '%r': () -> "#{@milliseconds}"
+
+    ## Numeric day of week (0 == Sunday)
+    '%w': () -> "#{@day}"
+
+    ## Last two digits of the year
+    '%y': () -> "#{@year}"[-2..]
+
+    ## Full year
+    '%Y': () -> "#{@year}"
+
+    ## Locale-formatted date (without time)
+    '%x': () -> @toLocaleDateString()
+
+    ## Locale-formatted time
+    '%X': () -> @toLocaleTimeString()
+
+    ## Timezone in +HHMM or -HHMM format
+    '%z': () ->
+      pfx = if @timezone >= 0 then '+' else '-'
+      tz = Math.abs @timezone
+      "#{pfx}#{TzTime.utils.pad ~~(tz / 60), 2}#{TzTime.utils.pad tz % 60, 2}"
+
+    ## Literal percent character
+    '%%': () -> '%'
+
+    ## Unsupported
+    '%U': () -> ''
+    '%Z': () -> ''
+
+  # #### `TzTime.PARSE_RECIPES`
+  #
+  # Functions for parsing the date.
+  #
+  # Each parser recipe corresponds to a format token. The recipe will return a
+  # piece of regexp that will match the token within the string, and a function
+  # that will convert the match.
+  #
+  # The converter function will take the matched string, and a meta object. The
+  # meta object is later used as source of information for building the final
+  # `Date` object.
+  #
+  TzTime.PARSE_RECIPES =
+    '%b': () ->
+      re: "#{TzTime.MNTH.join '|'}"
+      fn: (s, meta) ->
+        mlc = (mo.toLowerCase() for mo in TzTime.MNTH)
+        meta.month = mlc.indexOf s.toLowerCase()
+    '%B': () ->
+      re: "#{TzTime.MONTHS.join '|'}"
+      fn: (s, meta) ->
+        mlc = (mo.toLowerCase() for mo in TzTime.MONTHS)
+        meta.month = mlc.indexOf s.toLowerCase()
+    '%d': () ->
+      re: '[0-2][0-9]|3[01]'
+      fn: (s, meta) ->
+        meta.date = parseInt s, 10
+    '%D': () ->
+      re: '3[01]|[12]?\\d'
+      fn: (s, meta) ->
+        meta.date = parseInt s, 10
+    '%f': () ->
+      re: '\\d{2}\\.\\d{2}'
+      fn: (s, meta) ->
+        s = parseFloat s
+        meta.second = ~~s
+        meta.millisecond = (s - ~~s) * 1000
+    '%H': () ->
+      re: '[0-1]\\d|2[0-3]'
+      fn: (s, meta) ->
+        meta.hour = parseInt s, 10
+    '%i': () ->
+      re: '1[0-2]|\\d'
+      fn: (s, meta) ->
+        meta.hour = parseInt s, 10
+    '%I': () ->
+      re: '0\\d|1[0-2]'
+      fn: (s, meta) ->
+        meta.hour = parseInt s, 10
+    '%m': () ->
+      re: '0\\d|1[0-2]'
+      fn: (s, meta) ->
+        meta.month = parseInt(s, 10) - 1
+    '%M': () ->
+      re: '[0-5]\\d'
+      fn: (s, meta) ->
+        meta.minute = parseInt s, 10
+    '%n': () ->
+      re: '1[0-2]|\\d'
+      fn: (s, meta) ->
+        meta.month = parseInt(s, 10) - 1
+    '%N': () ->
+      re: '[1-5]?\\d'
+      fn: (s, meta) ->
+        meta.minute = parseInt s, 10
+    '%p': () ->
+      re: "#{TzTime.PM.replace(/\./g, '\\.')}|#{TzTime.AM.replace(/\./g, '\\.')}"
+      fn: (s, meta) ->
+        meta.timeAdjust = TzTime.PM.toLowerCase() is s.toLowerCase()
+    '%s': () ->
+      re: '[1-5]?\\d'
+      fn: (s, meta) ->
+        meta.second = parseInt s, 10
+    '%S': () ->
+      re: '[0-5]\\d'
+      fn: (s, meta) ->
+        meta.second = parseInt s, 10
+    '%r': () ->
+      re: '\\d{1,3}'
+      fn: (s, meta) ->
+        meta.millisecond = parseInt s, 10
+    '%y': () ->
+      re: '\\d{2}'
+      fn: (s, meta) ->
+        c = (new Date()).getFullYear().toString()[..1]  # century
+        meta.year = parseInt c + s, 10
+    '%Y': () ->
+      re: '\\d{4}'
+      fn: (s, meta) ->
+        meta.year = parseInt s, 10
+    '%z': () ->
+      re: '[+-](?1[01]|0\\d)[0-5]\\d|Z'
+      fn: (s, meta) ->
+        if s is 'Z'
+          meta.timezone = 0
+        else
+          mult = if s[0] is '-' then 1 else -1
+          h = parseInt s[1..2], 10
+          m = parseInt s[3..4], 10
+          meta.timezone = - mult * (h * 60) + m
+
+  # #### `TzTime.DEFAULT_FORMAT`
+  #
+  # The default format string for formatting and parsing functions. Default is
+  # '%Y-%m-%dT%H:%M:%f%z'.
+  #
+  TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z'
 
   # ### `TzTime.utils`
   #
@@ -669,5 +1031,7 @@ define (require) ->
       return 0 if h is 12
       return 12 if h is 24
       h
+
+
 
   TzTime
