@@ -49,9 +49,9 @@ time-zone-aware.
    - [`TzTime.utils`](#tztime-utils)
    - [`TzTime.utils.repeat(s, count)`](#tztime-utils-repeat-s-count)
    - [`TzTime.utils.reverse(s)`](#tztime-utils-reverse-s)
-   - [`TzTime.utils.pad(i, [digits, tail])`](#tztime-utils-pad-i-digits-tail)
-   - [`TzTime.utils.cycle(i, max, [zeroIndex])`](#tztime-utils-cycle-i-max-zeroindex)
-   - [`TzTime.utils.hour24(h, [pm])`](#tztime-utils-hour24-h-pm)
+     + [`#pad(i, [digits, tail])`](#pad-i-digits-tail)
+     + [`#cycle(i, max, [zeroIndex])`](#cycle-i-max-zeroindex)
+     + [`#hour24(h, [pm])`](#hour24-h-pm)
 
 
 ## `TzTime` <a name="tztime"></a>
@@ -380,7 +380,7 @@ Repeat string `s` `count` times.
 
 Reverses a string.
 
-### `TzTime.utils.pad(i, [digits, tail])` <a name="tztime-utils-pad-i-digits-tail"></a>
+#### `#pad(i, [digits, tail])` <a name="pad-i-digits-tail"></a>
 
 Zero-pads a number `i`.
 
@@ -412,7 +412,7 @@ Example:
     // 02.30
 
 
-### `TzTime.utils.cycle(i, max, [zeroIndex])` <a name="tztime-utils-cycle-i-max-zeroindex"></a>
+#### `#cycle(i, max, [zeroIndex])` <a name="cycle-i-max-zeroindex"></a>
 
 Keeps the number `i` within the `max` range. The range starts at 0 if
 `zeroIndex` is `true` or 1 if `zeroIndex` is `false` (default).
@@ -439,7 +439,7 @@ Example:
     // Returns 12
 
 
-### `TzTime.utils.hour24(h, [pm])` <a name="tztime-utils-hour24-h-pm"></a>
+#### `#hour24(h, [pm])` <a name="hour24-h-pm"></a>
 
 Converts the `h` hour into 24-hour format. The `pm` is `true` if the hour is
 PM. The `pm` argument defaults to `false`.

@@ -592,7 +592,7 @@ define (require) ->
     reverse: (s) ->
       s.split('').reverse().join('')
 
-    # ### `TzTime.utils.pad(i, [digits, tail])`
+    # #### `#pad(i, [digits, tail])`
     #
     # Zero-pads a number `i`.
     #
@@ -634,7 +634,7 @@ define (require) ->
           t = TzTime.utils.reverse t
           [h, t].join('.')
 
-    # ### `TzTime.utils.cycle(i, max, [zeroIndex])`
+    # #### `#cycle(i, max, [zeroIndex])`
     #
     # Keeps the number `i` within the `max` range. The range starts at 0 if
     # `zeroIndex` is `true` or 1 if `zeroIndex` is `false` (default).
@@ -659,7 +659,7 @@ define (require) ->
     cycle: (i, max, zeroIndex=false) ->
       i % max or if zeroIndex then 0 else max
 
-    # ### `TzTime.utils.hour24(h, [pm])`
+    # #### `#hour24(h, [pm])`
     #
     # Converts the `h` hour into 24-hour format. The `pm` is `true` if the hour
     # is PM. The `pm` argument defaults to `false`.
