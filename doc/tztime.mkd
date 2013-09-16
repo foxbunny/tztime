@@ -17,8 +17,8 @@ time-zone-aware.
      + [`#hours`](#hours)
      + [`#minutes`](#minutes)
      + [`#seconds`](#seconds)
-     + [`#milliseconds'](#milliseconds)
-     + [`#utcYear'](#utcyear)
+     + [`#milliseconds`](#milliseconds)
+     + [`#utcYear`](#utcyear)
      + [`#utcMonth`](#utcmonth)
      + [`#utcDate`](#utcdate)
      + [`#utcDay`](#utcday)
@@ -185,14 +185,14 @@ Seconds in instance's time zome. The value is an integer between 0 and 59.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#milliseconds' <a name="milliseconds"></a>
+#### `#milliseconds` <a name="milliseconds"></a>
 
 Milliseconds in instance's time zone. The value is an integer between 0 and
 999.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#utcYear' <a name="utcyear"></a>
+#### `#utcYear` <a name="utcyear"></a>
 
 The full year with century in UTC time zone. The value is an integer.
 

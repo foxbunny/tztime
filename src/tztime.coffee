@@ -279,7 +279,7 @@ define (require) ->
       get: () -> @getSeconds()
       set: (v) -> @setSeconds v
 
-    # #### `#milliseconds'
+    # #### `#milliseconds`
     #
     # Milliseconds in instance's time zone. The value is an integer between 0
     # and 999.
@@ -290,7 +290,7 @@ define (require) ->
       get: () -> @getMilliseconds()
       set: (v) -> @setMilliseconds v
 
-    # #### `#utcYear'
+    # #### `#utcYear`
     #
     # The full year with century in UTC time zone. The value is an integer.
     #
