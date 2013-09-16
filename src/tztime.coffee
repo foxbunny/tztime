@@ -610,17 +610,117 @@ define (require) ->
 
     # #### `strftime([format])`
     #
-    # Alias for `#toFormat` method.
+    # Alias for `#toFormat()` method.
     #
-    TzTime::strftime = TzTime::format
+    TzTime::strftime = TzTime::toFormat
 
-    # ### `TzTime.platformZone`
+    # ### Static properties
+    #
+
+    # #### `TzTime.platformZone`
     #
     # Gets the time zone offset of the platform. This is a read-only attribute.
     #
     staticProperty 'platformZone',
       get: () -> -(new Date().getTimezoneOffset())
       set: () -> throw new TypeError "Cannot assign to platformZone"
+
+    # ### Static methods
+    #
+
+    # #### `TzTime.parse(s, [format])`
+    #
+    # Parse a string `s` and return a `Date` object. The `format` string is
+    # used to specify the format in which `s` date is represented.
+    #
+    # A subset of `#toFormat()` tokens is used in parsing.
+    #
+    #  + %b - Short month name (e.g., 'Jan', 'Feb'...)
+    #  + %B - Full month name (e.g., 'January', 'February'...)
+    #  + %d - Zero-padded date (e.g, 02, 31...)
+    #  + %D - Non-zero-padded date (e.g., 2, 31...)
+    #  + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
+    #  + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
+    #  + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
+    #  + %m - Zero-padded month (e.g., 01, 02...)
+    #  + %M - Zero-padded minutes (e.g., 01, 12, 59...)
+    #  + %n - Non-zero-padded month (e.g., 1, 2...)
+    #  + %N - Non-zero-padded minutes (e.g., 1, 12, 59)
+    #  + %p - AM/PM (a.m. and p.m.)
+    #  + %s - Non-zero-padded seconds (e.g., 1, 2, 50...)
+    #  + %S - Zero-padded seconds (e.g., 01, 02, 50...)
+    #  + %r - Milliseconds (e.g., 1, 24, 500...)
+    #  + %y - Zero-padded year without the century part (e.g., 01, 13, 99...)
+    #  + %Y - Full year (e.g., 2001, 2013, 2099...)
+    #  + %z - Time zone in +HHMM or -HHMM format or 'Z' (e.g., +1000, -0200)
+    #
+    # The `%z` token behaves slightly differently when parsing date and time
+    # strings. In addition to formats that strftime outputs, it also supports
+    # 'Z', which allows parsing of ISO timestamps.
+    #
+    # If `format` string is omitted, it will default to
+    # `TzTime.DEFAULT_FORMAT`.
+    #
+    TzTime.parse = (s, format=TzTime.DEFAULT_FORMAT) ->
+      ## Escape all regexp special characters
+      rxp = format.replace /\\/, '\\\\'
+      for schr in TzTime.REGEXP_CHARS
+        rxp = rxp.replace new RegExp('\\' + schr, 'g'), "\\#{schr}"
+
+      ## Build the regexp for matching parse tokens
+      parseTokens = (key for key of TzTime.PARSE_RECIPES)
+      parseTokenRe = new RegExp "(#{parseTokens.join '|'})", "g"
+
+      ## Interpolate the format tokens and obtain converter functions
+      converters = []
+      rxp = rxp.replace parseTokenRe, (m, token) ->
+        # Get the token regexp and parser function
+        {re, fn} = TzTime.PARSE_RECIPES[token]()
+        converters.push fn
+        "(#{re})"
+
+      rxp = new RegExp "^#{rxp}$", "i"
+
+      ## Perform the match against the compiled parse regexp
+      matches = s.match rxp
+
+      ## We consider the parse failed if nothing matched
+      return null if not matches
+
+      ## Remove the first item from the matches, since we're not interested in it
+      matches.shift()
+
+      ## Prepare the meta object
+      meta =
+        year: 0
+        month: 0
+        date: 0
+        hour: 0
+        minute: 0
+        second: 0
+        millisecond: 0
+        timeAdjust: false
+        timezone: null
+
+      ## Iterate parser functions and apply the function to each match
+      for fn, idx in converters
+        fn matches[idx], meta
+
+      ## Create the `TzTime` object using meta data
+      new TzTime meta.year,
+        meta.month,
+        meta.date,
+        (if meta.timeAdjust then hour24(meta.hour) else meta.hour),
+        meta.minute,
+        meta.second,
+        meta.millisecond
+        meta.timezone
+
+    # #### `TzTime.strptime(s, [format])`
+    #
+    # Alias for `TzTime.parse()` method.
+    #
+    TzTime.strptime = TzTime.parse
 
   # ### Settings
   #

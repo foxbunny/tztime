@@ -353,7 +353,7 @@ define(function(require) {
       return format;
     };
 
-    TzTime.prototype.strftime = TzTime.prototype.format;
+    TzTime.prototype.strftime = TzTime.prototype.toFormat;
 
     staticProperty('platformZone', {
       get: function() {
@@ -363,6 +363,59 @@ define(function(require) {
         throw new TypeError("Cannot assign to platformZone");
       }
     });
+
+    TzTime.parse = function(s, format) {
+      var converters, fn, idx, key, matches, meta, parseTokenRe, parseTokens, rxp, schr, _len5, _len6, _n, _o, _ref1;
+      if (format == null) {
+        format = TzTime.DEFAULT_FORMAT;
+      }
+      rxp = format.replace(/\\/, '\\\\');
+      _ref1 = TzTime.REGEXP_CHARS;
+      for (_n = 0, _len5 = _ref1.length; _n < _len5; _n++) {
+        schr = _ref1[_n];
+        rxp = rxp.replace(new RegExp('\\' + schr, 'g'), "\\" + schr);
+      }
+      parseTokens = (function() {
+        var _results;
+        _results = [];
+        for (key in TzTime.PARSE_RECIPES) {
+          _results.push(key);
+        }
+        return _results;
+      })();
+      parseTokenRe = new RegExp("(" + (parseTokens.join('|')) + ")", "g");
+      converters = [];
+      rxp = rxp.replace(parseTokenRe, function(m, token) {
+        var fn, re, _ref2;
+        _ref2 = TzTime.PARSE_RECIPES[token](), re = _ref2.re, fn = _ref2.fn;
+        converters.push(fn);
+        return "(" + re + ")";
+      });
+      rxp = new RegExp("^" + rxp + "$", "i");
+      matches = s.match(rxp);
+      if (!matches) {
+        return null;
+      }
+      matches.shift();
+      meta = {
+        year: 0,
+        month: 0,
+        date: 0,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+        timeAdjust: false,
+        timezone: null
+      };
+      for (idx = _o = 0, _len6 = converters.length; _o < _len6; idx = ++_o) {
+        fn = converters[idx];
+        fn(matches[idx], meta);
+      }
+      return new TzTime(meta.year, meta.month, meta.date, (meta.timeAdjust ? hour24(meta.hour) : meta.hour), meta.minute, meta.second, meta.millisecond, meta.timezone);
+    };
+
+    TzTime.strptime = TzTime.parse;
 
     return TzTime;
 
