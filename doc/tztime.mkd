@@ -6,8 +6,9 @@ time-zone-aware.
 
  + [`TzTime`](#tztime)
    - [Constructor](#constructor)
-   - [`#__timezone__` (private property)](#timezone__-private-property)
-   - [`#__date__` (private property)](#date__-private-property)
+   - [Private properties](#private-properties)
+     + [`#__timezone__` (private property)](#timezone__-private-property)
+     + [`#__date__` (private property)](#date__-private-property)
    - [Attributes](#attributes)
      + [`#timezone`](#timezone)
      + [`#year`](#year)
@@ -97,16 +98,21 @@ East, negative towards West).
 Unlike the JavaScript Date constructor, calling TzTime without the `new`
 keyword has the same behavior as calling it with it.
 
-### `#__timezone__` (private property) <a name="timezone__-private-property"></a>
+### Private properties <a name="private-properties"></a>
 
-This property is a private property that stores the currently set timezone
-offset. This property is used to calcualte the correct UTC time. Please do not
-override this property.
+There are a few private properties that are used in all TzTime method. Since
+there aren't really any privacy in JavaScript, there is just a convention to
+not touch these properties.
+
+#### `#__timezone__` (private property) <a name="timezone__-private-property"></a>
+
+Stores the currently set timezone offset. This property is used to calcualte
+the correct UTC time. Please do not override this property.
 
 To set the time zone use either `#timezone` attribute, or
 `#setTimezoneOffset()` method.
 
-### `#__date__` (private property) <a name="date__-private-property"></a>
+#### `#__date__` (private property) <a name="date__-private-property"></a>
 
 This is a reference to the underlaying Date object that is queried to return
 all values necessary for TzTime object to function.

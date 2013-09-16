@@ -146,18 +146,24 @@ define (require) ->
         else
           instance = new Date yr, mo, dy, hr, mi, se, ms
 
-      # ### `#__timezone__` (private property)
+      # ### Private properties
       #
-      # This property is a private property that stores the currently set
-      # timezone offset. This property is used to calcualte the correct UTC
-      # time. Please do not override this property.
+      # There are a few private properties that are used in all TzTime method.
+      # Since there aren't really any privacy in JavaScript, there is just a
+      # convention to not touch these properties.
+      #
+
+      # #### `#__timezone__` (private property)
+      #
+      # Stores the currently set timezone offset. This property is used to
+      # calcualte the correct UTC time. Please do not override this property.
       #
       # To set the time zone use either `#timezone` attribute, or
       # `#setTimezoneOffset()` method.
       #
       @__timezone__ or= -instance.getTimezoneOffset()
 
-      # ### `#__date__` (private property)
+      # #### `#__date__` (private property)
       #
       # This is a reference to the underlaying Date object that is queried to
       # return all values necessary for TzTime object to function.
