@@ -160,17 +160,25 @@ Here are the results in Google Chrome 29.0.1547.66:
 
     Operation                   Date            TzTime          Delta %
     ------------------------------------------------------------------------
-    o.getHours()                172             734             427%
-    o.setHours(5)               498             628             126%
-    new O()                     308             483             157%
+    o.getHours()                172             486             283%
+    o.setHours(5)               498             838             168%
+    new O()                     308             424             138%
 
 Here are the results in FireFox 23.0.1:
 
     Operation                   Date            TzTime          Delta %
     ------------------------------------------------------------------------
-    o.getHours()                156             1432            917%
-    o.setHours(5)               423             1561            369%
-    new O()                     486             2530            521%
+    o.getHours()                156             2056            1317%
+    o.setHours(5)               423             3287            777%
+    new O()                     486             1804            371%
+
+Internet Explorer 9.0.17 (32-bit / Windows 7):
+
+    Operation                   Date            TzTime          Delta %
+    ------------------------------------------------------------------------
+    o.getHours()                251             789             917%
+    o.setHours(5)               718             1630            369%
+    new O()                     431             1532            521%
 
 As you can see, performance is quite horrible at the moment, especially in
 Firefox. The question now is, is the performance hit justified in face of
