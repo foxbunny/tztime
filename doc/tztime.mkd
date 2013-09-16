@@ -47,7 +47,10 @@ time-zone-aware.
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
      + [`#toFormat([format])`](#toformat-format)
      + [`strftime([format])`](#strftime-format)
-   - [`TzTime.platformZone`](#tztime-platformzone)
+   - [Static properties](#static-properties)
+     + [`TzTime.platformZone`](#tztime-platformzone)
+   - [Static methods](#static-methods)
+     + [`TzTime.parse(s, [format])`](#tztime-parse-s-format)
    - [Settings](#settings)
      + [`TzTime.DAY_MS`](#tztime-day_ms)
      + [`TzTime.REGEXP_CHARS`](#tztime-regexp_chars)
@@ -420,11 +423,52 @@ If `format` string is omitted, `TzTime.DEFAULT_FORMAT` setting is used.
 
 #### `strftime([format])` <a name="strftime-format"></a>
 
-Alias for `#toFormat` method.
+Alias for `#toFormat()` method.
 
-### `TzTime.platformZone` <a name="tztime-platformzone"></a>
+### Static properties <a name="static-properties"></a>
+
+#### `TzTime.platformZone` <a name="tztime-platformzone"></a>
 
 Gets the time zone offset of the platform. This is a read-only attribute.
+
+### Static methods <a name="static-methods"></a>
+
+#### `TzTime.parse(s, [format])` <a name="tztime-parse-s-format"></a>
+
+Parse a string `s` and return a `Date` object. The `format` string is used to
+specify the format in which `s` date is represented.
+
+A subset of `#toFormat()` tokens is used in parsing.
+
+ + %b - Short month name (e.g., 'Jan', 'Feb'...)
+ + %B - Full month name (e.g., 'January', 'February'...)
+ + %d - Zero-padded date (e.g, 02, 31...)
+ + %D - Non-zero-padded date (e.g., 2, 31...)
+ + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
+ + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
+ + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
+ + %m - Zero-padded month (e.g., 01, 02...)
+ + %M - Zero-padded minutes (e.g., 01, 12, 59...)
+ + %n - Non-zero-padded month (e.g., 1, 2...)
+ + %N - Non-zero-padded minutes (e.g., 1, 12, 59)
+ + %p - AM/PM (a.m. and p.m.)
+ + %s - Non-zero-padded seconds (e.g., 1, 2, 50...)
+ + %S - Zero-padded seconds (e.g., 01, 02, 50...)
+ + %r - Milliseconds (e.g., 1, 24, 500...)
+ + %y - Zero-padded year without the century part (e.g., 01, 13, 99...)
+ + %Y - Full year (e.g., 2001, 2013, 2099...)
+ + %z - Time zone in +HHMM or -HHMM format or 'Z' (e.g., +1000, -0200)
+
+
+The `%z` token behaves slightly differently when parsing date and time strings.
+In addition to formats that strftime outputs, it also supports 'Z', which
+allows parsing of ISO timestamps.
+
+If `format` string is omitted, it will default to `TzTime.DEFAULT_FORMAT`.
+
+Get the token regexp and parser function #### `TzTime.strptime(s, [format])`
+
+Alias for `TzTime.parse()` method.
 
 ### Settings <a name="settings"></a>
 
