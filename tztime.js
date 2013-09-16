@@ -81,7 +81,7 @@ define(function(require) {
         case 1:
           if (yr instanceof TzTime) {
             instance = new Date(yr.getTime());
-            this.__timezone__ = yr.timezone;
+            this.__tz__ = yr.timezone;
           } else if (yr instanceof Date) {
             instance = new Date(yr.getTime());
           } else {
@@ -95,12 +95,12 @@ define(function(require) {
           t = Date.UTC(yr, mo, dy, hr, mi, se, ms);
           t -= tz * 60 * 1000;
           instance = new Date(t);
-          this.__timezone__ = tz;
+          this.__tz__ = tz;
           break;
         default:
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
-      this.__timezone__ || (this.__timezone__ = -instance.getTimezoneOffset());
+      this.__tz__ || (this.__tz__ = -instance.getTimezoneOffset());
       this.__date__ = instance;
       this.constructor = TzTime;
     }
@@ -265,7 +265,7 @@ define(function(require) {
     });
 
     TzTime.prototype.getTimezoneOffset = function() {
-      return -this.__timezone__;
+      return -this.__tz__;
     };
 
     TzTime.prototype.setTimezoneOffset = function(v) {
@@ -278,8 +278,8 @@ define(function(require) {
         throw new TypeError("Time zone offset out of bounds.");
       }
       v = -v;
-      delta = v - this.__timezone__;
-      this.__timezone__ = v;
+      delta = v - this.__tz__;
+      this.__tz__ = v;
       this.setUTCMinutes(this.getUTCMinutes() - delta);
       return this;
     };

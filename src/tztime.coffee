@@ -128,7 +128,7 @@ define (require) ->
         when 1
           if yr instanceof TzTime
             instance = new Date yr.getTime()
-            @__timezone__ = yr.timezone
+            @__tz__ = yr.timezone
           else if yr instanceof Date
             instance = new Date yr.getTime()
           else
@@ -142,7 +142,7 @@ define (require) ->
           t = Date.UTC yr, mo, dy, hr, mi, se, ms
           t -= tz * 60 * 1000
           instance = new Date t
-          @__timezone__ = tz
+          @__tz__ = tz
         else
           instance = new Date yr, mo, dy, hr, mi, se, ms
 
@@ -153,7 +153,7 @@ define (require) ->
       # convention to not touch these properties.
       #
 
-      # #### `#__timezone__` (private property)
+      # #### `#__tz__`
       #
       # Stores the currently set timezone offset. This property is used to
       # calcualte the correct UTC time. Please do not override this property.
@@ -161,9 +161,9 @@ define (require) ->
       # To set the time zone use either `#timezone` attribute, or
       # `#setTimezoneOffset()` method.
       #
-      @__timezone__ or= -instance.getTimezoneOffset()
+      @__tz__ or= -instance.getTimezoneOffset()
 
-      # #### `#__date__` (private property)
+      # #### `#__date__`
       #
       # This is a reference to the underlaying Date object that is queried to
       # return all values necessary for TzTime object to function.
@@ -401,7 +401,7 @@ define (require) ->
     # opposite of the actual UTC offset in integer minutes.
     #
     getTimezoneOffset: () ->
-      -@__timezone__
+      -@__tz__
 
     # #### `#setTimezoneOffset(v)`
     #
@@ -422,8 +422,8 @@ define (require) ->
       if -720 > v > 720
         throw new TypeError "Time zone offset out of bounds."
       v = -v
-      delta = v - @__timezone__
-      @__timezone__ = v
+      delta = v - @__tz__
+      @__tz__ = v
       @setUTCMinutes @getUTCMinutes() - delta
       this
 

@@ -7,8 +7,8 @@ time-zone-aware.
  + [`TzTime`](#tztime)
    - [Constructor](#constructor)
    - [Private properties](#private-properties)
-     + [`#__timezone__` (private property)](#timezone__-private-property)
-     + [`#__date__` (private property)](#date__-private-property)
+     + [`#__tz__`](#tz)
+     + [`#__date__`](#date)
    - [Attributes](#attributes)
      + [`#timezone`](#timezone)
      + [`#year`](#year)
@@ -104,7 +104,7 @@ There are a few private properties that are used in all TzTime method. Since
 there aren't really any privacy in JavaScript, there is just a convention to
 not touch these properties.
 
-#### `#__timezone__` (private property) <a name="timezone__-private-property"></a>
+#### `#__tz__` <a name="tz"></a>
 
 Stores the currently set timezone offset. This property is used to calcualte
 the correct UTC time. Please do not override this property.
@@ -112,7 +112,7 @@ the correct UTC time. Please do not override this property.
 To set the time zone use either `#timezone` attribute, or
 `#setTimezoneOffset()` method.
 
-#### `#__date__` (private property) <a name="date__-private-property"></a>
+#### `#__date__` <a name="date"></a>
 
 This is a reference to the underlaying Date object that is queried to return
 all values necessary for TzTime object to function.
