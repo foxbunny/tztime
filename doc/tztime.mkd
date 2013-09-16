@@ -42,9 +42,9 @@ time-zone-aware.
      + [`#setDate(date)`](#setdate-date)
      + [`#setHours(hours [, minutes, seconds, milliseconds])`](#sethours-hours-minutes-seconds-milliseconds)
      + [`#setMinutes(minutes [, seconds, milliseconds])`](#setminutes-minutes-seconds-milliseconds)
-     + [`#setSeconds(seconds [, milliseconds])](#setseconds-seconds-milliseconds)
+     + [`#setSeconds(seconds [, milliseconds])`](#setseconds-seconds-milliseconds)
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
-   - [`TzTime.platformZone'](#tztime-platformzone)
+   - [`TzTime.platformZone`](#tztime-platformzone)
    - [`TzTime.utils`](#tztime-utils)
    - [`TzTime.utils.repeat(s, count)`](#tztime-utils-repeat-s-count)
    - [`TzTime.utils.reverse(s)`](#tztime-utils-reverse-s)
@@ -340,7 +340,7 @@ same as for the native Date prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#setSeconds(seconds [, milliseconds]) <a name="setseconds-seconds-milliseconds"></a>
+#### `#setSeconds(seconds [, milliseconds])` <a name="setseconds-seconds-milliseconds"></a>
 
 Set the seconds, and optionally milliseconds. The arguments are the same as for
 the native Date prototype's method.
@@ -354,7 +354,7 @@ prototype's method.
 
 The return value of this method is the TzTime object.
 
-### `TzTime.platformZone' <a name="tztime-platformzone"></a>
+### `TzTime.platformZone` <a name="tztime-platformzone"></a>
 
 Gets the time zone offset of the platform. This is a read-only attribute.
 

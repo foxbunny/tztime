@@ -491,7 +491,7 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setSeconds(seconds [, milliseconds])
+    # #### `#setSeconds(seconds [, milliseconds])`
     #
     # Set the seconds, and optionally milliseconds. The arguments are the same
     # as for the native Date prototype's method.
@@ -554,7 +554,7 @@ define (require) ->
       return
     ) TzTime.prototype
 
-    # ### `TzTime.platformZone'
+    # ### `TzTime.platformZone`
     #
     # Gets the time zone offset of the platform. This is a read-only attribute.
     #
