@@ -115,11 +115,11 @@ will still work correctly.
 
 ### Strftime formatting
 
-TzTime offers reliable strftime formatting using the non-native `strftime()`
+TzTime offers reliable strftime formatting using the non-native `toFormat()`
 method.
 
     var v = TzTime(2013, 8, 1, 12, 45, 9, 123, -120);
-    v.strftime('At %i:%M %p on %B %D');
+    v.toFormat('At %i:%M %p on %B %D');
     // 'At 12:45 p.m. on September 1'
 
 ## More?

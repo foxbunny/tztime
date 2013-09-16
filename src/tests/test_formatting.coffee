@@ -2,7 +2,7 @@
 
 if require?
   chai = require 'chai'
-  datetime = require '../datetime'
+  TzTime = require '../tztime'
 
 assert = chai.assert
 equal = assert.equal

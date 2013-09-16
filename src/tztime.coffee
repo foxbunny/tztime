@@ -560,7 +560,7 @@ define (require) ->
       return
     ) TzTime.prototype
 
-    # #### `#strftime([format])`
+    # #### `#toFormat([format])`
     #
     # Formats date and time using `format` formatting string. The formatting
     # uses strftime-compatible syntax with follwing tokens:
@@ -597,18 +597,22 @@ define (require) ->
     # in the formatting string. For example:
     #
     #     var t = new TzTime();
-    #     t.strftime('On %b %d at %i:%M %p');
+    #     t.toFormat('On %b %d at %i:%M %p');
     #
     # If `format` string is omitted, `TzTime.DEFAULT_FORMAT` setting is used.
     #
-    strftime: (format=TzTime.DEFAULT_FORMAT) ->
+    toFormat: (format=TzTime.DEFAULT_FORMAT) ->
       for token of TzTime.FORMAT_TOKENS
         r = new RegExp token, 'g'
         format = format.replace r, () =>
           TzTime.FORMAT_TOKENS[token].call this
       format
 
-    toISOFormat: () ->
+    # #### `strftime([format])`
+    #
+    # Alias for `#toFormat` method.
+    #
+    TzTime::strftime = TzTime::format
 
     # ### `TzTime.platformZone`
     #

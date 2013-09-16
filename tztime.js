@@ -338,7 +338,7 @@ define(function(require) {
       }
     })(TzTime.prototype);
 
-    TzTime.prototype.strftime = function(format) {
+    TzTime.prototype.toFormat = function(format) {
       var r, token,
         _this = this;
       if (format == null) {
@@ -353,7 +353,7 @@ define(function(require) {
       return format;
     };
 
-    TzTime.prototype.toISOFormat = function() {};
+    TzTime.prototype.strftime = TzTime.prototype.format;
 
     staticProperty('platformZone', {
       get: function() {
