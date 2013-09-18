@@ -190,6 +190,21 @@ describe 'TzTime', () ->
       equal d2, sorted[1]
       equal d3, sorted[2]
 
+  describe '#equals', () ->
+    it 'should return true if objects represent same time', () ->
+      d1 = new TzTime 2013, 8, 3, 13, 1, 1, 1
+      d2 = new TzTime 2013, 8, 3, 13, 1, 1, 1
+      assert.notEqual d1, d2
+      isok d1.equals d2
+      isok d2.equals d1
+
+    it 'should return false if dates represent different time', () ->
+      d1 = new TzTime 2013, 8, 3, 13, 1, 1, 1
+      d2 = new TzTime 2013, 8, 3, 13, 1, 1, 2
+      assert.notEqual d1, d2
+      notOk d1.equals d2
+      notOk d2.equals d1
+
   describe '#isBefore', () ->
     it 'should basically work :)', () ->
       old = new TzTime 2013, 8, 1, 12, 0, 0, 0
@@ -237,6 +252,19 @@ describe 'TzTime', () ->
       d2 = new TzTime 2013, 8, 2
       d3 = new TzTime 2013, 8, 3
       notOk d1.isBetween d2, d3
+
+  describe '#dateEquals', () ->
+    it 'should return true if dates equal', () ->
+      d1 = new TzTime 2013, 8, 3, 13, 1, 1, 1
+      d2 = new TzTime 2013, 8, 3, 14, 1, 1, 1
+      isok d1.dateEquals d2
+      isok d2.dateEquals d1
+
+    it 'should return false if dates are not equal', () ->
+      d1 = new TzTime 2013, 8, 3, 13, 1, 1, 1
+      d2 = new TzTime 2013, 8, 2, 13, 1, 1, 1
+      notOk d1.dateEquals d2
+      notOk d2.dateEquals d1
 
   describe '#isDateBefore', () ->
     it 'should return false if only times differ', () ->

@@ -761,6 +761,14 @@ define (require) ->
       this.hours = this.minutes = this.seconds = this.milliseconds = 0
       this
 
+    # ### `#equals(t)`
+    #
+    # Whether object represents the same time as `t`. `t` can be a `TzTime` or
+    # a `Date` object.
+    #
+    equals: (t) ->
+      t >= this and t <= this
+
     # ### `#isAfter(t)`
     #
     # Whether object is after `t`. `t` can be either anohter `TzTime` or a
@@ -770,7 +778,7 @@ define (require) ->
     # after it.
     #
     isAfter: (t) ->
-      t - this < 0
+      t < this
 
     # ### `#isBefore(t)`
     #
@@ -781,7 +789,7 @@ define (require) ->
     # before it.
     #
     isBefore: (t) ->
-      t - this > 0
+      t > this
 
     # ### `#isBetween(t1, t2)`
     #
@@ -794,7 +802,19 @@ define (require) ->
     # The order of `t1` and `t2` does not matter.
     #
     isBetween: (t1, t2) ->
-      (@isAfter(t1) and @isBefore(t2)) or (@isAfter(t2) and @isBefore(t1))
+      t1 > this > t2 or t1 < this < t2
+
+    # ### `#dateEquals(t)`
+    #
+    # Whether this object represents the same date as `t`. `t` can be either
+    # `TzTime` or `Date` object.
+    #
+    dateEquals: (t) ->
+      copy = new TzTime this
+      t = new TzTime t
+      copy.resetTime()
+      t.resetTime()
+      t >= copy and t <= copy
 
     # ### `#isDateAfter(t)`
     #
@@ -806,7 +826,7 @@ define (require) ->
       t = new TzTime t
       copy.resetTime()
       t.resetTime()
-      copy.isAfter t
+      copy > t
 
     # ### `#isDateBefore(t)`
     #
@@ -818,7 +838,7 @@ define (require) ->
       t = new TzTime t
       copy.resetTime()
       t.resetTime()
-      copy.isBefore t
+      copy < t
 
     # ### `#isDateBetween(t1, t2)`
     #
@@ -837,7 +857,7 @@ define (require) ->
       copy.resetTime()
       t1.resetTime()
       t2.resetTime()
-      copy.isBetween t1, t2
+      t1 < copy < t2 or t1 > copy > t2
 
     # ### `#delta(t)`
     #

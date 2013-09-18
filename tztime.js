@@ -367,16 +367,29 @@ define(function(require) {
       return this;
     };
 
+    TzTime.prototype.equals = function(t) {
+      return t >= this && t <= this;
+    };
+
     TzTime.prototype.isAfter = function(t) {
-      return t - this < 0;
+      return t < this;
     };
 
     TzTime.prototype.isBefore = function(t) {
-      return t - this > 0;
+      return t > this;
     };
 
     TzTime.prototype.isBetween = function(t1, t2) {
-      return (this.isAfter(t1) && this.isBefore(t2)) || (this.isAfter(t2) && this.isBefore(t1));
+      return (t1 > this && this > t2) || (t1 < this && this < t2);
+    };
+
+    TzTime.prototype.dateEquals = function(t) {
+      var copy;
+      copy = new TzTime(this);
+      t = new TzTime(t);
+      copy.resetTime();
+      t.resetTime();
+      return t >= copy && t <= copy;
     };
 
     TzTime.prototype.isDateAfter = function(t) {
@@ -385,7 +398,7 @@ define(function(require) {
       t = new TzTime(t);
       copy.resetTime();
       t.resetTime();
-      return copy.isAfter(t);
+      return copy > t;
     };
 
     TzTime.prototype.isDateBefore = function(t) {
@@ -394,7 +407,7 @@ define(function(require) {
       t = new TzTime(t);
       copy.resetTime();
       t.resetTime();
-      return copy.isBefore(t);
+      return copy < t;
     };
 
     TzTime.prototype.isDateBetween = function(t1, t2) {
@@ -405,7 +418,7 @@ define(function(require) {
       copy.resetTime();
       t1.resetTime();
       t2.resetTime();
-      return copy.isBetween(t1, t2);
+      return (t1 < copy && copy < t2) || (t1 > copy && copy > t2);
     };
 
     TzTime.prototype.delta = function(t) {

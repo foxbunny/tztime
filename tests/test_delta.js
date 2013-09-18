@@ -224,6 +224,24 @@ describe('TzTime', function() {
       return equal(d3, sorted[2]);
     });
   });
+  describe('#equals', function() {
+    it('should return true if objects represent same time', function() {
+      var d1, d2;
+      d1 = new TzTime(2013, 8, 3, 13, 1, 1, 1);
+      d2 = new TzTime(2013, 8, 3, 13, 1, 1, 1);
+      assert.notEqual(d1, d2);
+      isok(d1.equals(d2));
+      return isok(d2.equals(d1));
+    });
+    return it('should return false if dates represent different time', function() {
+      var d1, d2;
+      d1 = new TzTime(2013, 8, 3, 13, 1, 1, 1);
+      d2 = new TzTime(2013, 8, 3, 13, 1, 1, 2);
+      assert.notEqual(d1, d2);
+      notOk(d1.equals(d2));
+      return notOk(d2.equals(d1));
+    });
+  });
   describe('#isBefore', function() {
     it('should basically work :)', function() {
       var neu, old;
@@ -281,6 +299,22 @@ describe('TzTime', function() {
       d2 = new TzTime(2013, 8, 2);
       d3 = new TzTime(2013, 8, 3);
       return notOk(d1.isBetween(d2, d3));
+    });
+  });
+  describe('#dateEquals', function() {
+    it('should return true if dates equal', function() {
+      var d1, d2;
+      d1 = new TzTime(2013, 8, 3, 13, 1, 1, 1);
+      d2 = new TzTime(2013, 8, 3, 14, 1, 1, 1);
+      isok(d1.dateEquals(d2));
+      return isok(d2.dateEquals(d1));
+    });
+    return it('should return false if dates are not equal', function() {
+      var d1, d2;
+      d1 = new TzTime(2013, 8, 3, 13, 1, 1, 1);
+      d2 = new TzTime(2013, 8, 2, 13, 1, 1, 1);
+      notOk(d1.dateEquals(d2));
+      return notOk(d2.dateEquals(d1));
     });
   });
   describe('#isDateBefore', function() {
