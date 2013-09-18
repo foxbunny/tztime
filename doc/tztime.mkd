@@ -71,6 +71,7 @@ time-zone-aware.
    - [`#valueOf()`](#valueof)
    - [`#getTime()`](#gettime)
    - [`#setTime(milliseconds)`](#settime-milliseconds)
+   - [`#toSource()`](#tosource)
    - [`#toFormat([format])`](#toformat-format)
    - [`#strftime([format])`](#strftime-format)
    - [`#resetTime()`](#resettime)
@@ -551,6 +552,10 @@ Returns the number of milliseconds since Unix epoch.
 ### <a name="settime-milliseconds">`#setTime(milliseconds)`</a>
 
 Sets the number of milliseconds since Unix epoch.
+
+### <a name="tosource">`#toSource()`</a>
+
+Returns the source code representation.
 
 ### <a name="toformat-format">`#toFormat([format])`</a>
 

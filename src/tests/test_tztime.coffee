@@ -104,6 +104,11 @@ describe 'TzTime', () ->
       equal d1.milliseconds, 220
       equal d1.timezone, -120
 
+  describe '#toSource', () ->
+    it 'should return source representation', () ->
+      d = TzTime 2013, 8, 1, 12, 44, 30, 300, -240
+      equal d.toSource(), '(new TzTime(1378053870300, -240))'
+
   describe '#timezone', () ->
     it 'is a number', () ->
       d = TzTime 2013, 8, 1, 8, 20

@@ -349,6 +349,10 @@ define(function(require) {
       }
     })(TzTime.prototype);
 
+    TzTime.prototype.toSource = function() {
+      return "(new TzTime(" + (this.getTime()) + ", " + this.timezone + "))";
+    };
+
     TzTime.prototype.toFormat = function(format) {
       var r, token,
         _this = this;

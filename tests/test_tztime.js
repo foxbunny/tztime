@@ -134,6 +134,13 @@ describe('TzTime', function() {
       return equal(d1.timezone, -120);
     });
   });
+  describe('#toSource', function() {
+    return it('should return source representation', function() {
+      var d;
+      d = TzTime(2013, 8, 1, 12, 44, 30, 300, -240);
+      return equal(d.toSource(), '(new TzTime(1378053870300, -240))');
+    });
+  });
   describe('#timezone', function() {
     it('is a number', function() {
       var d;

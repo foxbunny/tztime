@@ -703,6 +703,14 @@ define (require) ->
       return
     ) TzTime.prototype
 
+
+    # ### `#toSource()`
+    #
+    # Returns the source code representation.
+    #
+    toSource: () ->
+      "(new TzTime(#{this.getTime()}, #{this.timezone}))"
+
     # ### `#toFormat([format])`
     #
     # Formats date and time using `format` formatting string. The formatting
