@@ -41,13 +41,14 @@ When using the longest form, it accepts time zone offset as well.
 
     var v3 = TzTime(2013, 8, 1, 12, 45, 0, 0, -120);
 
-Crated instances are instances of both TzTime and Date.
+Crated instances are instances of both TzTime, but not Date.
 
     v3 instanceof TzTime; // true
-    v3 instanceof Date; // true
+    v3 instanceof Date; // false
 
-Code that works with Date instances should work with with TzTime instances
-(sans the time zone support).
+Code that works with Date instances should work with with TzTime instances,
+though (sans the time zone support) and a few exotic cases such as coertion
+into string.
 
 ### Accessor attributes
 
