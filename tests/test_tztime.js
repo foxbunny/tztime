@@ -688,7 +688,7 @@ describe('TzTime', function() {
       return equal(d.seconds, 12);
     });
   });
-  return describe('#utcMilliseconds', function() {
+  describe('#utcMilliseconds', function() {
     it('should return the UTC milliseconds', function() {
       var d;
       d = TzTime(2013, 1, 2, 1, 35, 7, 224, 30);
@@ -700,6 +700,27 @@ describe('TzTime', function() {
       d = TzTime(2013, 1, 2, 1, 35, 7, 224, 30);
       d.utcMilliseconds = 433;
       return equal(d.milliseconds, 433);
+    });
+  });
+  return describe('#resetTime', function() {
+    it('should reset the time', function() {
+      var d;
+      d = TzTime(2013, 8, 1, 12, 45, 13, 300);
+      equal(d.hours, 12);
+      equal(d.minutes, 45);
+      equal(d.seconds, 13);
+      equal(d.milliseconds, 300);
+      d.resetTime();
+      equal(d.hours, 0);
+      equal(d.minutes, 0);
+      equal(d.seconds, 0);
+      return equal(d.milliseconds, 0);
+    });
+    return it('shouold return instance', function() {
+      var d, r;
+      d = TzTime(2013, 8, 1, 12, 45, 13, 300);
+      r = d.resetTime();
+      return equal(r, d);
     });
   });
 });

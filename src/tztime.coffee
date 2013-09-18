@@ -754,11 +754,19 @@ define (require) ->
           TzTime.FORMAT_TOKENS[token].call this
       format
 
-    # #### `strftime([format])`
+    # #### `#strftime([format])`
     #
     # Alias for `#toFormat()` method.
     #
     TzTime::strftime = TzTime::toFormat
+
+    # #### `#resetTime()`
+    #
+    # Resets the time portion of the object to 0:00:00.000.
+    #
+    resetTime: () ->
+      this.hours = this.minutes = this.seconds = this.milliseconds = 0
+      this
 
     # ### Static properties
     #

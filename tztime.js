@@ -365,6 +365,11 @@ define(function(require) {
 
     TzTime.prototype.strftime = TzTime.prototype.toFormat;
 
+    TzTime.prototype.resetTime = function() {
+      this.hours = this.minutes = this.seconds = this.milliseconds = 0;
+      return this;
+    };
+
     staticProperty('platformZone', {
       get: function() {
         return -(new Date().getTimezoneOffset());
