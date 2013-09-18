@@ -74,9 +74,11 @@ time-zone-aware.
    - [`#toFormat([format])`](#toformat-format)
    - [`#strftime([format])`](#strftime-format)
    - [`#resetTime()`](#resettime)
+   - [`#equals(t)`](#equals-t)
    - [`#isAfter(t)`](#isafter-t)
    - [`#isBefore(t)`](#isbefore-t)
    - [`#isBetween(t1, t2)`](#isbetween-t1-t2)
+   - [`#dateEquals(t)`](#dateequals-t)
    - [`#isDateAfter(t)`](#isdateafter-t)
    - [`#isDateBefore(t)`](#isdatebefore-t)
    - [`#isDateBetween(t1, t2)`](#isdatebetween-t1-t2)
@@ -600,6 +602,11 @@ Alias for `#toFormat()` method.
 
 Resets the time portion of the object to 0:00:00.000.
 
+### <a name="equals-t">`#equals(t)`</a>
+
+Whether object represents the same time as `t`. `t` can be a `TzTime` or a
+`Date` object.
+
 ### <a name="isafter-t">`#isAfter(t)`</a>
 
 Whether object is after `t`. `t` can be either anohter `TzTime` or a `Date`
@@ -623,6 +630,11 @@ Note that if `t1` or `t2` is equal to this object, this object is not
 considered to be between `t1` and `t2`.
 
 The order of `t1` and `t2` does not matter.
+
+### <a name="dateequals-t">`#dateEquals(t)`</a>
+
+Whether this object represents the same date as `t`. `t` can be either `TzTime`
+or `Date` object.
 
 ### <a name="isdateafter-t">`#isDateAfter(t)`</a>
 
