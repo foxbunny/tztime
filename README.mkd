@@ -130,12 +130,6 @@ The native `Date.parse` method has been replaced by strptime-powered
 
     var v = TzTime.parse('2013-09-19 4:30 p.m.', '%Y-%m-%d %i:%M %p');
 
-## More?
-
-Yes, the current order of business is to port
-[DatetimeJS](https://github.com/foxbunny/datetimejs) to TzTime, make everything
-nice and tidy, and time-zoney.
-
 ## Design of TzTime and performance
 
 Unfortunately, to get all the goodies to the table, a few design decisions have
