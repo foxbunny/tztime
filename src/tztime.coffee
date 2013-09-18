@@ -91,8 +91,6 @@ define (require) ->
       'Milliseconds'
     ]
 
-    # ### Constructor
-    #
     #     new TzTime();
     #     new TzTime(value);
     #     new TzTime(dateString);
@@ -153,14 +151,14 @@ define (require) ->
         else
           instance = new Date yr, mo, dy, hr, mi, se, ms
 
-      # ### Private properties
+      # ## Private properties
       #
       # There are a few private properties that are used in all TzTime method.
       # Since there aren't really any privacy in JavaScript, there is just a
       # convention to not touch these properties.
       #
 
-      # #### `#__tz__`
+      # ### `#__tz__`
       #
       # Stores the currently set timezone offset. This property is used to
       # calcualte the correct UTC time. Please do not override this property.
@@ -170,7 +168,7 @@ define (require) ->
       #
       @__tz__ or= -instance.getTimezoneOffset()
 
-      # #### `#__datetime__`
+      # ### `#__datetime__`
       #
       # This is a reference to the underlaying Date object that is queried to
       # return all values necessary for TzTime object to function.
@@ -179,7 +177,7 @@ define (require) ->
 
       @constructor = TzTime
 
-    # ### Attributes
+    # ## Attributes
     #
     # The TzTime prototype provides a number of methods that can be used to
     # manipulate the objects with greater ease than with native Date methods.
@@ -194,7 +192,7 @@ define (require) ->
     # values.
     #
 
-    # #### `#timezone`
+    # ### `#timezone`
     #
     # The time zone offset in integer minutes from UTC.
     #
@@ -214,7 +212,7 @@ define (require) ->
       get: () -> -@getTimezoneOffset()
       set: (v) -> @setTimezoneOffset -v
 
-    # #### `#year`
+    # ### `#year`
     #
     # Full integer year in instance's time zone. The value is an integer.
     #
@@ -222,7 +220,7 @@ define (require) ->
       get: () -> @getFullYear()
       set: (v) -> @setFullYear v
 
-    # #### `#month`
+    # ### `#month`
     #
     # Month in instance's time zone. The value is an integer between 0 and 11
     # where 0 is January.
@@ -233,7 +231,7 @@ define (require) ->
       get: () -> @getMonth()
       set: (v) -> @setMonth v
 
-    # #### `#date`
+    # ### `#date`
     #
     # Date in instance's time zone. The value is an integer between 1 and 31.
     #
@@ -243,7 +241,7 @@ define (require) ->
       get: () -> @getDate()
       set: (v) -> @setDate v
 
-    # #### `#day`
+    # ### `#day`
     #
     # Day of week in instance's time zone. The value is an integer between 0
     # and 6 where 0 is Sunday and 6 is Saturday.
@@ -254,7 +252,7 @@ define (require) ->
       get: () -> @getDay()
       set: () -> throw new TypeError "Cannot assign to day"
 
-    # #### `#hours`
+    # ### `#hours`
     #
     # Hours in 24-hour format in instance's time zone. The value is an integer
     # between 0 and 23.
@@ -265,7 +263,7 @@ define (require) ->
       get: () -> @getHours()
       set: (v) -> @setHours v
 
-    # #### `#minutes`
+    # ### `#minutes`
     #
     # Minutes in instace's time zone. The value is an integer between 0 and 59.
     #
@@ -275,7 +273,7 @@ define (require) ->
       get: () -> @getMinutes()
       set: (v) -> @setMinutes v
 
-    # #### `#seconds`
+    # ### `#seconds`
     #
     # Seconds in instance's time zome. The value is an integer between 0 and
     # 59.
@@ -286,7 +284,7 @@ define (require) ->
       get: () -> @getSeconds()
       set: (v) -> @setSeconds v
 
-    # #### `#milliseconds`
+    # ### `#milliseconds`
     #
     # Milliseconds in instance's time zone. The value is an integer between 0
     # and 999.
@@ -297,7 +295,7 @@ define (require) ->
       get: () -> @getMilliseconds()
       set: (v) -> @setMilliseconds v
 
-    # #### `#utcYear`
+    # ### `#utcYear`
     #
     # The full year with century in UTC time zone. The value is an integer.
     #
@@ -305,7 +303,7 @@ define (require) ->
       get: () -> @getUTCFullYear()
       set: (v) -> @setUTCFullYear v
 
-    # #### `#utcMonth`
+    # ### `#utcMonth`
     #
     # Month in UTC time zone. The value is an integer between 0 and 11 where 0
     # is January.
@@ -316,7 +314,7 @@ define (require) ->
       get: () -> @getUTCMonth()
       set: (v) -> @setUTCMonth v
 
-    # #### `#utcDate`
+    # ### `#utcDate`
     #
     # Date in UTC time zone. The value is an integer between 1 and 31.
     #
@@ -326,7 +324,7 @@ define (require) ->
       get: () -> @getUTCDate()
       set: (v) -> @setUTCDate v
 
-    # #### `#utcDay`
+    # ### `#utcDay`
     #
     # Day of week in UTC time zone. The value is an integer between 0 and 6
     # where 0 is Sunday, and 6 is Saturday.
@@ -337,7 +335,7 @@ define (require) ->
       get: () -> @getUTCDay()
       set: () -> throw new TypeError "Cannot assign to utcDay"
 
-    # #### `#utcHours`
+    # ### `#utcHours`
     #
     # Hours in UTC time zone. The value is an integer between 0 and 23.
     #
@@ -347,7 +345,7 @@ define (require) ->
       get: () -> @getUTCHours()
       set: (v) -> @setUTCHours v
 
-    # #### `#utcMinutes`
+    # ### `#utcMinutes`
     #
     # Minutes in UTC time zone. The value is an integer between 0 and 59.
     #
@@ -357,7 +355,7 @@ define (require) ->
       get: () -> @getUTCMinutes()
       set: (v) -> @setUTCMinutes v
 
-    # #### `#utcSeconds`
+    # ### `#utcSeconds`
     #
     # Seconds in UTC time zone. The value is an integer between 0 and 59.
     #
@@ -367,7 +365,7 @@ define (require) ->
       get: () -> @getUTCSeconds()
       set: (v) -> @setUTCSeconds v
 
-    # #### `#utcMilliseconds`
+    # ### `#utcMilliseconds`
     #
     # Milliseconds in UTC time zone. The value is an integer between 0 and 999.
     #
@@ -377,7 +375,7 @@ define (require) ->
       get: () -> @getUTCMilliseconds()
       set: (v) -> @setUTCMilliseconds v
 
-    # ### Methods
+    # ## Methods
     #
     # The methods of the TzTime prototype are specifically designed to address
     # either time-zone-awareness issues, or simply provide a somewhat better
@@ -394,7 +392,7 @@ define (require) ->
     # expected behavior.
     #
 
-    # #### `#getTimezoneOffset()`
+    # ### `#getTimezoneOffset()`
     #
     # This method is different from the native implementation. It returns the
     # actual time zone set on the TzTime instance instead of the local time
@@ -404,7 +402,7 @@ define (require) ->
     getTimezoneOffset: () ->
       -@__tz__
 
-    # #### `#setTimezoneOffset(v)`
+    # ### `#setTimezoneOffset(v)`
     #
     # Sets the time zone using the reverse offset. This is a counterpart of
     # `#getTimezoneOffset()` that is missing in the native implementation. It
@@ -428,62 +426,62 @@ define (require) ->
       @setUTCMinutes @getUTCMinutes() - delta
       this
 
-    # #### `#getFullYear()`
+    # ### `#getFullYear()`
     #
     # Returns the full integer year with century in the instance's time zone.
     #
-    # #### `#getMonth()`
+    # ### `#getMonth()`
     #
     # Returns the 0-indexed integer month. 0 is January. The return value is in
     # the instance's time zone.
     #
-    # #### `#getDate()`
+    # ### `#getDate()`
     #
     # Returns the integer date (1-31) in the instance's time zone.
     #
-    # #### `#getDay()`
+    # ### `#getDay()`
     #
     # Returns the integer day of week (0-6) in instace's time zone. 0 is
     # Sunday, and 6 is Saturday.
     #
-    # #### `#getHours()`
+    # ### `#getHours()`
     #
     # Returns the 24-hour format hour (0-23) in the instance's time zone.
     #
-    # #### `#getMinutes()`
+    # ### `#getMinutes()`
     #
     # Returns the minutes (0-59) in the instance's time zone.
     #
-    # #### `#getSeconds()`
+    # ### `#getSeconds()`
     #
     # Returns the seconds (0-59) in the instance's time zone.
     #
-    # #### `#getMilliseconds()`
+    # ### `#getMilliseconds()`
     #
     # Returns the milliseconds (0-999) in the instance's time zone.
     #
-    # #### `#setFullYear(year [, month, date])`
+    # ### `#setFullYear(year [, month, date])`
     #
     # Sets the year, and optionally month and date. The arguments are the same
     # as for the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setMonth(month [, date])`
+    # ### `#setMonth(month [, date])`
     #
     # Sets the month, and optionally date. The arguments are the same as for
     # the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setDate(date)`
+    # ### `#setDate(date)`
     #
     # Sets the date. The argument is the same as for the native Date
     # prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setHours(hours [, minutes, seconds, milliseconds])`
+    # ### `#setHours(hours [, minutes, seconds, milliseconds])`
     #
     # Sets the hours, and optionally minutes, seconds and milliseconds if
     # specified. The argumetns are the same as for the native Date prototype's
@@ -491,83 +489,83 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setMinutes(minutes [, seconds, milliseconds])`
+    # ### `#setMinutes(minutes [, seconds, milliseconds])`
     #
     # Set the minutes and optionally seconds and milliseconds. The arguments
     # are the same as for the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setSeconds(seconds [, milliseconds])`
+    # ### `#setSeconds(seconds [, milliseconds])`
     #
     # Set the seconds, and optionally milliseconds. The arguments are the same
     # as for the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setMilliseconds(milliseconds)`
+    # ### `#setMilliseconds(milliseconds)`
     #
     # Sets the milliseconds. The argument is the same as for the native Date
     # prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#getUTCFullYear()`
+    # ### `#getUTCFullYear()`
     #
     # Returns the full integer year with century in UTC.
     #
-    # #### `#getUTCMonth()`
+    # ### `#getUTCMonth()`
     #
     # Returns the 0-indexed integer month. 0 is January. The return value is in
     # UTC.
     #
-    # #### `#getUTCDate()`
+    # ### `#getUTCDate()`
     #
     # Returns the integer date (1-31) in UTC.
     #
-    # #### `#getUTCDay()`
+    # ### `#getUTCDay()`
     #
     # Returns the integer day of week (0-6) in instace's time zone. 0 is
     # Sunday, and 6 is Saturday. Return value is in UTC.
     #
-    # #### `#getUTCHours()`
+    # ### `#getUTCHours()`
     #
     # Returns the 24-hour format hour (0-23) in UTC.
     #
-    # #### `#getUTCMinutes()`
+    # ### `#getUTCMinutes()`
     #
     # Returns the minutes (0-59) in UTC.
     #
-    # #### `#getUTCSeconds()`
+    # ### `#getUTCSeconds()`
     #
     # Returns the seconds (0-59) in UTC.
     #
-    # #### `#getUTCMilliseconds()`
+    # ### `#getUTCMilliseconds()`
     #
     # Returns the milliseconds (0-999) in UTC.
     #
-    # #### `#setUTCFullYear(year [, month, date])`
+    # ### `#setUTCFullYear(year [, month, date])`
     #
     # Sets the year, and optionally month and date in UTC. The arguments are
     # the same as for the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setUTCMonth(month [, date])`
+    # ### `#setUTCMonth(month [, date])`
     #
     # Sets the month, and optionally date in UTC. The arguments are the same as
     # for the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setUTCDate(date)`
+    # ### `#setUTCDate(date)`
     #
     # Sets the date in UTC. The argument is the same as for the native Date
     # prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setUTCHours(hours [, minutes, seconds, milliseconds])`
+    # ### `#setUTCHours(hours [, minutes, seconds, milliseconds])`
     #
     # Sets the hours, and optionally minutes, seconds and milliseconds if
     # specified in UTC. The argumetns are the same as for the native Date
@@ -575,79 +573,79 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setUTCMinutes(minutes [, seconds, milliseconds])`
+    # ### `#setUTCMinutes(minutes [, seconds, milliseconds])`
     #
     # Set the minutes and optionally seconds and milliseconds in UTC. The
     # arguments are the same as for the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setUTCSeconds(seconds [, milliseconds])`
+    # ### `#setUTCSeconds(seconds [, milliseconds])`
     #
     # Set the seconds, and optionally milliseconds in UTC. The arguments are
     # the same as for the native Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#setUTCMilliseconds(milliseconds)`
+    # ### `#setUTCMilliseconds(milliseconds)`
     #
     # Sets the milliseconds in UTC. The argument is the same as for the native
     # Date prototype's method.
     #
     # The return value of this method is the TzTime object.
     #
-    # #### `#toDateString()`
+    # ### `#toDateString()`
     #
     # Returns the date portion as human-readable string.
     #
-    # #### `#toISOString()`
+    # ### `#toISOString()`
     #
     # Returns the date and time in ISO 8601 extended format.
     #
-    # #### `#toJSON()`
+    # ### `#toJSON()`
     #
     # Same as `#toISOString`.
     #
-    # #### `#toLocaleDateString()`
+    # ### `#toLocaleDateString()`
     #
     # Returns the date portion in locale-specific format.
     #
-    # #### `#toLocaleString()`
+    # ### `#toLocaleString()`
     #
     # Returns the date and time in local-specific format.
     #
-    # #### `#toLocaleTimeString()`
+    # ### `#toLocaleTimeString()`
     #
     # Returns the time portion in locale-specific format.
     #
-    # #### `#toString()`
+    # ### `#toString()`
     #
     # Returns the string representation of the date and time object. Note that
     # this string usually includes a time zone. However, the time zone has
     # nothing to do with the timezone associated with the instance (it is
     # always in the local time zone of the platform).
     #
-    # #### `#toTimeString()`
+    # ### `#toTimeString()`
     #
     # Returns the time portion of the string returned by `#toString()`. Note
     # that the time zone returned by this method has nothing to do with the
     # timezone associated with the instance (it is always in the local time
     # zone of the platform).
     #
-    # #### `#toUTCString()`
+    # ### `#toUTCString()`
     #
     # Returns a human-friendly representation of the date and time in GMT.
     #
-    # #### `#valueOf()`
+    # ### `#valueOf()`
     #
     # Returns the base value of the instance in milliseconds since Unix epoch.
     # (Essentially the same as `#getTime()`).
     #
-    # #### `#getTime()`
+    # ### `#getTime()`
     #
     # Returns the number of milliseconds since Unix epoch.
     #
-    # #### `#setTime(milliseconds)`
+    # ### `#setTime(milliseconds)`
     #
     # Sets the number of milliseconds since Unix epoch.
     #
@@ -700,7 +698,7 @@ define (require) ->
       return
     ) TzTime.prototype
 
-    # #### `#toFormat([format])`
+    # ### `#toFormat([format])`
     #
     # Formats date and time using `format` formatting string. The formatting
     # uses strftime-compatible syntax with follwing tokens:
@@ -748,13 +746,13 @@ define (require) ->
           TzTime.FORMAT_TOKENS[token].call this
       format
 
-    # #### `#strftime([format])`
+    # ### `#strftime([format])`
     #
     # Alias for `#toFormat()` method.
     #
     TzTime::strftime = TzTime::toFormat
 
-    # #### `#resetTime()`
+    # ### `#resetTime()`
     #
     # Resets the time portion of the object to 0:00:00.000.
     #
@@ -762,7 +760,7 @@ define (require) ->
       this.hours = this.minutes = this.seconds = this.milliseconds = 0
       this
 
-    # #### `#isAfter(t)`
+    # ### `#isAfter(t)`
     #
     # Whether object is after `t`. `t` can be either anohter `TzTime` or a
     # `Date` object.
@@ -773,7 +771,7 @@ define (require) ->
     isAfter: (t) ->
       t - this < 0
 
-    # #### `#isBefore(t)`
+    # ### `#isBefore(t)`
     #
     # Whether object is before `t`. `t` can be either another `TzTime` or a
     # `Date` object.
@@ -784,7 +782,7 @@ define (require) ->
     isBefore: (t) ->
       t - this > 0
 
-    # #### `#isBetween(t1, t2)`
+    # ### `#isBetween(t1, t2)`
     #
     # Whther object is between `t1` and `t2`. `t1` and `t2` can be either
     # `TzTime` or `Date` objects.
@@ -797,7 +795,7 @@ define (require) ->
     isBetween: (t1, t2) ->
       (@isAfter(t1) and @isBefore(t2)) or (@isAfter(t2) and @isBefore(t1))
 
-    # #### `#isDateAfter(t)`
+    # ### `#isDateAfter(t)`
     #
     # Whether this object is after `t` by date. `t` can be either another
     # `TzTime` or `Date` object.
@@ -809,7 +807,7 @@ define (require) ->
       t.resetTime()
       copy.isAfter t
 
-    # #### `#isDateBefore(t)`
+    # ### `#isDateBefore(t)`
     #
     # Whether this object is before `t` by date. `t` can be either another
     # `TzTime` or `Date` object.
@@ -821,7 +819,7 @@ define (require) ->
       t.resetTime()
       copy.isBefore t
 
-    # #### `#isDateBetween(t1, t2)`
+    # ### `#isDateBetween(t1, t2)`
     #
     # Whether this object is between `t1` and `t2` by date. The two arguments
     # can either be `TzTime` or `Date` objects.
@@ -840,7 +838,7 @@ define (require) ->
       t2.resetTime()
       copy.isBetween t1, t2
 
-    # #### `#delta(t)`
+    # ### `#delta(t)`
     #
     # Calculates the difference between this instance and `t`, another `TzTime`
     # objects or a `Date` object and returns a delta object. The delta object
@@ -889,10 +887,10 @@ define (require) ->
       composite: [~~days, ~~hrs, ~~mins, ~~secs, msecs]
 
 
-    # ### Static properties
+    # ## Static properties
     #
 
-    # #### `TzTime.platformZone`
+    # ### `TzTime.platformZone`
     #
     # Gets the time zone offset of the platform. This is a read-only attribute.
     #
@@ -900,10 +898,10 @@ define (require) ->
       get: () -> -(new Date().getTimezoneOffset())
       set: () -> throw new TypeError "Cannot assign to platformZone"
 
-    # ### Static methods
+    # ## Static methods
     #
 
-    # #### `TzTime.reorder(d, d1 [, d2...])`
+    # ### `TzTime.reorder(d, d1 [, d2...])`
     #
     # Reorders the `TzTime` or `Date` objects from earliest to latest. The
     # return value is an array.
@@ -912,7 +910,7 @@ define (require) ->
       d.sort (d1, d2) -> d1 - d2
       d
 
-    # #### `TzTime.parse(s, [format])`
+    # ### `TzTime.parse(s, [format])`
     #
     # Parse a string `s` and return a `Date` object. The `format` string is
     # used to specify the format in which `s` date is represented.
@@ -1000,29 +998,29 @@ define (require) ->
         meta.millisecond
         meta.timezone
 
-    # #### `TzTime.strptime(s, [format])`
+    # ### `TzTime.strptime(s, [format])`
     #
     # Alias for `TzTime.parse()` method.
     #
     TzTime.strptime = TzTime.parse
 
-  # ### Settings
+  # ## Settings
   #
 
-  # #### `TzTime.DAY_MS`
+  # ### `TzTime.DAY_MS`
   #
   # Number of milliseconds in a day
   #
   TzTime.DAY_MS = DAY_MS = 86400000
 
-  # #### `TzTime.REGEXP_CHARS`
+  # ### `TzTime.REGEXP_CHARS`
   #
   # Array of regexp characters that should be escaped in a format string when
   # parsing dates and times.
   #
   TzTime.REGEXP_CHARS = '^$[]().{}+*?|'.split ''
 
-  # #### `TzTime.MONTHS`
+  # ### `TzTime.MONTHS`
   #
   # Month names
   #
@@ -1041,7 +1039,7 @@ define (require) ->
     'December'
   ]
 
-  # #### `TzTime.MNTH`
+  # ### `TzTime.MNTH`
   #
   # Short month names (three-letter abbreviations).
   #
@@ -1060,7 +1058,7 @@ define (require) ->
     'Dec'
   ]
 
-  # #### `TzTime.DAYS`
+  # ### `TzTime.DAYS`
   #
   # Week day names, starting with Sunday.
   #
@@ -1074,7 +1072,7 @@ define (require) ->
     'Saturday'
   ]
 
-  # #### `TzTime.DY`
+  # ### `TzTime.DY`
   #
   # Abbreviated week day names.
   #
@@ -1088,26 +1086,26 @@ define (require) ->
     'Sat'
   ]
 
-  # #### `TzTime.AM`
+  # ### `TzTime.AM`
   #
   # Ante-meridiem shorthand
   #
   TzTime.AM = 'a.m.'
 
-  # #### `TzTime.PM`
+  # ### `TzTime.PM`
   #
   # Post-meridiem shorthand
   #
   TzTime.PM = 'p.m.'
 
 
-  # #### `TzTime.WEEK_START`
+  # ### `TzTime.WEEK_START`
   #
   # Day the week starts on. 0 is Sunday, 1 is Monday, and so on.
   #
   TzTime.WEEK_START = 0
 
-  # #### `TzTime.FORMAT_TOKENS`
+  # ### `TzTime.FORMAT_TOKENS`
   #
   # Definitions of formatting tokens used by the `#strftime()` method. All
   # format functions are applied to a `Date` object so the `Date` methods can
@@ -1210,7 +1208,7 @@ define (require) ->
     '%U': () -> ''
     '%Z': () -> ''
 
-  # #### `TzTime.PARSE_RECIPES`
+  # ### `TzTime.PARSE_RECIPES`
   #
   # Functions for parsing the date.
   #
@@ -1311,14 +1309,14 @@ define (require) ->
           m = parseInt s[3..4], 10
           meta.timezone = - mult * (h * 60) + m
 
-  # #### `TzTime.DEFAULT_FORMAT`
+  # ### `TzTime.DEFAULT_FORMAT`
   #
   # The default format string for formatting and parsing functions. Default is
   # '%Y-%m-%dT%H:%M:%f%z'.
   #
   TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z'
 
-  # ### `TzTime.utils`
+  # ## `TzTime.utils`
   #
   # Utility functions for micro-formatting.
   #
@@ -1328,21 +1326,21 @@ define (require) ->
   #
   TzTime.utils =
 
-    # #### `#repeat(s, count)`
+    # ### `#repeat(s, count)`
     #
     # Repeat string `s` `count` times.
     #
     repeat: (s, count) ->
       new Array(count + 1).join s
 
-    # #### `#reverse(s)`
+    # ### `#reverse(s)`
     #
     # Reverses a string.
     #
     reverse: (s) ->
       s.split('').reverse().join('')
 
-    # #### `#pad(i, [digits, tail])`
+    # ### `#pad(i, [digits, tail])`
     #
     # Zero-pads a number `i`.
     #
@@ -1384,7 +1382,7 @@ define (require) ->
           t = TzTime.utils.reverse t
           [h, t].join('.')
 
-    # #### `#cycle(i, max, [zeroIndex])`
+    # ### `#cycle(i, max, [zeroIndex])`
     #
     # Keeps the number `i` within the `max` range. The range starts at 0 if
     # `zeroIndex` is `true` or 1 if `zeroIndex` is `false` (default).
@@ -1409,7 +1407,7 @@ define (require) ->
     cycle: (i, max, zeroIndex=false) ->
       i % max or if zeroIndex then 0 else max
 
-    # #### `#hour24(h, [pm])`
+    # ### `#hour24(h, [pm])`
     #
     # Converts the `h` hour into 24-hour format. The `pm` is `true` if the hour
     # is PM. The `pm` argument defaults to `false`.
