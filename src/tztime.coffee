@@ -106,6 +106,8 @@ define (require) ->
     #     new TimeZone(year, month, day, hour, minute, second, millsecond, tz);
     #     new TimeZone(dateObject);
     #     new TimeZone(tzTimeObject);
+    #     new TimeZone(str, format); // same as TzTime.parse()
+    #     new TimeZone(value, tz);
     #
     # The `tz` argument is a time zone UTC offset in integer minutes (postive
     # towards East, and negative towards West).
@@ -116,6 +118,9 @@ define (require) ->
     #
     # The last argument is an integer offset from UTC in minutes (positive
     # towards East, negative towards West).
+    #
+    # In the last non-standard form, the `value` is the number of milliseconds
+    # since Unix epoch (same as the form with a single numeric argument).
     #
     # Unlike the JavaScript Date constructor, calling TzTime without the `new`
     # keyword has the same behavior as calling it with it.
@@ -139,7 +144,10 @@ define (require) ->
           else
             instance = new Date yr
         when 2
-          throw new Error "Not implemented yet"
+          if typeof yr is 'string' and typeof mo is 'string'
+            return TzTime.parse yr, mo
+          instance = new Date yr
+          @__tz__ = mo
         when 8
           ## When time zone is passed as an argument, first create the the unix
           ## epoch using other arguments as if they were UTC, then shift the

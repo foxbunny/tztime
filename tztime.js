@@ -98,7 +98,11 @@ define(function(require) {
           }
           break;
         case 2:
-          throw new Error("Not implemented yet");
+          if (typeof yr === 'string' && typeof mo === 'string') {
+            return TzTime.parse(yr, mo);
+          }
+          instance = new Date(yr);
+          this.__tz__ = mo;
           break;
         case 8:
           t = Date.UTC(yr, mo, dy, hr, mi, se, ms);

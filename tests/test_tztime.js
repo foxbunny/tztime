@@ -105,12 +105,33 @@ describe('TzTime', function() {
       assertEqualDate(d2, d3);
       return assertEqualDate(d3, d4);
     });
-    return it('should retain timezone when passed TzTime instance', function() {
+    it('should retain timezone when passed TzTime instance', function() {
       var d, d1;
       d = TzTime(2013, 8, 1);
       d.timezone = -240;
       d1 = TzTime(d);
       return equal(d1.timezone, -240);
+    });
+    it('should behave as TzTime.parse() if passed two strings', function() {
+      var d;
+      d = TzTime('2013-03-03', '%Y-%m-%d');
+      equal(d.year, 2013);
+      equal(d.month, 2);
+      return equal(d.date, 3);
+    });
+    return it('should take unix epoch and timezone', function() {
+      var d, d1, uepoch;
+      d = TzTime(2013, 8, 1, 12, 34, 20, 220, 240);
+      uepoch = d.getTime();
+      d1 = TzTime(uepoch, -120);
+      equal(d1.year, 2013);
+      equal(d1.month, 8);
+      equal(d1.date, 1);
+      equal(d1.hours, 6);
+      equal(d1.minutes, 34);
+      equal(d1.seconds, 20);
+      equal(d1.milliseconds, 220);
+      return equal(d1.timezone, -120);
     });
   });
   describe('#timezone', function() {

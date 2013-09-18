@@ -85,6 +85,25 @@ describe 'TzTime', () ->
       d1 = TzTime d
       equal d1.timezone, -240
 
+    it 'should behave as TzTime.parse() if passed two strings', () ->
+      d = TzTime '2013-03-03', '%Y-%m-%d'
+      equal d.year, 2013
+      equal d.month, 2
+      equal d.date, 3
+
+    it 'should take unix epoch and timezone', () ->
+      d = TzTime 2013, 8, 1, 12, 34, 20, 220, 240
+      uepoch = d.getTime()
+      d1 = TzTime uepoch, -120
+      equal d1.year, 2013
+      equal d1.month, 8
+      equal d1.date, 1
+      equal d1.hours, 6
+      equal d1.minutes, 34
+      equal d1.seconds, 20
+      equal d1.milliseconds, 220
+      equal d1.timezone, -120
+
   describe '#timezone', () ->
     it 'is a number', () ->
       d = TzTime 2013, 8, 1, 8, 20
