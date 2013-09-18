@@ -677,7 +677,8 @@ Gets the time zone offset of the platform. This is a read-only attribute.
 
 #### <a name="tztime-reorder-d-d1-d2">`TzTime.reorder(d, d1 [, d2...])`</a>
 
-Reorders the `TzTime` or `Date` objects from earliest to latest.
+Reorders the `TzTime` or `Date` objects from earliest to latest. The return
+value is an array.
 
 #### <a name="tztime-parse-s-format">`TzTime.parse(s, [format])`</a>
 

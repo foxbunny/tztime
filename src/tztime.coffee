@@ -905,7 +905,8 @@ define (require) ->
 
     # #### `TzTime.reorder(d, d1 [, d2...])`
     #
-    # Reorders the `TzTime` or `Date` objects from earliest to latest.
+    # Reorders the `TzTime` or `Date` objects from earliest to latest. The
+    # return value is an array.
     #
     TzTime.reorder = (d...) ->
       d.sort (d1, d2) -> d1 - d2
