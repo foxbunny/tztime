@@ -1,4 +1,4 @@
-# TzTime <a name="tztime"></a>
+# <a name="tztime">TzTime</a>
 
 This is a drop-in replacement for JavaScript's native Date constructor which
 adds many useful and arguably saner API enhancements, and makes it
@@ -45,11 +45,47 @@ time-zone-aware.
      + [`#setMinutes(minutes [, seconds, milliseconds])`](#setminutes-minutes-seconds-milliseconds)
      + [`#setSeconds(seconds [, milliseconds])`](#setseconds-seconds-milliseconds)
      + [`#setMilliseconds(milliseconds)`](#setmilliseconds-milliseconds)
+     + [`#getUTCFullYear()`](#getutcfullyear)
+     + [`#getUTCMonth()`](#getutcmonth)
+     + [`#getUTCDate()`](#getutcdate)
+     + [`#getUTCDay()`](#getutcday)
+     + [`#getUTCHours()`](#getutchours)
+     + [`#getUTCMinutes()`](#getutcminutes)
+     + [`#getUTCSeconds()`](#getutcseconds)
+     + [`#getUTCMilliseconds()`](#getutcmilliseconds)
+     + [`#setUTCFullYear(year [, month, date])`](#setutcfullyear-year-month-date)
+     + [`#setUTCMonth(month [, date])`](#setutcmonth-month-date)
+     + [`#setUTCDate(date)`](#setutcdate-date)
+     + [`#setUTCHours(hours [, minutes, seconds, milliseconds])`](#setutchours-hours-minutes-seconds-milliseconds)
+     + [`#setUTCMinutes(minutes [, seconds, milliseconds])`](#setutcminutes-minutes-seconds-milliseconds)
+     + [`#setUTCSeconds(seconds [, milliseconds])`](#setutcseconds-seconds-milliseconds)
+     + [`#setUTCMilliseconds(milliseconds)`](#setutcmilliseconds-milliseconds)
+     + [`#toDateString()`](#todatestring)
+     + [`#toISOString()`](#toisostring)
+     + [`#toJSON()`](#tojson)
+     + [`#toLocaleDateString()`](#tolocaledatestring)
+     + [`#toLocaleString()`](#tolocalestring)
+     + [`#toLocaleTimeString()`](#tolocaletimestring)
+     + [`#toString()`](#tostring)
+     + [`#toTimeString()`](#totimestring)
+     + [`#toUTCString()`](#toutcstring)
+     + [`#valueOf()`](#valueof)
+     + [`#getTime()`](#gettime)
+     + [`#setTime(milliseconds)`](#settime-milliseconds)
      + [`#toFormat([format])`](#toformat-format)
-     + [`strftime([format])`](#strftime-format)
+     + [`#strftime([format])`](#strftime-format)
+     + [`#resetTime()`](#resettime)
+     + [`#isAfter(t)`](#isafter-t)
+     + [`#isBefore(t)`](#isbefore-t)
+     + [`#isBetween(t1, t2)`](#isbetween-t1-t2)
+     + [`#isDateAfter(t)`](#isdateafter-t)
+     + [`#isDateBefore(t)`](#isdatebefore-t)
+     + [`#isDateBetween(t1, t2)`](#isdatebetween-t1-t2)
+     + [`#delta(t)`](#delta-t)
    - [Static properties](#static-properties)
      + [`TzTime.platformZone`](#tztime-platformzone)
    - [Static methods](#static-methods)
+     + [`TzTime.reorder(d, d1 [, d2...])`](#tztime-reorder-d-d1-d2)
      + [`TzTime.parse(s, [format])`](#tztime-parse-s-format)
    - [Settings](#settings)
      + [`TzTime.DAY_MS`](#tztime-day_ms)
@@ -72,7 +108,7 @@ time-zone-aware.
      + [`#hour24(h, [pm])`](#hour24-h-pm)
 
 
-## `TzTime` <a name="tztime"></a>
+## <a name="tztime">`TzTime`</a>
 
 Crates a JavaScript Date object with enhanced API and time zone awareness.
 
@@ -83,7 +119,7 @@ manipulation.
 In general, you can assume that an undocumented method that exists in native
 Date global works as expected.
 
-### Constructor <a name="constructor"></a>
+### <a name="constructor">Constructor</a>
 
     new TzTime();
     new TzTime(value);
@@ -116,13 +152,13 @@ East, negative towards West).
 Unlike the JavaScript Date constructor, calling TzTime without the `new`
 keyword has the same behavior as calling it with it.
 
-### Private properties <a name="private-properties"></a>
+### <a name="private-properties">Private properties</a>
 
 There are a few private properties that are used in all TzTime method. Since
 there aren't really any privacy in JavaScript, there is just a convention to
 not touch these properties.
 
-#### `#__tz__` <a name="tz"></a>
+#### <a name="tz">`#__tz__`</a>
 
 Stores the currently set timezone offset. This property is used to calcualte
 the correct UTC time. Please do not override this property.
@@ -130,14 +166,12 @@ the correct UTC time. Please do not override this property.
 To set the time zone use either `#timezone` attribute, or
 `#setTimezoneOffset()` method.
 
-#### `#__datetime__` <a name="datetime"></a>
+#### <a name="datetime">`#__datetime__`</a>
 
 This is a reference to the underlaying Date object that is queried to return
 all values necessary for TzTime object to function.
 
-TzTime constructor inherits from the native Date prototype.
-
-### Attributes <a name="attributes"></a>
+### <a name="attributes">Attributes</a>
 
 The TzTime prototype provides a number of methods that can be used to
 manipulate the objects with greater ease than with native Date methods. This is
@@ -151,7 +185,7 @@ particularly true when incrementing or decrementing values. For example:
 Most of the attributes are accessors that call methods to set or get the
 values.
 
-#### `#timezone` <a name="timezone"></a>
+#### <a name="timezone">`#timezone`</a>
 
 The time zone offset in integer minutes from UTC.
 
@@ -166,105 +200,105 @@ The semantic of setting the time zone is changing just the time zone without
 changing the local _time_. When setting the timezone, the local time of the
 instance remains the same, while the UTC time of the instance is shifted.
 
-#### `#year` <a name="year"></a>
+#### <a name="year">`#year`</a>
 
 Full integer year in instance's time zone. The value is an integer.
 
-#### `#month` <a name="month"></a>
+#### <a name="month">`#month`</a>
 
 Month in instance's time zone. The value is an integer between 0 and 11 where 0
 is January.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#date` <a name="date"></a>
+#### <a name="date">`#date`</a>
 
 Date in instance's time zone. The value is an integer between 1 and 31.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#day` <a name="day"></a>
+#### <a name="day">`#day`</a>
 
 Day of week in instance's time zone. The value is an integer between 0 and 6
 where 0 is Sunday and 6 is Saturday.
 
 This is a read-only attribute.
 
-#### `#hours` <a name="hours"></a>
+#### <a name="hours">`#hours`</a>
 
 Hours in 24-hour format in instance's time zone. The value is an integer
 between 0 and 23.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#minutes` <a name="minutes"></a>
+#### <a name="minutes">`#minutes`</a>
 
 Minutes in instace's time zone. The value is an integer between 0 and 59.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#seconds` <a name="seconds"></a>
+#### <a name="seconds">`#seconds`</a>
 
 Seconds in instance's time zome. The value is an integer between 0 and 59.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#milliseconds` <a name="milliseconds"></a>
+#### <a name="milliseconds">`#milliseconds`</a>
 
 Milliseconds in instance's time zone. The value is an integer between 0 and
 999.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#utcYear` <a name="utcyear"></a>
+#### <a name="utcyear">`#utcYear`</a>
 
 The full year with century in UTC time zone. The value is an integer.
 
-#### `#utcMonth` <a name="utcmonth"></a>
+#### <a name="utcmonth">`#utcMonth`</a>
 
 Month in UTC time zone. The value is an integer between 0 and 11 where 0 is
 January.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#utcDate` <a name="utcdate"></a>
+#### <a name="utcdate">`#utcDate`</a>
 
 Date in UTC time zone. The value is an integer between 1 and 31.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#utcDay` <a name="utcday"></a>
+#### <a name="utcday">`#utcDay`</a>
 
 Day of week in UTC time zone. The value is an integer between 0 and 6 where 0
 is Sunday, and 6 is Saturday.
 
 This is a read-only attribute.
 
-#### `#utcHours` <a name="utchours"></a>
+#### <a name="utchours">`#utcHours`</a>
 
 Hours in UTC time zone. The value is an integer between 0 and 23.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#utcMinutes` <a name="utcminutes"></a>
+#### <a name="utcminutes">`#utcMinutes`</a>
 
 Minutes in UTC time zone. The value is an integer between 0 and 59.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#utcSeconds` <a name="utcseconds"></a>
+#### <a name="utcseconds">`#utcSeconds`</a>
 
 Seconds in UTC time zone. The value is an integer between 0 and 59.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-#### `#utcMilliseconds` <a name="utcmilliseconds"></a>
+#### <a name="utcmilliseconds">`#utcMilliseconds`</a>
 
 Milliseconds in UTC time zone. The value is an integer between 0 and 999.
 
 Setting values outside the rage will adjust other attributes accordingly.
 
-### Methods <a name="methods"></a>
+### <a name="methods">Methods</a>
 
 The methods of the TzTime prototype are specifically designed to address either
 time-zone-awareness issues, or simply provide a somewhat better API over those
@@ -279,14 +313,14 @@ The `UTC*` methods behave slightly differently under the hood because of
 TzTime's time-zone-awareness, but should provide the same API and expected
 behavior.
 
-#### `#getTimezoneOffset()` <a name="gettimezoneoffset"></a>
+#### <a name="gettimezoneoffset">`#getTimezoneOffset()`</a>
 
 This method is different from the native implementation. It returns the actual
 time zone set on the TzTime instance instead of the local time zone of the
 platform. Like the native implementation, it returns the opposite of the actual
 UTC offset in integer minutes.
 
-#### `#setTimezoneOffset(v)` <a name="settimezoneoffset-v"></a>
+#### <a name="settimezoneoffset-v">`#setTimezoneOffset(v)`</a>
 
 Sets the time zone using the reverse offset. This is a counterpart of
 `#getTimezoneOffset()` that is missing in the native implementation. It is here
@@ -295,90 +329,227 @@ recommended to use the `#timezone` attribute instead.
 
 `v` should be a reverse offset from UTC in integer minutes.
 
-#### `#getFullYear()` <a name="getfullyear"></a>
+#### <a name="getfullyear">`#getFullYear()`</a>
 
 Returns the full integer year with century in the instance's time zone.
 
-#### `#getMonth()` <a name="getmonth"></a>
+#### <a name="getmonth">`#getMonth()`</a>
 
 Returns the 0-indexed integer month. 0 is January. The return value is in the
 instance's time zone.
 
-#### `#getDate()` <a name="getdate"></a>
+#### <a name="getdate">`#getDate()`</a>
 
 Returns the integer date (1-31) in the instance's time zone.
 
-#### `#getDay()` <a name="getday"></a>
+#### <a name="getday">`#getDay()`</a>
 
 Returns the integer day of week (0-6) in instace's time zone. 0 is Sunday, and
 6 is Saturday.
 
-#### `#getHours()` <a name="gethours"></a>
+#### <a name="gethours">`#getHours()`</a>
 
 Returns the 24-hour format hour (0-23) in the instance's time zone.
 
-#### `#getMinutes()` <a name="getminutes"></a>
+#### <a name="getminutes">`#getMinutes()`</a>
 
 Returns the minutes (0-59) in the instance's time zone.
 
-#### `#getSeconds()` <a name="getseconds"></a>
+#### <a name="getseconds">`#getSeconds()`</a>
 
 Returns the seconds (0-59) in the instance's time zone.
 
-#### `#getMilliseconds()` <a name="getmilliseconds"></a>
+#### <a name="getmilliseconds">`#getMilliseconds()`</a>
 
 Returns the milliseconds (0-999) in the instance's time zone.
 
-#### `#setFullYear(year [, month, date])` <a name="setfullyear-year-month-date"></a>
+#### <a name="setfullyear-year-month-date">`#setFullYear(year [, month, date])`</a>
 
 Sets the year, and optionally month and date. The arguments are the same as for
 the native Date prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#setMonth(month [, date])` <a name="setmonth-month-date"></a>
+#### <a name="setmonth-month-date">`#setMonth(month [, date])`</a>
 
 Sets the month, and optionally date. The arguments are the same as for the
 native Date prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#setDate(date)` <a name="setdate-date"></a>
+#### <a name="setdate-date">`#setDate(date)`</a>
 
 Sets the date. The argument is the same as for the native Date prototype's
 method.
 
 The return value of this method is the TzTime object.
 
-#### `#setHours(hours [, minutes, seconds, milliseconds])` <a name="sethours-hours-minutes-seconds-milliseconds"></a>
+#### <a name="sethours-hours-minutes-seconds-milliseconds">`#setHours(hours [, minutes, seconds, milliseconds])`</a>
 
 Sets the hours, and optionally minutes, seconds and milliseconds if specified.
 The argumetns are the same as for the native Date prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#setMinutes(minutes [, seconds, milliseconds])` <a name="setminutes-minutes-seconds-milliseconds"></a>
+#### <a name="setminutes-minutes-seconds-milliseconds">`#setMinutes(minutes [, seconds, milliseconds])`</a>
 
 Set the minutes and optionally seconds and milliseconds. The arguments are the
 same as for the native Date prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#setSeconds(seconds [, milliseconds])` <a name="setseconds-seconds-milliseconds"></a>
+#### <a name="setseconds-seconds-milliseconds">`#setSeconds(seconds [, milliseconds])`</a>
 
 Set the seconds, and optionally milliseconds. The arguments are the same as for
 the native Date prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#setMilliseconds(milliseconds)` <a name="setmilliseconds-milliseconds"></a>
+#### <a name="setmilliseconds-milliseconds">`#setMilliseconds(milliseconds)`</a>
 
 Sets the milliseconds. The argument is the same as for the native Date
 prototype's method.
 
 The return value of this method is the TzTime object.
 
-#### `#toFormat([format])` <a name="toformat-format"></a>
+#### <a name="getutcfullyear">`#getUTCFullYear()`</a>
+
+Returns the full integer year with century in UTC.
+
+#### <a name="getutcmonth">`#getUTCMonth()`</a>
+
+Returns the 0-indexed integer month. 0 is January. The return value is in UTC.
+
+#### <a name="getutcdate">`#getUTCDate()`</a>
+
+Returns the integer date (1-31) in UTC.
+
+#### <a name="getutcday">`#getUTCDay()`</a>
+
+Returns the integer day of week (0-6) in instace's time zone. 0 is Sunday, and
+6 is Saturday. Return value is in UTC.
+
+#### <a name="getutchours">`#getUTCHours()`</a>
+
+Returns the 24-hour format hour (0-23) in UTC.
+
+#### <a name="getutcminutes">`#getUTCMinutes()`</a>
+
+Returns the minutes (0-59) in UTC.
+
+#### <a name="getutcseconds">`#getUTCSeconds()`</a>
+
+Returns the seconds (0-59) in UTC.
+
+#### <a name="getutcmilliseconds">`#getUTCMilliseconds()`</a>
+
+Returns the milliseconds (0-999) in UTC.
+
+#### <a name="setutcfullyear-year-month-date">`#setUTCFullYear(year [, month, date])`</a>
+
+Sets the year, and optionally month and date in UTC. The arguments are the same
+as for the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### <a name="setutcmonth-month-date">`#setUTCMonth(month [, date])`</a>
+
+Sets the month, and optionally date in UTC. The arguments are the same as for
+the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### <a name="setutcdate-date">`#setUTCDate(date)`</a>
+
+Sets the date in UTC. The argument is the same as for the native Date
+prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### <a name="setutchours-hours-minutes-seconds-milliseconds">`#setUTCHours(hours [, minutes, seconds, milliseconds])`</a>
+
+Sets the hours, and optionally minutes, seconds and milliseconds if specified
+in UTC. The argumetns are the same as for the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### <a name="setutcminutes-minutes-seconds-milliseconds">`#setUTCMinutes(minutes [, seconds, milliseconds])`</a>
+
+Set the minutes and optionally seconds and milliseconds in UTC. The arguments
+are the same as for the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### <a name="setutcseconds-seconds-milliseconds">`#setUTCSeconds(seconds [, milliseconds])`</a>
+
+Set the seconds, and optionally milliseconds in UTC. The arguments are the same
+as for the native Date prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### <a name="setutcmilliseconds-milliseconds">`#setUTCMilliseconds(milliseconds)`</a>
+
+Sets the milliseconds in UTC. The argument is the same as for the native Date
+prototype's method.
+
+The return value of this method is the TzTime object.
+
+#### <a name="todatestring">`#toDateString()`</a>
+
+Returns the date portion as human-readable string.
+
+#### <a name="toisostring">`#toISOString()`</a>
+
+Returns the date and time in ISO 8601 extended format.
+
+#### <a name="tojson">`#toJSON()`</a>
+
+Same as `#toISOString`.
+
+#### <a name="tolocaledatestring">`#toLocaleDateString()`</a>
+
+Returns the date portion in locale-specific format.
+
+#### <a name="tolocalestring">`#toLocaleString()`</a>
+
+Returns the date and time in local-specific format.
+
+#### <a name="tolocaletimestring">`#toLocaleTimeString()`</a>
+
+Returns the time portion in locale-specific format.
+
+#### <a name="tostring">`#toString()`</a>
+
+Returns the string representation of the date and time object. Note that this
+string usually includes a time zone. However, the time zone has nothing to do
+with the timezone associated with the instance (it is always in the local time
+zone of the platform).
+
+#### <a name="totimestring">`#toTimeString()`</a>
+
+Returns the time portion of the string returned by `#toString()`. Note that the
+time zone returned by this method has nothing to do with the timezone
+associated with the instance (it is always in the local time zone of the
+platform).
+
+#### <a name="toutcstring">`#toUTCString()`</a>
+
+Returns a human-friendly representation of the date and time in GMT.
+
+#### <a name="valueof">`#valueOf()`</a>
+
+Returns the base value of the instance in milliseconds since Unix epoch.
+(Essentially the same as `#getTime()`).
+
+#### <a name="gettime">`#getTime()`</a>
+
+Returns the number of milliseconds since Unix epoch.
+
+#### <a name="settime-milliseconds">`#setTime(milliseconds)`</a>
+
+Sets the number of milliseconds since Unix epoch.
+
+#### <a name="toformat-format">`#toFormat([format])`</a>
 
 Formats date and time using `format` formatting string. The formatting uses
 strftime-compatible syntax with follwing tokens:
@@ -421,19 +592,94 @@ the formatting string. For example:
 
 If `format` string is omitted, `TzTime.DEFAULT_FORMAT` setting is used.
 
-#### `strftime([format])` <a name="strftime-format"></a>
+#### <a name="strftime-format">`#strftime([format])`</a>
 
 Alias for `#toFormat()` method.
 
-### Static properties <a name="static-properties"></a>
+#### <a name="resettime">`#resetTime()`</a>
 
-#### `TzTime.platformZone` <a name="tztime-platformzone"></a>
+Resets the time portion of the object to 0:00:00.000.
+
+#### <a name="isafter-t">`#isAfter(t)`</a>
+
+Whether object is after `t`. `t` can be either anohter `TzTime` or a `Date`
+object.
+
+Note that if `t` is equal to this object, it is considered to not be after it.
+
+#### <a name="isbefore-t">`#isBefore(t)`</a>
+
+Whether object is before `t`. `t` can be either another `TzTime` or a `Date`
+object.
+
+Note that if `t` is equal to this object, it is considered to not be before it.
+
+#### <a name="isbetween-t1-t2">`#isBetween(t1, t2)`</a>
+
+Whther object is between `t1` and `t2`. `t1` and `t2` can be either `TzTime` or
+`Date` objects.
+
+Note that if `t1` or `t2` is equal to this object, this object is not
+considered to be between `t1` and `t2`.
+
+The order of `t1` and `t2` does not matter.
+
+#### <a name="isdateafter-t">`#isDateAfter(t)`</a>
+
+Whether this object is after `t` by date. `t` can be either another `TzTime` or
+`Date` object.
+
+#### <a name="isdatebefore-t">`#isDateBefore(t)`</a>
+
+Whether this object is before `t` by date. `t` can be either another `TzTime`
+or `Date` object.
+
+#### <a name="isdatebetween-t1-t2">`#isDateBetween(t1, t2)`</a>
+
+Whether this object is between `t1` and `t2` by date. The two arguments can
+either be `TzTime` or `Date` objects.
+
+Note that if `t1` or `t2` equals this object, this object is not considered to
+be between them.
+
+The order of `t1` and `t2` does not matter.
+
+#### <a name="delta-t">`#delta(t)`</a>
+
+Calculates the difference between this instance and `t`, another `TzTime`
+objects or a `Date` object and returns a delta object. The delta object has the
+following structure:
+
+    d.delta // relative difference
+    d.milliseconds // difference in milliseconds (same as delta)
+    d.seconds // difference rounded to seconds with no decimals
+    d.minutes // difference rounded to minutes with no decimals
+    d.hours // difference rounded to hours with no decimals
+    d.days // difference rounded to days with no decimals
+    d.composite // composite difference
+
+
+Relative difference means the difference between this object and `t` relative
+to this object. This can be a negative or positive number in milliseconds. All
+other values (including the `milliseconds` key) are absolute, which means they
+are always positive.
+
+The composite difference is an array containing the total difference broken
+down into days, hours, minutes, seconds, and milliseconds.
+
+### <a name="static-properties">Static properties</a>
+
+#### <a name="tztime-platformzone">`TzTime.platformZone`</a>
 
 Gets the time zone offset of the platform. This is a read-only attribute.
 
-### Static methods <a name="static-methods"></a>
+### <a name="static-methods">Static methods</a>
 
-#### `TzTime.parse(s, [format])` <a name="tztime-parse-s-format"></a>
+#### <a name="tztime-reorder-d-d1-d2">`TzTime.reorder(d, d1 [, d2...])`</a>
+
+Reorders the `TzTime` or `Date` objects from earliest to latest.
+
+#### <a name="tztime-parse-s-format">`TzTime.parse(s, [format])`</a>
 
 Parse a string `s` and return a `Date` object. The `format` string is used to
 specify the format in which `s` date is represented.
@@ -470,52 +716,52 @@ Get the token regexp and parser function #### `TzTime.strptime(s, [format])`
 
 Alias for `TzTime.parse()` method.
 
-### Settings <a name="settings"></a>
+### <a name="settings">Settings</a>
 
-#### `TzTime.DAY_MS` <a name="tztime-day_ms"></a>
+#### <a name="tztime-day_ms">`TzTime.DAY_MS`</a>
 
 Number of milliseconds in a day
 
-#### `TzTime.REGEXP_CHARS` <a name="tztime-regexp_chars"></a>
+#### <a name="tztime-regexp_chars">`TzTime.REGEXP_CHARS`</a>
 
 Array of regexp characters that should be escaped in a format string when
 parsing dates and times.
 
-#### `TzTime.MONTHS` <a name="tztime-months"></a>
+#### <a name="tztime-months">`TzTime.MONTHS`</a>
 
 Month names
 
-#### `TzTime.MNTH` <a name="tztime-mnth"></a>
+#### <a name="tztime-mnth">`TzTime.MNTH`</a>
 
 Short month names (three-letter abbreviations).
 
-#### `TzTime.DAYS` <a name="tztime-days"></a>
+#### <a name="tztime-days">`TzTime.DAYS`</a>
 
 Week day names, starting with Sunday.
 
-#### `TzTime.DY` <a name="tztime-dy"></a>
+#### <a name="tztime-dy">`TzTime.DY`</a>
 
 Abbreviated week day names.
 
-#### `TzTime.AM` <a name="tztime-am"></a>
+#### <a name="tztime-am">`TzTime.AM`</a>
 
 Ante-meridiem shorthand
 
-#### `TzTime.PM` <a name="tztime-pm"></a>
+#### <a name="tztime-pm">`TzTime.PM`</a>
 
 Post-meridiem shorthand
 
-#### `TzTime.WEEK_START` <a name="tztime-week_start"></a>
+#### <a name="tztime-week_start">`TzTime.WEEK_START`</a>
 
 Day the week starts on. 0 is Sunday, 1 is Monday, and so on.
 
-#### `TzTime.FORMAT_TOKENS` <a name="tztime-format_tokens"></a>
+#### <a name="tztime-format_tokens">`TzTime.FORMAT_TOKENS`</a>
 
 Definitions of formatting tokens used by the `#strftime()` method. All format
 functions are applied to a `Date` object so the `Date` methods can be called on
 `this`.
 
-#### `TzTime.PARSE_RECIPES` <a name="tztime-parse_recipes"></a>
+#### <a name="tztime-parse_recipes">`TzTime.PARSE_RECIPES`</a>
 
 Functions for parsing the date.
 
@@ -527,12 +773,12 @@ The converter function will take the matched string, and a meta object. The
 meta object is later used as source of information for building the final
 `Date` object.
 
-#### `TzTime.DEFAULT_FORMAT` <a name="tztime-default_format"></a>
+#### <a name="tztime-default_format">`TzTime.DEFAULT_FORMAT`</a>
 
 The default format string for formatting and parsing functions. Default is
 '%Y-%m-%dT%H:%M:%f%z'.
 
-### `TzTime.utils` <a name="tztime-utils"></a>
+### <a name="tztime-utils">`TzTime.utils`</a>
 
 Utility functions for micro-formatting.
 
@@ -540,15 +786,15 @@ The `TzTime.utils` contains a few utility methods that are used to perform
 formatting and calculation tasks, mainly used by `strptime` and `strftime`
 functions.
 
-#### `#repeat(s, count)` <a name="repeat-s-count"></a>
+#### <a name="repeat-s-count">`#repeat(s, count)`</a>
 
 Repeat string `s` `count` times.
 
-#### `#reverse(s)` <a name="reverse-s"></a>
+#### <a name="reverse-s">`#reverse(s)`</a>
 
 Reverses a string.
 
-#### `#pad(i, [digits, tail])` <a name="pad-i-digits-tail"></a>
+#### <a name="pad-i-digits-tail">`#pad(i, [digits, tail])`</a>
 
 Zero-pads a number `i`.
 
@@ -580,7 +826,7 @@ Example:
     // 02.30
 
 
-#### `#cycle(i, max, [zeroIndex])` <a name="cycle-i-max-zeroindex"></a>
+#### <a name="cycle-i-max-zeroindex">`#cycle(i, max, [zeroIndex])`</a>
 
 Keeps the number `i` within the `max` range. The range starts at 0 if
 `zeroIndex` is `true` or 1 if `zeroIndex` is `false` (default).
@@ -607,7 +853,7 @@ Example:
     // Returns 12
 
 
-#### `#hour24(h, [pm])` <a name="hour24-h-pm"></a>
+#### <a name="hour24-h-pm">`#hour24(h, [pm])`</a>
 
 Converts the `h` hour into 24-hour format. The `pm` is `true` if the hour is
 PM. The `pm` argument defaults to `false`.
