@@ -109,6 +109,13 @@ describe 'TzTime', () ->
       d = TzTime 2013, 8, 1, 12, 44, 30, 300, -240
       equal d.toSource(), '(new TzTime(1378053870300, -240))'
 
+    it 'should return a new instance with eval()', () ->
+      d = TzTime 2013, 8, 1, 12, 44, 30, 300, -240
+      s = d.toSource()
+      d1 = eval(s)
+      assert.ok d1.equals d
+      equal d1.timezone, -240
+
   describe '#timezone', () ->
     it 'is a number', () ->
       d = TzTime 2013, 8, 1, 8, 20

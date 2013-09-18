@@ -135,10 +135,18 @@ describe('TzTime', function() {
     });
   });
   describe('#toSource', function() {
-    return it('should return source representation', function() {
+    it('should return source representation', function() {
       var d;
       d = TzTime(2013, 8, 1, 12, 44, 30, 300, -240);
       return equal(d.toSource(), '(new TzTime(1378053870300, -240))');
+    });
+    return it('should return a new instance with eval()', function() {
+      var d, d1, s;
+      d = TzTime(2013, 8, 1, 12, 44, 30, 300, -240);
+      s = d.toSource();
+      d1 = eval(s);
+      assert.ok(d1.equals(d));
+      return equal(d1.timezone, -240);
     });
   });
   describe('#timezone', function() {
