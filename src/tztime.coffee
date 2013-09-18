@@ -762,6 +762,133 @@ define (require) ->
       this.hours = this.minutes = this.seconds = this.milliseconds = 0
       this
 
+    # #### `#isAfter(t)`
+    #
+    # Whether object is after `t`. `t` can be either anohter `TzTime` or a
+    # `Date` object.
+    #
+    # Note that if `t` is equal to this object, it is considered to not be
+    # after it.
+    #
+    isAfter: (t) ->
+      t - this < 0
+
+    # #### `#isBefore(t)`
+    #
+    # Whether object is before `t`. `t` can be either another `TzTime` or a
+    # `Date` object.
+    #
+    # Note that if `t` is equal to this object, it is considered to not be
+    # before it.
+    #
+    isBefore: (t) ->
+      t - this > 0
+
+    # #### `#isBetween(t1, t2)`
+    #
+    # Whther object is between `t1` and `t2`. `t1` and `t2` can be either
+    # `TzTime` or `Date` objects.
+    #
+    # Note that if `t1` or `t2` is equal to this object, this object is not
+    # considered to be between `t1` and `t2`.
+    #
+    # The order of `t1` and `t2` does not matter.
+    #
+    isBetween: (t1, t2) ->
+      (@isAfter(t1) and @isBefore(t2)) or (@isAfter(t2) and @isBefore(t1))
+
+    # #### `#isDateAfter(t)`
+    #
+    # Whether this object is after `t` by date. `t` can be either another
+    # `TzTime` or `Date` object.
+    #
+    isDateAfter: (t) ->
+      copy = new TzTime this
+      t = new TzTime t
+      copy.resetTime()
+      t.resetTime()
+      copy.isAfter t
+
+    # #### `#isDateBefore(t)`
+    #
+    # Whether this object is before `t` by date. `t` can be either another
+    # `TzTime` or `Date` object.
+    #
+    isDateBefore: (t) ->
+      copy = new TzTime this
+      t = new TzTime t
+      copy.resetTime()
+      t.resetTime()
+      copy.isBefore t
+
+    # #### `#isDateBetween(t1, t2)`
+    #
+    # Whether this object is between `t1` and `t2` by date. The two arguments
+    # can either be `TzTime` or `Date` objects.
+    #
+    # Note that if `t1` or `t2` equals this object, this object is not
+    # considered to be between them.
+    #
+    # The order of `t1` and `t2` does not matter.
+    #
+    isDateBetween: (t1, t2) ->
+      copy = new TzTime this
+      t1 = new TzTime t1
+      t2 = new TzTime t2
+      copy.resetTime()
+      t1.resetTime()
+      t2.resetTime()
+      copy.isBetween t1, t2
+
+    # #### `#delta(t)`
+    #
+    # Calculates the difference between this instance and `t`, another `TzTime`
+    # objects or a `Date` object and returns a delta object. The delta object
+    # has the following structure:
+    #
+    #     d.delta // relative difference
+    #     d.milliseconds // difference in milliseconds (same as delta)
+    #     d.seconds // difference rounded to seconds with no decimals
+    #     d.minutes // difference rounded to minutes with no decimals
+    #     d.hours // difference rounded to hours with no decimals
+    #     d.days // difference rounded to days with no decimals
+    #     d.composite // composite difference
+    #
+    # Relative difference means the difference between this object and `t`
+    # relative to this object. This can be a negative or positive number in
+    # milliseconds. All other values (including the `milliseconds` key) are
+    # absolute, which means they are always positive.
+    #
+    # The composite difference is an array containing the total difference
+    # broken down into days, hours, minutes, seconds, and milliseconds.
+    #
+    delta: (t) ->
+      delta = t - this  # absolute delta in ms
+      absD = Math.abs delta
+
+      ## As a side note, the `~` operator is a bitwise NOT operator. It's an
+      ## unary operator, which floors a number if chained twice. Not sure where
+      ## I picked it up, but it seems to work fine.
+      ##
+      ## Here in the code below we use it to get the fraction part of float
+      ## numbers by subtracting the number from the double-bitwise-negated
+      ## version of the same number: x - ~~x
+
+      days = absD / 1000 / 60 / 60 / 24  # diff in days, not rounded
+      hrs = (days - ~~days) * 24 # fraction part of days in hours, not rounded
+      mins = (hrs - ~~hrs) * 60 # fraction part of hours in minutes, not rounded
+      secs = (mins - ~~mins) * 60 # fraction part of mins in seconds, not rounded
+      msecs = (secs - ~~secs) * 1000 # fraction part of secs in milliseconds
+
+      delta: delta
+      milliseconds: absD
+      seconds: Math.ceil absD / 1000
+      minutes: Math.ceil absD / 1000 / 60
+      hours: Math.ceil absD / 1000 / 60 / 60
+      days: Math.ceil days
+      composite: [~~days, ~~hrs, ~~mins, ~~secs, msecs]
+
+
     # ### Static properties
     #
 
@@ -775,6 +902,14 @@ define (require) ->
 
     # ### Static methods
     #
+
+    # #### `TzTime.reorder(d, d1 [, d2...])`
+    #
+    # Reorders the `TzTime` or `Date` objects from earliest to latest.
+    #
+    TzTime.reorder = (d...) ->
+      d.sort (d1, d2) -> d1 - d2
+      d
 
     # #### `TzTime.parse(s, [format])`
     #
@@ -1283,7 +1418,5 @@ define (require) ->
       return 0 if h is 12
       return 12 if h is 24
       h
-
-
 
   TzTime

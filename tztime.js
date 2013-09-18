@@ -4,7 +4,8 @@
 @license LICENSE
 */
 
-var define;
+var define,
+  __slice = [].slice;
 
 define = (function(root) {
   if (typeof root.define === 'function' && root.define.amd) {
@@ -364,6 +365,67 @@ define(function(require) {
       return this;
     };
 
+    TzTime.prototype.isAfter = function(t) {
+      return t - this < 0;
+    };
+
+    TzTime.prototype.isBefore = function(t) {
+      return t - this > 0;
+    };
+
+    TzTime.prototype.isBetween = function(t1, t2) {
+      return (this.isAfter(t1) && this.isBefore(t2)) || (this.isAfter(t2) && this.isBefore(t1));
+    };
+
+    TzTime.prototype.isDateAfter = function(t) {
+      var copy;
+      copy = new TzTime(this);
+      t = new TzTime(t);
+      copy.resetTime();
+      t.resetTime();
+      return copy.isAfter(t);
+    };
+
+    TzTime.prototype.isDateBefore = function(t) {
+      var copy;
+      copy = new TzTime(this);
+      t = new TzTime(t);
+      copy.resetTime();
+      t.resetTime();
+      return copy.isBefore(t);
+    };
+
+    TzTime.prototype.isDateBetween = function(t1, t2) {
+      var copy;
+      copy = new TzTime(this);
+      t1 = new TzTime(t1);
+      t2 = new TzTime(t2);
+      copy.resetTime();
+      t1.resetTime();
+      t2.resetTime();
+      return copy.isBetween(t1, t2);
+    };
+
+    TzTime.prototype.delta = function(t) {
+      var absD, days, delta, hrs, mins, msecs, secs;
+      delta = t - this;
+      absD = Math.abs(delta);
+      days = absD / 1000 / 60 / 60 / 24;
+      hrs = (days - ~~days) * 24;
+      mins = (hrs - ~~hrs) * 60;
+      secs = (mins - ~~mins) * 60;
+      msecs = (secs - ~~secs) * 1000;
+      return {
+        delta: delta,
+        milliseconds: absD,
+        seconds: Math.ceil(absD / 1000),
+        minutes: Math.ceil(absD / 1000 / 60),
+        hours: Math.ceil(absD / 1000 / 60 / 60),
+        days: Math.ceil(days),
+        composite: [~~days, ~~hrs, ~~mins, ~~secs, msecs]
+      };
+    };
+
     staticProperty('platformZone', {
       get: function() {
         return -(new Date().getTimezoneOffset());
@@ -372,6 +434,15 @@ define(function(require) {
         throw new TypeError("Cannot assign to platformZone");
       }
     });
+
+    TzTime.reorder = function() {
+      var d;
+      d = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      d.sort(function(d1, d2) {
+        return d1 - d2;
+      });
+      return d;
+    };
 
     TzTime.parse = function(s, format) {
       var converters, fn, idx, key, matches, meta, parseTokenRe, parseTokens, rxp, schr, _len5, _len6, _n, _o, _ref1;
