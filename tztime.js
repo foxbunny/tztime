@@ -502,6 +502,10 @@ define(function(require) {
 
     TzTime.strptime = TzTime.parse;
 
+    TzTime.fromJSON = function(s) {
+      return TzTime.parse(s, TzTime.JSON_FORMAT);
+    };
+
     return TzTime;
 
   })();

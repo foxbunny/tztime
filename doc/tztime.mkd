@@ -86,6 +86,7 @@ time-zone-aware.
  + [Static methods](#static-methods)
    - [`TzTime.reorder(d, d1 [, d2...])`](#tztime-reorder-d-d1-d2)
    - [`TzTime.parse(s, [format])`](#tztime-parse-s-format)
+   - [`TzTime.fromJSON`](#tztime-fromjson)
  + [Settings](#settings)
    - [`TzTime.DAY_MS`](#tztime-day_ms)
    - [`TzTime.REGEXP_CHARS`](#tztime-regexp_chars)
@@ -99,6 +100,7 @@ time-zone-aware.
    - [`TzTime.FORMAT_TOKENS`](#tztime-format_tokens)
    - [`TzTime.PARSE_RECIPES`](#tztime-parse_recipes)
    - [`TzTime.DEFAULT_FORMAT`](#tztime-default_format)
+   - [`TzTime.JSON_FORMAT`](#tztime-json_format)
  + [`TzTime.utils`](#tztime-utils)
    - [`#repeat(s, count)`](#repeat-s-count)
    - [`#reverse(s)`](#reverse-s)
@@ -559,6 +561,7 @@ strftime-compatible syntax with follwing tokens:
  + %d - Zero-padded date (e.g, 02, 31...)
  + %D - Non-zero-padded date (e.g., 2, 31...)
  + %f - Zero-padded decimal seconds (e.g., 04.23, 23.50)
+ + %F - Zero-padded decimal seconds with 3-digit fraction (e.g., 04.233)
  + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
  + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
  + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
@@ -688,6 +691,8 @@ A subset of `#toFormat()` tokens is used in parsing.
  + %B - Full month name (e.g., 'January', 'February'...)
  + %d - Zero-padded date (e.g, 02, 31...)
  + %D - Non-zero-padded date (e.g., 2, 31...)
+ + %f - Zero-padded decimal seconds (e.g., 04.23, 23.50)
+ + %F - Zero-padded decimal seconds with 3-digit fraction (e.g., 04.233)
  + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
  + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
  + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
@@ -713,6 +718,15 @@ If `format` string is omitted, it will default to `TzTime.DEFAULT_FORMAT`.
 Get the token regexp and parser function ### `TzTime.strptime(s, [format])`
 
 Alias for `TzTime.parse()` method.
+
+### <a name="tztime-fromjson">`TzTime.fromJSON`</a>
+
+Parses the string using the `TzTime.JSON_FORMAT` format string.
+
+Because `JSON.parse` returns a string when parsing a valid JSON timestamp, we
+need to convert the string to a date by parsing the string. `TzTime.fromJSON()`
+is a shortcut for performing this task by using a prset format string and
+wrapping `TzTime.parse()`
 
 ## <a name="settings">Settings</a>
 
@@ -775,6 +789,11 @@ meta object is later used as source of information for building the final
 
 The default format string for formatting and parsing functions. Default is
 '%Y-%m-%dT%H:%M:%f%z'.
+
+### <a name="tztime-json_format">`TzTime.JSON_FORMAT`</a>
+
+This formatting string is used to parse the date using the `TzTime.fromJSON()`
+method. Default value is '%Y-%m-%dT%H:%M:%F%z'.
 
 ## <a name="tztime-utils">`TzTime.utils`</a>
 

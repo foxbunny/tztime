@@ -1010,6 +1010,18 @@ define (require) ->
     #
     TzTime.strptime = TzTime.parse
 
+    # ### `TzTime.fromJSON`
+    #
+    # Parses the string using the `TzTime.JSON_FORMAT` format string.
+    #
+    # Because `JSON.parse` returns a string when parsing a valid JSON
+    # timestamp, we need to convert the string to a date by parsing the string.
+    # `TzTime.fromJSON()` is a shortcut for performing this task by using a
+    # prset format string and wrapping `TzTime.parse()`
+    #
+    TzTime.fromJSON = (s) ->
+      TzTime.parse s, TzTime.JSON_FORMAT
+
   # ## Settings
   #
 

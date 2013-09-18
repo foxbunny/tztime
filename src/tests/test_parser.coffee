@@ -82,3 +82,30 @@ describe 'TzTime.parse', () ->
     equal d.date, 1, 'date must match'
     equal d.hours, 0, 'hours must match'
     equal d.minutes, 0, 'minutes must match'
+
+describe 'TzTime.fromJSON', () ->
+  it 'should parse a JSON-generated string', () ->
+    d = TzTime 2013, 11, 1, 12, 45, 11, 233, 0
+
+    ## Converting a Date or TzTime object to JSON will correctly convert it to
+    ## extended ISO format.
+    s = JSON.stringify(d)
+    equal s, '"2013-12-01T12:45:11.233Z"'
+
+    ## However, when parsing, it just returns a normal string instead of the
+    ## Date object.
+    s1 = JSON.parse(s)
+    equal s1, "2013-12-01T12:45:11.233Z"
+
+    ## Because of this, we must use fromJSON to convert
+    d1 = TzTime.fromJSON s1
+    equal d1.year, 2013
+    equal d1.month, 11
+    equal d1.date, 1
+    equal d1.hours, 12
+    equal d1.minutes, 45
+    equal d1.seconds, 11
+    equal.d1.milliseconds, 233
+    equal d1.timezone, 0
+    equal d1 - d, 0
+

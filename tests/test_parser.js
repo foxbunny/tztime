@@ -116,3 +116,16 @@ describe('TzTime.parse', function() {
     return equal(d.minutes, 0, 'minutes must match');
   });
 });
+
+describe('TzTime.fromJSON', function() {
+  return it('should parse a JSON-generated string', function() {
+    var d, d1, s, s1;
+    d = TzTime(2013, 11, 1, 12, 45, 11, 233, 0);
+    s = JSON.stringify(d);
+    equal(s, '"2013-12-01T12:45:11.233Z"');
+    s1 = JSON.parse(s);
+    equal(s1, "2013-12-01T12:45:11.233Z");
+    d1 = TzTime.fromJSON(s1);
+    return assert(d1 - d, 0);
+  });
+});
