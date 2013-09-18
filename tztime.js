@@ -25,7 +25,7 @@ define = (function(root) {
 define(function(require) {
   var DAY_MS, TzTime;
   TzTime = (function() {
-    var D, METHODS, NON_TZ_AWARE_GETTERS, NON_TZ_AWARE_SETTERS, TZ_AWARE_METHODS, m, property, staticProperty, wrap, wrapReturn, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
+    var METHODS, NON_TZ_AWARE_GETTERS, NON_TZ_AWARE_SETTERS, TZ_AWARE_METHODS, m, property, staticProperty, wrap, wrapReturn, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
 
     property = function(name, descriptor) {
       return Object.defineProperty(TzTime.prototype, name, descriptor);
@@ -112,12 +112,6 @@ define(function(require) {
       this.__datetime__ = instance;
       this.constructor = TzTime;
     }
-
-    D = function() {};
-
-    D.prototype = Date.prototype;
-
-    TzTime.prototype = new D();
 
     property('timezone', {
       get: function() {

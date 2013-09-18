@@ -179,12 +179,6 @@ define (require) ->
 
       @constructor = TzTime
 
-    # TzTime constructor inherits from the native Date prototype.
-    #
-    D = () ->
-    D.prototype = Date.prototype
-    TzTime.prototype = new D()
-
     # ### Attributes
     #
     # The TzTime prototype provides a number of methods that can be used to

@@ -64,18 +64,12 @@ describe('TzTime', function() {
       d = new TzTime(2013, 8, 1);
       return assert.ok(d instanceof TzTime);
     });
-    it('should also be an instance of Date', function() {
-      var d;
-      d = new TzTime(2013, 8, 1);
-      return assert.ok(d instanceof Date);
-    });
     it('should be usable withough the new keyword', function() {
       var d, d1;
       d = TzTime(2013, 8, 1);
       equal(typeof d, 'object');
       equal(d.constructor, TzTime);
       assert.ok(d instanceof TzTime);
-      assert.ok(d instanceof Date);
       d1 = new TzTime(2013, 8, 1);
       return equal(d.getTime(), d1.getTime());
     });
