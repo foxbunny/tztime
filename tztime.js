@@ -109,7 +109,9 @@ define(function(require) {
         default:
           instance = new Date(yr, mo, dy, hr, mi, se, ms);
       }
-      this.__tz__ || (this.__tz__ = -instance.getTimezoneOffset());
+      if (this.__tz__ == null) {
+        this.__tz__ = -instance.getTimezoneOffset();
+      }
       this.__datetime__ = instance;
       this.constructor = TzTime;
     }
@@ -445,7 +447,7 @@ define(function(require) {
     };
 
     TzTime.parse = function(s, format) {
-      var converters, fn, idx, key, matches, meta, parseTokenRe, parseTokens, rxp, schr, _len5, _len6, _n, _o, _ref1;
+      var converters, fn, idx, key, matches, meta, parseTokenRe, parseTokens, rxp, schr, _len5, _len6, _n, _o, _ref1, _ref2;
       if (format == null) {
         format = TzTime.DEFAULT_FORMAT;
       }
@@ -485,14 +487,17 @@ define(function(require) {
         minute: 0,
         second: 0,
         millisecond: 0,
-        timeAdjust: false,
-        timezone: null
+        timeAdjust: null,
+        timezone: TzTime.platformZone
       };
       for (idx = _o = 0, _len6 = converters.length; _o < _len6; idx = ++_o) {
         fn = converters[idx];
         fn(matches[idx], meta);
       }
-      return new TzTime(meta.year, meta.month, meta.date, (meta.timeAdjust ? hour24(meta.hour) : meta.hour), meta.minute, meta.second, meta.millisecond, meta.timezone);
+      if ((_ref2 = meta.timeAdjust) === true || _ref2 === false) {
+        meta.hour = hour24(meta.hour, meta.timeAdjust);
+      }
+      return new TzTime(meta.year, meta.month, meta.date, meta.hour, meta.minute, meta.second, meta.millisecond, meta.timezone);
     };
 
     TzTime.strptime = TzTime.parse;
@@ -535,6 +540,11 @@ define(function(require) {
       var fs;
       fs = Math.round((this.seconds + this.milliseconds / 1000) * 100) / 100;
       return TzTime.utils.pad(fs, 2, 2);
+    },
+    '%F': function() {
+      var fs;
+      fs = this.seconds + this.milliseconds / 1000;
+      return TzTime.utils.pad(fs, 2, 3);
     },
     '%H': function() {
       return TzTime.utils.pad(this.hours, 2);
@@ -668,11 +678,21 @@ define(function(require) {
     },
     '%f': function() {
       return {
-        re: '\\d{2}\\.\\d{2}',
+        re: '[0-5]\\d\\.\\d{2}',
         fn: function(s, meta) {
           s = parseFloat(s);
           meta.second = ~~s;
-          return meta.millisecond = (s - ~~s) * 1000;
+          return meta.millisecond = Math.round((s - ~~s) * 1000);
+        }
+      };
+    },
+    '%F': function() {
+      return {
+        re: '[0-5]\\d\\.\\d{3}',
+        fn: function(s, meta) {
+          s = parseFloat(s);
+          meta.second = ~~s;
+          return meta.millisecond = Math.round((s - ~~s) * 1000);
         }
       };
     },
@@ -688,6 +708,9 @@ define(function(require) {
       return {
         re: '1[0-2]|\\d',
         fn: function(s, meta) {
+          if (meta.timeAdjust === null) {
+            meta.timeAdjust = false;
+          }
           return meta.hour = parseInt(s, 10);
         }
       };
@@ -696,6 +719,9 @@ define(function(require) {
       return {
         re: '0\\d|1[0-2]',
         fn: function(s, meta) {
+          if (meta.timeAdjust === null) {
+            meta.timeAdjust = false;
+          }
           return meta.hour = parseInt(s, 10);
         }
       };
@@ -784,7 +810,7 @@ define(function(require) {
     },
     '%z': function() {
       return {
-        re: '[+-](?1[01]|0\\d)[0-5]\\d|Z',
+        re: '[+-](?:1[01]|0\\d)[0-5]\\d|Z',
         fn: function(s, meta) {
           var h, m, mult;
           if (s === 'Z') {
@@ -800,6 +826,7 @@ define(function(require) {
     }
   };
   TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z';
+  TzTime.ISO_FORMAT = '%Y-%m-%dT%H:%M:%F%z';
   TzTime.utils = {
     repeat: function(s, count) {
       return new Array(count + 1).join(s);

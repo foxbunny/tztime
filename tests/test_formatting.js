@@ -37,6 +37,9 @@ describe('TzTime', function() {
     it('should return zero-padded seconds with fraction', function() {
       return equal(d.toFormat('%f'), '08.20');
     });
+    it('should return zero-padded seconds with 3-digit fraction', function() {
+      return equal(d.toFormat('%F'), '08.200');
+    });
     it('should return zero-padded hours in 24-hour format', function() {
       return equal(d.toFormat('%H'), '18');
     });

@@ -166,7 +166,7 @@ define (require) ->
       # To set the time zone use either `#timezone` attribute, or
       # `#setTimezoneOffset()` method.
       #
-      @__tz__ or= -instance.getTimezoneOffset()
+      @__tz__ = -instance.getTimezoneOffset() if not @__tz__?
 
       # ### `#__datetime__`
       #
@@ -683,7 +683,7 @@ define (require) ->
             this
         ) method if not (method in ['Day', 'Minutes'])
 
-        ## Crate getters
+        ## Create getters
         proto['get' + method] = ((method) ->
           ## Create a closure for `method` so it doesn't get overrun by
           ## iteration.
@@ -711,6 +711,7 @@ define (require) ->
     #  + %d - Zero-padded date (e.g, 02, 31...)
     #  + %D - Non-zero-padded date (e.g., 2, 31...)
     #  + %f - Zero-padded decimal seconds (e.g., 04.23, 23.50)
+    #  + %F - Zero-padded decimal seconds with 3-digit fraction (e.g., 04.233)
     #  + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
     #  + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
     #  + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
@@ -921,6 +922,8 @@ define (require) ->
     #  + %B - Full month name (e.g., 'January', 'February'...)
     #  + %d - Zero-padded date (e.g, 02, 31...)
     #  + %D - Non-zero-padded date (e.g., 2, 31...)
+    #  + %f - Zero-padded decimal seconds (e.g., 04.23, 23.50)
+    #  + %F - Zero-padded decimal seconds with 3-digit fraction (e.g., 04.233)
     #  + %H - Zero-padded hour in 24-hour format (e.g., 8, 13, 0...)
     #  + %i - Non-zero-padded hour in 12-hour format (e.g., 8, 1, 12...)
     #  + %I - Zero-padded hour in 12-hour format (e.g., 08, 01, 12...)
@@ -981,18 +984,21 @@ define (require) ->
         minute: 0
         second: 0
         millisecond: 0
-        timeAdjust: false
-        timezone: null
+        timeAdjust: null
+        timezone: TzTime.platformZone
 
       ## Iterate parser functions and apply the function to each match
       for fn, idx in converters
         fn matches[idx], meta
 
+      if meta.timeAdjust in [true, false]
+        meta.hour = hour24(meta.hour, meta.timeAdjust)
+
       ## Create the `TzTime` object using meta data
       new TzTime meta.year,
         meta.month,
         meta.date,
-        (if meta.timeAdjust then hour24(meta.hour) else meta.hour),
+        meta.hour,
         meta.minute,
         meta.second,
         meta.millisecond
@@ -1139,6 +1145,11 @@ define (require) ->
       fs = Math.round((@seconds + @milliseconds / 1000) * 100) / 100
       TzTime.utils.pad fs, 2, 2
 
+    ## Zero-padded seconds with 3-digit decimal part.
+    '%F': () ->
+      fs = @seconds + @milliseconds / 1000
+      TzTime.utils.pad fs, 2, 3
+
     ## Zero-padded hour in 24-hour format
     '%H': () -> TzTime.utils.pad @hours, 2
 
@@ -1240,11 +1251,17 @@ define (require) ->
       fn: (s, meta) ->
         meta.date = parseInt s, 10
     '%f': () ->
-      re: '\\d{2}\\.\\d{2}'
+      re: '[0-5]\\d\\.\\d{2}'
       fn: (s, meta) ->
         s = parseFloat s
         meta.second = ~~s
-        meta.millisecond = (s - ~~s) * 1000
+        meta.millisecond = Math.round((s - ~~s) * 1000)
+    '%F': () ->
+      re: '[0-5]\\d\\.\\d{3}'
+      fn: (s, meta) ->
+        s = parseFloat s
+        meta.second = ~~s
+        meta.millisecond = Math.round((s - ~~s) * 1000)
     '%H': () ->
       re: '[0-1]\\d|2[0-3]'
       fn: (s, meta) ->
@@ -1252,10 +1269,14 @@ define (require) ->
     '%i': () ->
       re: '1[0-2]|\\d'
       fn: (s, meta) ->
+        if meta.timeAdjust is null
+          meta.timeAdjust = false
         meta.hour = parseInt s, 10
     '%I': () ->
       re: '0\\d|1[0-2]'
       fn: (s, meta) ->
+        if meta.timeAdjust is null
+          meta.timeAdjust = false
         meta.hour = parseInt s, 10
     '%m': () ->
       re: '0\\d|1[0-2]'
@@ -1299,7 +1320,7 @@ define (require) ->
       fn: (s, meta) ->
         meta.year = parseInt s, 10
     '%z': () ->
-      re: '[+-](?1[01]|0\\d)[0-5]\\d|Z'
+      re: '[+-](?:1[01]|0\\d)[0-5]\\d|Z'
       fn: (s, meta) ->
         if s is 'Z'
           meta.timezone = 0
@@ -1315,6 +1336,13 @@ define (require) ->
   # '%Y-%m-%dT%H:%M:%f%z'.
   #
   TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z'
+
+  # ### `TzTime.JSON_FORMAT`
+  #
+  # This formatting string is used to parse the date using the
+  # `TzTime.fromJSON()` method. Default value is '%Y-%m-%dT%H:%M:%F%z'.
+  #
+  TzTime.ISO_FORMAT = '%Y-%m-%dT%H:%M:%F%z'
 
   # ## `TzTime.utils`
   #
