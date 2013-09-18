@@ -495,7 +495,7 @@ define(function(require) {
         fn(matches[idx], meta);
       }
       if ((_ref2 = meta.timeAdjust) === true || _ref2 === false) {
-        meta.hour = hour24(meta.hour, meta.timeAdjust);
+        meta.hour = TzTime.utils.hour24(meta.hour, meta.timeAdjust);
       }
       return new TzTime(meta.year, meta.month, meta.date, meta.hour, meta.minute, meta.second, meta.millisecond, meta.timezone);
     };
@@ -830,7 +830,7 @@ define(function(require) {
     }
   };
   TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z';
-  TzTime.ISO_FORMAT = '%Y-%m-%dT%H:%M:%F%z';
+  TzTime.JSON_FORMAT = '%Y-%m-%dT%H:%M:%F%z';
   TzTime.utils = {
     repeat: function(s, count) {
       return new Array(count + 1).join(s);

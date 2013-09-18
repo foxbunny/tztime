@@ -992,7 +992,7 @@ define (require) ->
         fn matches[idx], meta
 
       if meta.timeAdjust in [true, false]
-        meta.hour = hour24(meta.hour, meta.timeAdjust)
+        meta.hour = TzTime.utils.hour24(meta.hour, meta.timeAdjust)
 
       ## Create the `TzTime` object using meta data
       new TzTime meta.year,
@@ -1354,7 +1354,7 @@ define (require) ->
   # This formatting string is used to parse the date using the
   # `TzTime.fromJSON()` method. Default value is '%Y-%m-%dT%H:%M:%F%z'.
   #
-  TzTime.ISO_FORMAT = '%Y-%m-%dT%H:%M:%F%z'
+  TzTime.JSON_FORMAT = '%Y-%m-%dT%H:%M:%F%z'
 
   # ## `TzTime.utils`
   #
