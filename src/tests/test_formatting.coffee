@@ -11,7 +11,7 @@ d = new TzTime(2013, 8, 1, 18, 7, 8, 200)
 d1 = new TzTime(2013, 8, 1, 8, 7, 8, 200)
 
 describe 'TzTime', () ->
-  describe 'tpFormat()', () ->
+  describe '#toFormat()', () ->
     it 'should return the short week day name', () ->
       equal d.toFormat('%a'), 'Sun'
 

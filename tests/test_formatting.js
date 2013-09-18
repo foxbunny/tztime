@@ -15,7 +15,7 @@ d = new TzTime(2013, 8, 1, 18, 7, 8, 200);
 d1 = new TzTime(2013, 8, 1, 8, 7, 8, 200);
 
 describe('TzTime', function() {
-  return describe('tpFormat()', function() {
+  return describe('#toFormat()', function() {
     it('should return the short week day name', function() {
       return equal(d.toFormat('%a'), 'Sun');
     });
