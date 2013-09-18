@@ -138,6 +138,8 @@ There are a few non-standard forms added.
     new TimeZone(year, month, day, hour, minute, second, millsecond, tz);
     new TimeZone(dateObject);
     new TimeZone(tzTimeObject);
+    new TimeZone(str, format); // same as TzTime.parse()
+    new TimeZone(value, tz);
 
 
 The `tz` argument is a time zone UTC offset in integer minutes (postive towards
@@ -147,8 +149,8 @@ The `dateObject` and `tzTimeObject` are Date and TzTime objects respectively.
 Constructor will return a completely new instance of those objects and, in case
 of TzTime objects, also retain the time zone offset.
 
-The last argument is an integer offset from UTC in minutes (positive towards
-East, negative towards West).
+In the last non-standard form, the `value` is the number of milliseconds since
+Unix epoch (same as the form with a single numeric argument).
 
 Unlike the JavaScript Date constructor, calling TzTime without the `new`
 keyword has the same behavior as calling it with it.

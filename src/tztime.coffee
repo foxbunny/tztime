@@ -116,9 +116,6 @@ define (require) ->
     # respectively. Constructor will return a completely new instance of those
     # objects and, in case of TzTime objects, also retain the time zone offset.
     #
-    # The last argument is an integer offset from UTC in minutes (positive
-    # towards East, negative towards West).
-    #
     # In the last non-standard form, the `value` is the number of milliseconds
     # since Unix epoch (same as the form with a single numeric argument).
     #
