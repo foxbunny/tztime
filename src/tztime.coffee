@@ -52,6 +52,13 @@ define (require) ->
       TzTime.prototype[name] = () ->
         @__datetime__[name] arguments...
 
+    ## Crate a method on `TzTime.prototype` that wraps the native method and
+    ## returns the instance.
+    wrapReturn = (name) ->
+      TzTime.prototype[name] = () ->
+        @__datetime__[name] arguments...
+        this
+
     ## All setter and getter methods without the `set` and `get` parts.
     METHODS = [
       'FullYear'
@@ -511,6 +518,145 @@ define (require) ->
     #
     # The return value of this method is the TzTime object.
     #
+    # #### `#getUTCFullYear()`
+    #
+    # Returns the full integer year with century in UTC.
+    #
+    # #### `#getUTCMonth()`
+    #
+    # Returns the 0-indexed integer month. 0 is January. The return value is in
+    # UTC.
+    #
+    # #### `#getUTCDate()`
+    #
+    # Returns the integer date (1-31) in UTC.
+    #
+    # #### `#getUTCDay()`
+    #
+    # Returns the integer day of week (0-6) in instace's time zone. 0 is
+    # Sunday, and 6 is Saturday. Return value is in UTC.
+    #
+    # #### `#getUTCHours()`
+    #
+    # Returns the 24-hour format hour (0-23) in UTC.
+    #
+    # #### `#getUTCMinutes()`
+    #
+    # Returns the minutes (0-59) in UTC.
+    #
+    # #### `#getUTCSeconds()`
+    #
+    # Returns the seconds (0-59) in UTC.
+    #
+    # #### `#getUTCMilliseconds()`
+    #
+    # Returns the milliseconds (0-999) in UTC.
+    #
+    # #### `#setUTCFullYear(year [, month, date])`
+    #
+    # Sets the year, and optionally month and date in UTC. The arguments are
+    # the same as for the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setUTCMonth(month [, date])`
+    #
+    # Sets the month, and optionally date in UTC. The arguments are the same as
+    # for the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setUTCDate(date)`
+    #
+    # Sets the date in UTC. The argument is the same as for the native Date
+    # prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setUTCHours(hours [, minutes, seconds, milliseconds])`
+    #
+    # Sets the hours, and optionally minutes, seconds and milliseconds if
+    # specified in UTC. The argumetns are the same as for the native Date
+    # prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setUTCMinutes(minutes [, seconds, milliseconds])`
+    #
+    # Set the minutes and optionally seconds and milliseconds in UTC. The
+    # arguments are the same as for the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setUTCSeconds(seconds [, milliseconds])`
+    #
+    # Set the seconds, and optionally milliseconds in UTC. The arguments are
+    # the same as for the native Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#setUTCMilliseconds(milliseconds)`
+    #
+    # Sets the milliseconds in UTC. The argument is the same as for the native
+    # Date prototype's method.
+    #
+    # The return value of this method is the TzTime object.
+    #
+    # #### `#toDateString()`
+    #
+    # Returns the date portion as human-readable string.
+    #
+    # #### `#toISOString()`
+    #
+    # Returns the date and time in ISO 8601 extended format.
+    #
+    # #### `#toJSON()`
+    #
+    # Same as `#toISOString`.
+    #
+    # #### `#toLocaleDateString()`
+    #
+    # Returns the date portion in locale-specific format.
+    #
+    # #### `#toLocaleString()`
+    #
+    # Returns the date and time in local-specific format.
+    #
+    # #### `#toLocaleTimeString()`
+    #
+    # Returns the time portion in locale-specific format.
+    #
+    # #### `#toString()`
+    #
+    # Returns the string representation of the date and time object. Note that
+    # this string usually includes a time zone. However, the time zone has
+    # nothing to do with the timezone associated with the instance (it is
+    # always in the local time zone of the platform).
+    #
+    # #### `#toTimeString()`
+    #
+    # Returns the time portion of the string returned by `#toString()`. Note
+    # that the time zone returned by this method has nothing to do with the
+    # timezone associated with the instance (it is always in the local time
+    # zone of the platform).
+    #
+    # #### `#toUTCString()`
+    #
+    # Returns a human-friendly representation of the date and time in GMT.
+    #
+    # #### `#valueOf()`
+    #
+    # Returns the base value of the instance in milliseconds since Unix epoch.
+    # (Essentially the same as `#getTime()`).
+    #
+    # #### `#getTime()`
+    #
+    # Returns the number of milliseconds since Unix epoch.
+    #
+    # #### `#setTime(milliseconds)`
+    #
+    # Sets the number of milliseconds since Unix epoch.
+    #
     wrap m for m in [
       'toDateString'
       'toISOString'
@@ -523,13 +669,13 @@ define (require) ->
       'toUTCString'
       'valueOf'
       'getTime'
-      'setTime'
     ]
 
-    wrap 'setUTC' + m for m in METHODS if m isnt 'Day'
+    wrapReturn 'setTime'
+    wrapReturn 'setUTC' + m for m in METHODS if m isnt 'Day'
+    wrapReturn 'set' + m for m in NON_TZ_AWARE_SETTERS
     wrap 'getUTC' + m for m in METHODS
     wrap 'get' + m for m in NON_TZ_AWARE_GETTERS
-    wrap 'set' + m for m in NON_TZ_AWARE_SETTERS
 
     ((proto) ->
       for method in TZ_AWARE_METHODS

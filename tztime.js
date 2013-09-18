@@ -25,7 +25,7 @@ define = (function(root) {
 define(function(require) {
   var DAY_MS, TzTime;
   TzTime = (function() {
-    var D, METHODS, NON_TZ_AWARE_GETTERS, NON_TZ_AWARE_SETTERS, TZ_AWARE_METHODS, m, property, staticProperty, wrap, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
+    var D, METHODS, NON_TZ_AWARE_GETTERS, NON_TZ_AWARE_SETTERS, TZ_AWARE_METHODS, m, property, staticProperty, wrap, wrapReturn, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
 
     property = function(name, descriptor) {
       return Object.defineProperty(TzTime.prototype, name, descriptor);
@@ -39,6 +39,14 @@ define(function(require) {
       return TzTime.prototype[name] = function() {
         var _ref;
         return (_ref = this.__datetime__)[name].apply(_ref, arguments);
+      };
+    };
+
+    wrapReturn = function(name) {
+      return TzTime.prototype[name] = function() {
+        var _ref;
+        (_ref = this.__datetime__)[name].apply(_ref, arguments);
+        return this;
       };
     };
 
@@ -284,32 +292,34 @@ define(function(require) {
       return this;
     };
 
-    _ref = ['toDateString', 'toISOString', 'toJSON', 'toLocaleDateString', 'toLocaleString', 'toLocaleTimeString', 'toString', 'toTimeString', 'toUTCString', 'valueOf', 'getTime', 'setTime'];
+    _ref = ['toDateString', 'toISOString', 'toJSON', 'toLocaleDateString', 'toLocaleString', 'toLocaleTimeString', 'toString', 'toTimeString', 'toUTCString', 'valueOf', 'getTime'];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       m = _ref[_i];
       wrap(m);
     }
 
+    wrapReturn('setTime');
+
     if (m !== 'Day') {
       for (_j = 0, _len1 = METHODS.length; _j < _len1; _j++) {
         m = METHODS[_j];
-        wrap('setUTC' + m);
+        wrapReturn('setUTC' + m);
       }
     }
 
-    for (_k = 0, _len2 = METHODS.length; _k < _len2; _k++) {
-      m = METHODS[_k];
+    for (_k = 0, _len2 = NON_TZ_AWARE_SETTERS.length; _k < _len2; _k++) {
+      m = NON_TZ_AWARE_SETTERS[_k];
+      wrapReturn('set' + m);
+    }
+
+    for (_l = 0, _len3 = METHODS.length; _l < _len3; _l++) {
+      m = METHODS[_l];
       wrap('getUTC' + m);
     }
 
-    for (_l = 0, _len3 = NON_TZ_AWARE_GETTERS.length; _l < _len3; _l++) {
-      m = NON_TZ_AWARE_GETTERS[_l];
+    for (_m = 0, _len4 = NON_TZ_AWARE_GETTERS.length; _m < _len4; _m++) {
+      m = NON_TZ_AWARE_GETTERS[_m];
       wrap('get' + m);
-    }
-
-    for (_m = 0, _len4 = NON_TZ_AWARE_SETTERS.length; _m < _len4; _m++) {
-      m = NON_TZ_AWARE_SETTERS[_m];
-      wrap('set' + m);
     }
 
     (function(proto) {
