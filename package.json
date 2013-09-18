@@ -1,16 +1,16 @@
 {
-  "name" : "",
-  "description" : "",
-  "homepage" : "",
-  "keywords" : [],
-  "author" : "",
+  "name" : "TzTime",
+  "description" : "Time-zone-aware Date replacement for JavaScript",
+  "homepage" : "https://github.com/foxbunny/tztime",
+  "keywords" : ['date', 'time', 'formatting', 'time zone', 'delta', 'conversion', 'parsing'],
+  "author" : "Branko Vukelic <branko@brankovukelic.com>",
   "bugs": {
-    "url": "",
-    "email": ""
+    "url": "https://github.com/foxbunny/tztime/issues",
+    "email": "branko@brankovukelic.com"
   },
   "license": {
-    "type": "",
-    "url": ""
+    "type": "MIT",
+    "url": "https://raw.github.com/foxbunny/tztime/master/LICENSE"
   },
   "dependencies" : {
   },
@@ -21,7 +21,7 @@
     "mocha": "*",
     "chai": "*"
   },
-  "main": "",
+  "main": "tztime.js",
   "volo": {
     "dependencies": {
     },
