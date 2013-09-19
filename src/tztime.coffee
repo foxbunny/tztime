@@ -35,8 +35,14 @@ define (require) ->
   # methods like `#getTimezoneOffset()` have been modified to support time zone
   # manipulation.
   #
-  # In general, you can assume that an undocumented method that exists in
-  # native Date global works as expected.
+  # During development, we have decided to not inherit from the Date prototype
+  # directly. Therefore, TzTime provides a subset of methods that Date
+  # prototype offers. Deprecated or seldom used methods have been omitted.
+  #
+  # While some of the methods are simple wrappers around native methods, others
+  # may provide altered behavior. For example, all setters will return the
+  # object for chaining instaed of a numeric value. Most getters, on the other
+  # hand, should work as expected.
   #
   class TzTime
 
@@ -92,6 +98,8 @@ define (require) ->
       'Milliseconds'
     ]
 
+    # ### Syntax
+    #
     #     [new] TzTime();
     #     [new] TzTime(value);
     #     [new] TzTime(dateString);
