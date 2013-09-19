@@ -100,6 +100,8 @@ define (require) ->
 
     # ### Syntax
     #
+    # The Date-compatible syntax is as follows:
+    #
     #     [new] TzTime();
     #     [new] TzTime(value);
     #     [new] TzTime(dateString);
@@ -110,7 +112,8 @@ define (require) ->
     # documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
     # for more information.
     #
-    # There are a few non-standard forms added.
+    # There are a few non-compatible syntaxes that were added to take advantage
+    # of features unique to TzTime:
     #
     #     [new] TimeZone(year, month, day, hour, minute, second, millsecond, tz);
     #     [new] TimeZone(dateObject);
