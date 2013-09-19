@@ -27,7 +27,7 @@ define = ((root) ->
 define (require) ->
   DAY_MS = 86400000
 
-  # ## `TzTime`
+  # ## `TzTime` constructor
   #
   # Crates a JavaScript Date object with enhanced API and time zone awareness.
   #

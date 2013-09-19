@@ -4,7 +4,7 @@ This is a drop-in replacement for JavaScript's native Date constructor which
 adds many useful and arguably saner API enhancements, and makes it
 time-zone-aware.
 
- + [`TzTime`](#tztime)
+ + [`TzTime` constructor](#tztime-constructor)
  + [Private properties](#private-properties)
    - [`#__tz__`](#tz)
    - [`#__datetime__`](#datetime)
@@ -18,6 +18,7 @@ time-zone-aware.
    - [`#minutes`](#minutes)
    - [`#seconds`](#seconds)
    - [`#milliseconds`](#milliseconds)
+   - [`#dayOfYear`](#dayofyear)
    - [`#utcYear`](#utcyear)
    - [`#utcMonth`](#utcmonth)
    - [`#utcDate`](#utcdate)
@@ -71,6 +72,8 @@ time-zone-aware.
    - [`#valueOf()`](#valueof)
    - [`#getTime()`](#gettime)
    - [`#setTime(milliseconds)`](#settime-milliseconds)
+   - [`#getDayOfYear()`](#getdayofyear)
+   - [`#setDayOfYear(days)`](#setdayofyear-days)
    - [`#toSource()`](#tosource)
    - [`#toFormat([format])`](#toformat-format)
    - [`#strftime([format])`](#strftime-format)
@@ -88,7 +91,7 @@ time-zone-aware.
    - [`TzTime.platformZone`](#tztime-platformzone)
  + [Static methods](#static-methods)
    - [`TzTime.reorder(d, d1 [, d2...])`](#tztime-reorder-d-d1-d2)
-   - [`TzTime.parse(s, [format])`](#tztime-parse-s-format)
+   - [`TzTime.parse(s, [format, tz])`](#tztime-parse-s-format-tz)
    - [`TzTime.fromJSON`](#tztime-fromjson)
  + [Settings](#settings)
    - [`TzTime.DAY_MS`](#tztime-day_ms)
@@ -112,7 +115,7 @@ time-zone-aware.
    - [`#hour24(h, [pm])`](#hour24-h-pm)
 
 
-## <a name="tztime">`TzTime`</a>
+## <a name="tztime-constructor">`TzTime` constructor</a>
 
 Crates a JavaScript Date object with enhanced API and time zone awareness.
 
@@ -123,10 +126,10 @@ manipulation.
 In general, you can assume that an undocumented method that exists in native
 Date global works as expected.
 
-    new TzTime();
-    new TzTime(value);
-    new TzTime(dateString);
-    new TzTime(year, month, day [, hour, minute, second, millisecond]);
+    [new] TzTime();
+    [new] TzTime(value);
+    [new] TzTime(dateString);
+    [new] TzTime(year, month, day [, hour, minute, second, millisecond]);
 
 
 All constructor arguments are compliant with the standard JavaScript Date
@@ -136,11 +139,13 @@ for more information.
 
 There are a few non-standard forms added.
 
-    new TimeZone(year, month, day, hour, minute, second, millsecond, tz);
-    new TimeZone(dateObject);
-    new TimeZone(tzTimeObject);
-    new TimeZone(str, format); // same as TzTime.parse()
-    new TimeZone(value, tz);
+    [new] TimeZone(year, month, day, hour, minute, second, millsecond, tz);
+    [new] TimeZone(dateObject);
+    [new] TimeZone(tzTimeObject);
+    [new] TimeZone(str, format); // same as TzTime.parse()
+    [new] TimeZone(str, tz); // same as TzTime.parse()
+    [new] TimeZone(str, format, tz); // same as TzTime.parse()
+    [new] TimeZone(value, tz);
 
 
 The `tz` argument is a time zone UTC offset in integer minutes (postive towards
@@ -150,8 +155,14 @@ The `dateObject` and `tzTimeObject` are Date and TzTime objects respectively.
 Constructor will return a completely new instance of those objects and, in case
 of TzTime objects, also retain the time zone offset.
 
+The `str` is a string representation of a date and/or time.
+
+The `format` argument is a formatting string compatible with `TzTime.parse()`
+method.
+
 In the last non-standard form, the `value` is the number of milliseconds since
-Unix epoch (same as the form with a single numeric argument).
+1 January, 1970 UTC, or 'Unix epoch' (same as the form with a single numeric
+argument).
 
 Unlike the JavaScript Date constructor, calling TzTime without the `new`
 keyword has the same behavior as calling it with it.
@@ -253,6 +264,13 @@ Milliseconds in instance's time zone. The value is an integer between 0 and
 999.
 
 Setting values outside the rage will adjust other attributes accordingly.
+
+### <a name="dayofyear">`#dayOfYear`</a>
+
+Number of days since January 1st. The value is an integer between 0 and 365
+(366 for leap years).
+
+Setting values outside the range will adjust other attributes accordingly.
 
 ### <a name="utcyear">`#utcYear`</a>
 
@@ -553,6 +571,17 @@ Returns the number of milliseconds since Unix epoch.
 
 Sets the number of milliseconds since Unix epoch.
 
+### <a name="getdayofyear">`#getDayOfYear()`</a>
+
+Returns the number of days since January 1st.
+
+### <a name="setdayofyear-days">`#setDayOfYear(days)`</a>
+
+Sets the date by setting the number of days since January 1st. The argument is
+an ingteger from 0 to 365 (or 366 in leap years).
+
+Setting values outside the range will adjust other attributes accordingly.
+
 ### <a name="tosource">`#toSource()`</a>
 
 Returns the source code representation.
@@ -699,10 +728,14 @@ Gets the time zone offset of the platform. This is a read-only attribute.
 Reorders the `TzTime` or `Date` objects from earliest to latest. The return
 value is an array.
 
-### <a name="tztime-parse-s-format">`TzTime.parse(s, [format])`</a>
+### <a name="tztime-parse-s-format-tz">`TzTime.parse(s, [format, tz])`</a>
 
 Parse a string `s` and return a `Date` object. The `format` string is used to
 specify the format in which `s` date is represented.
+
+The `tz` argument is a time zone offset to use as an override for the time zone
+found in the string (if any). If it is 0 or `true`, UTC is used instead of an
+offset. If it is undefined or `null`, no time zone override is performed.
 
 A subset of `#toFormat()` tokens is used in parsing.
 
@@ -807,12 +840,12 @@ meta object is later used as source of information for building the final
 ### <a name="tztime-default_format">`TzTime.DEFAULT_FORMAT`</a>
 
 The default format string for formatting and parsing functions. Default is
-'%Y-%m-%dT%H:%M:%f%z'.
+'%Y-%m-%dT%H:%M:%S' (short ISO format without time zone).
 
 ### <a name="tztime-json_format">`TzTime.JSON_FORMAT`</a>
 
 This formatting string is used to parse the date using the `TzTime.fromJSON()`
-method. Default value is '%Y-%m-%dT%H:%M:%F%z'.
+method. Default value is '%Y-%m-%dT%H:%M:%F%z' (full ISO exended format).
 
 ## <a name="tztime-utils">`TzTime.utils`</a>
 
