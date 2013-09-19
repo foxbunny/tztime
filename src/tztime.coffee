@@ -182,9 +182,12 @@ define (require) ->
 
       # ## Private properties
       #
-      # There are a few private properties that are used in all TzTime method.
-      # Since there aren't really any privacy in JavaScript, there is just a
-      # convention to not touch these properties.
+      # There are a few private properties that are used in most TzTime
+      # methods. Since JavaScript does not have truly private properties, it is
+      # just a convention not to touch these properties. They are documented
+      # here since it may sometimes be useful to access them for
+      # troubleshooting. Otherwise, you shouldn't expect the API stability
+      # and/or usefulness of using these properties directly.
       #
 
       # ### `#__tz__`
