@@ -78,6 +78,52 @@ describe 'TzTime.parse', () ->
     equal d.hours, 0, 'hours must match'
     equal d.minutes, 0, 'minutes must match'
 
+  it 'should ignore time zone if `utc` flag is set', () ->
+    d = TzTime.parse '2013-12-01 12:00 p.m.', '%Y-%m-%d %i:%M %p'
+    equal d.timezone, TzTime.platformZone
+    d = TzTime.parse '2013-12-01 12:00 p.m.', '%Y-%m-%d %i:%M %p', true
+    equal d.timezone, 0
+    equal d.hours, 12
+
+  it 'should accept a timezone offset instead of utc flag', () ->
+    d = TzTime.parse '2013-12-01 12:00 p.m.', '%Y-%m-%d %i:%M %p'
+    equal d.timezone, TzTime.platformZone
+    d = TzTime.parse '2013-12-01 12:00 p.m.', '%Y-%m-%d %i:%M %p', 240
+    equal d.timezone, 240
+    equal d.hours, 12
+
+  it 'should use default format if no format is supplied', () ->
+    d = TzTime.parse '2013-12-01T12:00:00'
+    equal d.timezone, TzTime.platformZone
+    equal d.year, 2013
+    equal d.month, 11
+    equal d.date, 1
+    equal d.hours, 12
+    equal d.minutes, 0
+    equal d.seconds, 0
+    equal d.milliseconds, 0
+
+  it 'should use default format and UTC if no format is supplied', () ->
+    d = TzTime.parse '2013-12-01T12:00:00', true
+    equal d.timezone, 0
+    equal d.year, 2013
+    equal d.month, 11
+    equal d.date, 1
+    equal d.hours, 12
+    equal d.minutes, 0
+    equal d.seconds, 0
+    equal d.milliseconds, 0
+
+    d = TzTime.parse '2013-12-01T12:00:00', 120
+    equal d.timezone, 120
+    equal d.year, 2013
+    equal d.month, 11
+    equal d.date, 1
+    equal d.hours, 12
+    equal d.minutes, 0
+    equal d.seconds, 0
+    equal d.milliseconds, 0
+
 describe 'TzTime.fromJSON', () ->
   it 'should parse a JSON-generated string', () ->
     d = TzTime 2013, 11, 1, 12, 45, 11, 233, 0

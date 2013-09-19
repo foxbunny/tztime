@@ -352,6 +352,44 @@ describe('TzTime', function() {
       return equal(d.getHours(), 8);
     });
   });
+  describe('#getDayOfYear()', function() {
+    return it('should return the number of days from Jan 1st', function() {
+      var d;
+      d = TzTime(2013, 0, 1);
+      equal(d.getDayOfYear(), 1);
+      d = TzTime(2013, 0, 20);
+      equal(d.getDayOfYear(), 20);
+      d = TzTime(2013, 2, 20);
+      return equal(d.getDayOfYear(), 79);
+    });
+  });
+  describe('#setDayOfYear()', function() {
+    it('should set the date by setting day of year', function() {
+      var d;
+      d = TzTime(2013, 8, 1);
+      d.setDayOfYear(1);
+      equal(d.month, 0);
+      equal(d.date, 1);
+      d.setDayOfYear(20);
+      equal(d.month, 0);
+      equal(d.date, 20);
+      d.setDayOfYear(79);
+      equal(d.month, 2);
+      return equal(d.date, 20);
+    });
+    return it('should behave as expected when setting outside range', function() {
+      var d;
+      d = TzTime(2013, 8, 1);
+      d.setDayOfYear(385);
+      equal(d.month, 0);
+      equal(d.date, 20);
+      d = TzTime(2013, 8, 1);
+      d.setDayOfYear(-20);
+      equal(d.year, 2012);
+      equal(d.month, 11);
+      return equal(d.date, 11);
+    });
+  });
   describe('#year', function() {
     it('should set year', function() {
       var d;
@@ -624,6 +662,39 @@ describe('TzTime', function() {
       d = TzTime(2013, 8, 1, 8, 20, 1, 500);
       d.milliseconds += 500;
       return equal(d.seconds, 2);
+    });
+  });
+  describe('#dayOfYear', function() {
+    it('should return the day of year', function() {
+      var d;
+      d = TzTime(2013, 0, 1);
+      equal(d.dayOfYear, 1);
+      d = TzTime(2013, 0, 20);
+      equal(d.dayOfYear, 20);
+      d = TzTime(2013, 2, 20);
+      return equal(d.dayOfYear, 79);
+    });
+    it('should set the date by setting day of year', function() {
+      var d;
+      d = TzTime(2013, 8, 1);
+      d.dayOfYear = 1;
+      equal(d.month, 0);
+      equal(d.date, 1);
+      d.dayOfYear = 20;
+      equal(d.month, 0);
+      equal(d.date, 20);
+      d.dayOfYear = 79;
+      equal(d.month, 2);
+      return equal(d.date, 20);
+    });
+    return it('should work with -= and += operators', function() {
+      var d;
+      d = TzTime(2013, 8, 1);
+      d.dayOfYear += 20;
+      equal(d.date, 21);
+      d.dayOfYear -= 40;
+      equal(d.month, 7);
+      return equal(d.date, 13);
     });
   });
   describe('#utcYear', function() {

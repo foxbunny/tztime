@@ -25,6 +25,7 @@ define = ((root) ->
 
 
 define (require) ->
+  DAY_MS = 86400000
 
   # ## `TzTime`
   #
@@ -117,7 +118,8 @@ define (require) ->
     # objects and, in case of TzTime objects, also retain the time zone offset.
     #
     # In the last non-standard form, the `value` is the number of milliseconds
-    # since Unix epoch (same as the form with a single numeric argument).
+    # since 1 January, 1970 UTC, or 'Unix epoch' (same as the form with a
+    # single numeric argument).
     #
     # Unlike the JavaScript Date constructor, calling TzTime without the `new`
     # keyword has the same behavior as calling it with it.
@@ -299,6 +301,18 @@ define (require) ->
     property 'milliseconds',
       get: () -> @getMilliseconds()
       set: (v) -> @setMilliseconds v
+
+    # ### `#dayOfYear`
+    #
+    # Number of days since January 1st. The value is an integer between 0 and
+    # 365 (366 for leap years).
+    #
+    # Setting values outside the range will adjust other attributes
+    # accordingly.
+    #
+    property 'dayOfYear',
+      get: () -> @getDayOfYear()
+      set: (v) -> @setDayOfYear v
 
     # ### `#utcYear`
     #
@@ -703,6 +717,26 @@ define (require) ->
       return
     ) TzTime.prototype
 
+    # ### `#getDayOfYear()`
+    #
+    # Returns the number of days since January 1st.
+    #
+    getDayOfYear: () ->
+      t = TzTime this.year, 0, 1
+      diff = this.getTime() - t.getTime()
+      Math.round(diff / DAY_MS) + 1
+
+    # ### `#setDayOfYear(days)`
+    #
+    # Sets the date by setting the number of days since January 1st. The
+    # argument is an ingteger from 0 to 365 (or 366 in leap years).
+    #
+    # Setting values outside the range will adjust other attributes
+    # accordingly.
+    #
+    setDayOfYear: (d) ->
+      this.month = 0
+      this.date = d
 
     # ### `#toSource()`
     #
@@ -944,10 +978,15 @@ define (require) ->
       d.sort (d1, d2) -> d1 - d2
       d
 
-    # ### `TzTime.parse(s, [format])`
+    # ### `TzTime.parse(s, [format, tz])`
     #
     # Parse a string `s` and return a `Date` object. The `format` string is
     # used to specify the format in which `s` date is represented.
+    #
+    # The `tz` argument is a time zone offset to use as an override for the
+    # time zone found in the string (if any). If it is 0 or `true`, UTC is used
+    # instead of an offset. If it is undefined or `null`, no time zone
+    # override is performed.
     #
     # A subset of `#toFormat()` tokens is used in parsing.
     #
@@ -979,7 +1018,15 @@ define (require) ->
     # If `format` string is omitted, it will default to
     # `TzTime.DEFAULT_FORMAT`.
     #
-    TzTime.parse = (s, format=TzTime.DEFAULT_FORMAT) ->
+    TzTime.parse = (s, format, tz) ->
+      if typeof format isnt 'string'
+        tz = format
+        format = TzTime.DEFAULT_FORMAT
+      if not format?
+        format = TzTime.DEFAULT_FORMAT
+      if not utc?
+        utc = null
+
       ## Escape all regexp special characters
       rxp = format.replace /\\/, '\\\\'
       for schr in TzTime.REGEXP_CHARS
@@ -1026,6 +1073,11 @@ define (require) ->
 
       if meta.timeAdjust in [true, false]
         meta.hour = TzTime.utils.hour24(meta.hour, meta.timeAdjust)
+
+      if tz is true
+        meta.timezone = 0
+      if typeof tz is 'number'
+        meta.timezone = tz
 
       ## Create the `TzTime` object using meta data
       new TzTime meta.year,
@@ -1378,14 +1430,15 @@ define (require) ->
   # ### `TzTime.DEFAULT_FORMAT`
   #
   # The default format string for formatting and parsing functions. Default is
-  # '%Y-%m-%dT%H:%M:%f%z'.
+  # '%Y-%m-%dT%H:%M:%S' (short ISO format without time zone).
   #
-  TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z'
+  TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
   # ### `TzTime.JSON_FORMAT`
   #
   # This formatting string is used to parse the date using the
-  # `TzTime.fromJSON()` method. Default value is '%Y-%m-%dT%H:%M:%F%z'.
+  # `TzTime.fromJSON()` method. Default value is '%Y-%m-%dT%H:%M:%F%z' (full
+  # ISO exended format).
   #
   TzTime.JSON_FORMAT = '%Y-%m-%dT%H:%M:%F%z'
 

@@ -25,6 +25,7 @@ define = (function(root) {
 
 define(function(require) {
   var DAY_MS, TzTime;
+  DAY_MS = 86400000;
   TzTime = (function() {
     var METHODS, NON_TZ_AWARE_GETTERS, NON_TZ_AWARE_SETTERS, TZ_AWARE_METHODS, m, property, staticProperty, wrap, wrapReturn, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
 
@@ -201,6 +202,15 @@ define(function(require) {
       }
     });
 
+    property('dayOfYear', {
+      get: function() {
+        return this.getDayOfYear();
+      },
+      set: function(v) {
+        return this.setDayOfYear(v);
+      }
+    });
+
     property('utcYear', {
       get: function() {
         return this.getUTCFullYear();
@@ -349,6 +359,18 @@ define(function(require) {
       }
     })(TzTime.prototype);
 
+    TzTime.prototype.getDayOfYear = function() {
+      var diff, t;
+      t = TzTime(this.year, 0, 1);
+      diff = this.getTime() - t.getTime();
+      return Math.round(diff / DAY_MS) + 1;
+    };
+
+    TzTime.prototype.setDayOfYear = function(d) {
+      this.month = 0;
+      return this.date = d;
+    };
+
     TzTime.prototype.toSource = function() {
       return "(new TzTime(" + (this.getTime()) + ", " + this.timezone + "))";
     };
@@ -467,10 +489,17 @@ define(function(require) {
       return d;
     };
 
-    TzTime.parse = function(s, format) {
-      var converters, fn, idx, key, matches, meta, parseTokenRe, parseTokens, rxp, schr, _len5, _len6, _n, _o, _ref1, _ref2;
+    TzTime.parse = function(s, format, tz) {
+      var converters, fn, idx, key, matches, meta, parseTokenRe, parseTokens, rxp, schr, utc, _len5, _len6, _n, _o, _ref1, _ref2;
+      if (typeof format !== 'string') {
+        tz = format;
+        format = TzTime.DEFAULT_FORMAT;
+      }
       if (format == null) {
         format = TzTime.DEFAULT_FORMAT;
+      }
+      if (typeof utc === "undefined" || utc === null) {
+        utc = null;
       }
       rxp = format.replace(/\\/, '\\\\');
       _ref1 = TzTime.REGEXP_CHARS;
@@ -517,6 +546,12 @@ define(function(require) {
       }
       if ((_ref2 = meta.timeAdjust) === true || _ref2 === false) {
         meta.hour = TzTime.utils.hour24(meta.hour, meta.timeAdjust);
+      }
+      if (tz === true) {
+        meta.timezone = 0;
+      }
+      if (typeof tz === 'number') {
+        meta.timezone = tz;
       }
       return new TzTime(meta.year, meta.month, meta.date, meta.hour, meta.minute, meta.second, meta.millisecond, meta.timezone);
     };
@@ -850,7 +885,7 @@ define(function(require) {
       };
     }
   };
-  TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%f%z';
+  TzTime.DEFAULT_FORMAT = '%Y-%m-%dT%H:%M:%S';
   TzTime.JSON_FORMAT = '%Y-%m-%dT%H:%M:%F%z';
   TzTime.utils = {
     repeat: function(s, count) {
