@@ -92,10 +92,10 @@ define (require) ->
       'Milliseconds'
     ]
 
-    #     new TzTime();
-    #     new TzTime(value);
-    #     new TzTime(dateString);
-    #     new TzTime(year, month, day [, hour, minute, second, millisecond]);
+    #     [new] TzTime();
+    #     [new] TzTime(value);
+    #     [new] TzTime(dateString);
+    #     [new] TzTime(year, month, day [, hour, minute, second, millisecond]);
     #
     # All constructor arguments are compliant with the standard JavaScript Date
     # constructor arguments. Please refer to [Date
@@ -104,11 +104,13 @@ define (require) ->
     #
     # There are a few non-standard forms added.
     #
-    #     new TimeZone(year, month, day, hour, minute, second, millsecond, tz);
-    #     new TimeZone(dateObject);
-    #     new TimeZone(tzTimeObject);
-    #     new TimeZone(str, format); // same as TzTime.parse()
-    #     new TimeZone(value, tz);
+    #     [new] TimeZone(year, month, day, hour, minute, second, millsecond, tz);
+    #     [new] TimeZone(dateObject);
+    #     [new] TimeZone(tzTimeObject);
+    #     [new] TimeZone(str, format); // same as TzTime.parse()
+    #     [new] TimeZone(str, tz); // same as TzTime.parse()
+    #     [new] TimeZone(str, format, tz); // same as TzTime.parse()
+    #     [new] TimeZone(value, tz);
     #
     # The `tz` argument is a time zone UTC offset in integer minutes (postive
     # towards East, and negative towards West).
@@ -116,6 +118,11 @@ define (require) ->
     # The `dateObject` and `tzTimeObject` are Date and TzTime objects
     # respectively. Constructor will return a completely new instance of those
     # objects and, in case of TzTime objects, also retain the time zone offset.
+    #
+    # The `str` is a string representation of a date and/or time.
+    #
+    # The `format` argument is a formatting string compatible with
+    # `TzTime.parse()` method.
     #
     # In the last non-standard form, the `value` is the number of milliseconds
     # since 1 January, 1970 UTC, or 'Unix epoch' (same as the form with a
@@ -143,10 +150,14 @@ define (require) ->
           else
             instance = new Date yr
         when 2
-          if typeof yr is 'string' and typeof mo is 'string'
+          if typeof yr is 'string'
             return TzTime.parse yr, mo
           instance = new Date yr
           @__tz__ = mo
+        when 3
+          if typeof yr is 'string'
+            return TzTime.parse yr, mo, dy
+          instance = new Date yr, mo, dy
         when 8
           ## When time zone is passed as an argument, first create the the unix
           ## epoch using other arguments as if they were UTC, then shift the

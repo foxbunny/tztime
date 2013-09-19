@@ -87,9 +87,35 @@ describe 'TzTime', () ->
 
     it 'should behave as TzTime.parse() if passed two strings', () ->
       d = TzTime '2013-03-03', '%Y-%m-%d'
+      equal d.timezone, TzTime.platformZone
       equal d.year, 2013
       equal d.month, 2
       equal d.date, 3
+
+    it 'should accept format string and timezone', () ->
+      d = TzTime '2013-03-03', '%Y-%m-%d', -360
+      equal d.timezone, -360
+      equal d.year, 2013
+      equal d.month, 2
+      equal d.date, 3
+
+    it 'should also accept the version without format string', () ->
+      d = TzTime '2013-03-03T12:00:00', -360
+      equal d.timezone, -360
+      equal d.year, 2013
+      equal d.month, 2
+      equal d.date, 3
+      equal d.hours, 12
+      equal d.minutes, 0
+
+    it 'should also accept no format string and boolean timezone', () ->
+      d = TzTime '2013-03-03T12:00:00', true
+      equal d.timezone, 0
+      equal d.year, 2013
+      equal d.month, 2
+      equal d.date, 3
+      equal d.hours, 12
+      equal d.minutes, 0
 
     it 'should take unix epoch and timezone', () ->
       d = TzTime 2013, 8, 1, 12, 34, 20, 220, 240

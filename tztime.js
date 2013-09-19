@@ -99,11 +99,17 @@ define(function(require) {
           }
           break;
         case 2:
-          if (typeof yr === 'string' && typeof mo === 'string') {
+          if (typeof yr === 'string') {
             return TzTime.parse(yr, mo);
           }
           instance = new Date(yr);
           this.__tz__ = mo;
+          break;
+        case 3:
+          if (typeof yr === 'string') {
+            return TzTime.parse(yr, mo, dy);
+          }
+          instance = new Date(yr, mo, dy);
           break;
         case 8:
           t = Date.UTC(yr, mo, dy, hr, mi, se, ms);
