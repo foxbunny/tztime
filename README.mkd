@@ -1,4 +1,4 @@
-# TzTime
+# TzTime.JS
 
 Time-zone-aware drop-in Date object replacement for JavaScript.
 
