@@ -1,5 +1,5 @@
 {
-  "name" : "TzTime",
+  "name" : "tztime",
   "description" : "Time-zone-aware Date replacement for JavaScript",
   "homepage" : "https://github.com/foxbunny/tztime",
   "keywords" : ["date", "time", "formatting", "time zone", "delta", 
