@@ -142,6 +142,23 @@ define (require) ->
     # Unlike the JavaScript Date constructor, calling TzTime without the `new`
     # keyword has the same behavior as calling it with it.
     #
+    # Examples:
+    #
+    #     var d;
+    #     d = TzTime(2013, 8, 1);
+    #     // Just like Date constructor, midnight of Sep 1st, 2013
+    #
+    #     d = TzTime('2013 Sep 1 11:23 a.m.', '%Y %b %D $i:%M %p');
+    #     // parses into 11:23 on Sep 1st 2013
+    #
+    #     d = new Date();
+    #     d = TzTime(d);
+    #     // Converts a date instance into TzTime
+    #
+    #     d = new Date();
+    #     d = TzTime(d.getTime(), -240);
+    #     // Converts a date instance into TzTime and sets time zone to UTC-4
+    #
     constructor: (yr, mo, dy, hr=0, mi=0, se=0, ms=0, tz=null) ->
 
       if not (this instanceof TzTime)
@@ -195,8 +212,8 @@ define (require) ->
       # Stores the currently set timezone offset. This property is used to
       # calcualte the correct UTC time. Please do not override this property.
       #
-      # To set the time zone use either `#timezone` attribute, or
-      # `#setTimezoneOffset()` method.
+      # To set the time zone use either [`#timezone`](#timezone) attribute, or
+      # [`#setTimezoneOffset()`](#settimezoneoffsetv) method.
       #
       @__tz__ = -instance.getTimezoneOffset() if not @__tz__?
 
@@ -240,6 +257,12 @@ define (require) ->
     # time of the instance remains the same, while the UTC time of the instance
     # is shifted.
     #
+    # Examples:
+    #
+    #     var d = TzTime('2013-09-01T11:45:00', 0);
+    #     d.timezone === 0;  // true because we set it in constructor
+    #     d.timezone = 240   // Set to UTC+4
+    #
     property 'timezone',
       get: () -> -@getTimezoneOffset()
       set: (v) -> @setTimezoneOffset -v
@@ -247,6 +270,15 @@ define (require) ->
     # ### `#year`
     #
     # Full integer year in instance's time zone. The value is an integer.
+    #
+    # Examples:
+    #
+    #     var d = TzTime('2013-09-01T11:45:00', 0);
+    #     d.year === 2013;  // true
+    #     d.year += 2
+    #     d.year === 2015;  // true
+    #     d.year = 2011;
+    #     d.year === 2011;  // true
     #
     property 'year',
       get: () -> @getFullYear()
@@ -259,6 +291,19 @@ define (require) ->
     #
     # Setting values outside the rage will adjust other attributes accordingly.
     #
+    # Examples:
+    #
+    #     var d = TzTime('2013-09-01T11:45:00', 0);
+    #     d.month === 8;    // true, since it's 0-indexed
+    #     d.month += 2;
+    #     d.month === 10;   // true
+    #     d.month = 3;
+    #     d.month === 3;    // true
+    #
+    #     d.month = 12;     // outside the range
+    #     d.year === 2014;  // true
+    #     d.month = 0;      // 11 is December, so 12 is January next year
+    #
     property 'month',
       get: () -> @getMonth()
       set: (v) -> @setMonth v
@@ -268,6 +313,17 @@ define (require) ->
     # Date in instance's time zone. The value is an integer between 1 and 31.
     #
     # Setting values outside the rage will adjust other attributes accordingly.
+    #
+    # Examples:
+    #
+    #     var d = TzTime('2013-09-01T11:45:00', 0);
+    #     d.date === 1;   // true
+    #     d.date += 22;
+    #     d.date === 23;  // true
+    #
+    #     d.date = 45;    // outside the range
+    #     d.month === 9;  // shifted into October because its outside the range
+    #     d.date === 15;  // September has 30 days, so 45 - 30 is 15th.
     #
     property 'date',
       get: () -> @getDate()
@@ -279,6 +335,16 @@ define (require) ->
     # and 6 where 0 is Sunday and 6 is Saturday.
     #
     # This is a read-only attribute.
+    #
+    # Examples:
+    #
+    #     var d = TzTime('2013-09-01T11:45:00', 0);
+    #     d.day === 0;  // Sunday is 0
+    #     d.date += 2;
+    #     d.day === 2;  // Tuesday
+    #
+    #     d.day = 12;
+    #     TypeError: Cannot assign to day
     #
     property 'day',
       get: () -> @getDay()
@@ -1150,7 +1216,9 @@ define (require) ->
 
   # ### `TzTime.MONTHS`
   #
-  # Month names
+  # Month names.
+  #
+  # Defaults are English full month names (e.g., 'January', 'October', etc).
   #
   TzTime.MONTHS = [
     'January'
@@ -1171,6 +1239,8 @@ define (require) ->
   #
   # Short month names (three-letter abbreviations).
   #
+  # Defaults are English abbreviated month names (e.g., 'Jan', 'Oct', etc)
+  #
   TzTime.MNTH = [
     'Jan'
     'Feb'
@@ -1190,6 +1260,8 @@ define (require) ->
   #
   # Week day names, starting with Sunday.
   #
+  # Defaults are English week day names (e.g., 'Sunday', 'Monday', etc).
+  #
   TzTime.DAYS = [
     'Sunday'
     'Monday'
@@ -1203,6 +1275,8 @@ define (require) ->
   # ### `TzTime.DY`
   #
   # Abbreviated week day names.
+  #
+  # Defaults are English three-letter abbreviations (e.g., 'Sun', 'Mon', etc).
   #
   TzTime.DY = [
     'Sun'
@@ -1218,11 +1292,17 @@ define (require) ->
   #
   # Ante-meridiem shorthand
   #
+  # Default is 'a.m.' (which is an Associated Press style) unlike in most
+  # libraries and platforms.
+  #
   TzTime.AM = 'a.m.'
 
   # ### `TzTime.PM`
   #
   # Post-meridiem shorthand
+  #
+  # Default is 'p.m.' (which is an Associated Press style) unlike in most
+  # libraries and platforms.
   #
   TzTime.PM = 'p.m.'
 
@@ -1231,14 +1311,71 @@ define (require) ->
   #
   # Day the week starts on. 0 is Sunday, 1 is Monday, and so on.
   #
+  # Default value is 0.
+  #
   TzTime.WEEK_START = 0
 
   # ### `TzTime.FORMAT_TOKENS`
   #
-  # Definitions of formatting tokens used by the `#strftime()` method. All
-  # format functions are applied to a `Date` object so the `Date` methods can
-  # be called on `this`.
+  # Definitions of formatting tokens used by the
+  # [`#toFormat()`](#toformat-format) method. All format functions are applied
+  # to a `Date` object so the `Date` methods can be called on `this`.
   #
+  # This variable is an object, that maps formatting tokens (e.g., '%H') to
+  # formatting functions.
+  #
+  # Each formatting function is applied to the date object being formatted and
+  # returns a string representing the value of its token.
+  #
+  # To add new tokens, simply add a new key to this object that represents the
+  # token (it will be used directly in a regexp, so make sure any special
+  # characters are escaped), and assign a function that will do the formatting.
+  # The `this` inside the function represents the date object.
+  #
+  # For example, let's add a token '%o' that will return a date in ordinal
+  # format:
+  #
+  #     TzTime.FORMAT_TOKENS['%o'] = function() {
+  #       var date = '' + this.getDate();
+  #       if (['11', '12', '13'].indexOf(date) >= 0) {
+  #         return date + 'th';
+  #       }
+  #       switch (date.slice(-1)) {
+  #         case '1': return date + 'st';
+  #         case '2': return date + 'nd';
+  #         case '3': return date + 'rd';
+  #         default: return date + 'th';
+  #       }
+  #     };
+  #
+  #     var d1 = new TzTime(2013, 8, 1);
+  #     var d2 = new TzTime(2013, 8, 2);
+  #     var d3 = new TzTime(2013, 8, 3);
+  #     var d4 = new TzTime(2013, 8, 15);
+  #
+  #     console.log(d1.toFormat('On %o'));
+  #     console.log(d2.toFormat('On %o'));
+  #     console.log(d3.toFormat('On %o'));
+  #     console.log(d4.toFormat('On %o'));
+  #
+  #     // On 1st
+  #     // On 2nd
+  #     // On 3rd
+  #     // On 4th
+  #
+  # As you can see, you are not really limited to standard tokens for
+  # formatting.  Developers can use this feature to add tokens that are
+  # specific to the application as well, not just date formatting in general
+  # (e.g., output an entire block of HTML depending on the date's value).
+  #
+  # Note that tokens are not limited to 2 characters nor do they have to start
+  # with a percent character. They are case sensitive, though.
+  #
+  # (If you are wondering why this seemingly very useful token isn't included
+  # by default, it's because it's English only, and this library is supposed to
+  # be easy to localize.)
+  #
+
   TzTime.FORMAT_TOKENS =
     ## Shorthand day-of-week name
     '%a': () -> TzTime.DY[@day]
@@ -1353,6 +1490,57 @@ define (require) ->
   # meta object is later used as source of information for building the final
   # `Date` object.
   #
+  # The meta object has following properties:
+  #
+  #     meta.year // full integer year
+  #     meta.month // 0-indexed month
+  #     meta.date // integer date (as in day of month)
+  #     meta.hour // integer hour in 12- or 24-hour format
+  #     meta.minute // integer minute
+  #     meta.second // integer second
+  #     meta.millisecond // integer millisecond (0 to 999)
+  #     meta.timeAdjust // whether the time is PM (requiring meta.hour + 12)
+  #     meta.teimzone // the time zone offset in minutes (-720 to +720)
+  #
+  # Each parsing function will modify the meta object with its own data. You
+  # can also read the data off the meta object, but you should keep in mind the
+  # order in which parsing functions are executed since you will only be able
+  # to read the data added by the previous parse functions. The order in which
+  # functions are run is determined by the order in which tokens appear in the
+  # format string.
+  #
+  # The regular expression fragment must have all its backslashes escaped. So,
+  # instead of typing `'\d'`, you must type `'\\d'`.
+  #
+  # Let's demonstrate writing a parse function by adding a parse function of
+  # the new token we've added to the [format tokens](#tztime-format_tokens).
+  #
+  #     TzTime.PARSE_RECIPES['%o'] = function() {
+  #         return {
+  #             re: '31st|30th|20th|1\\dth|2?(?:1st|2nd|3rd|[4-9]th)',
+  #             fn: function(s, meta) {
+  #                 meta.date = parseInt(s.slice(0, -2), 10);
+  #             }
+  #         };
+  #     };
+  #
+  #     var s1 = 'December 1st, 2012'
+  #     var s2 = 'April 22nd, 2003'
+  #     var s3 = 'January 11th, 2014'
+  #     var format = '%B %o, %Y'
+  #
+  #     console.log(TzTime.parse(s1, format));
+  #     console.log(TzTime.parse(s2, format));
+  #     console.log(TzTime.parse(s3, format));
+  #
+  # And yes, I know the regexp isn't particularly clever, but it's generally a
+  # good idea to have a regexp that will match only what it needs to.
+  #
+  # (If you are wondering why this seemingly very useful token isn't included
+  # by default, it's because it's English only, and DatetimeJS is supposed to b
+  # easy to localize.)
+  #
+
   TzTime.PARSE_RECIPES =
     '%b': () ->
       re: "#{TzTime.MNTH.join '|'}"
