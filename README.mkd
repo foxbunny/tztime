@@ -27,13 +27,13 @@ Install with NPM:
 
     npm install tztime
 
-## Browser (AMD)
+### Browser (AMD)
 
 Simplly require it as usual:
 
     var TzTime = require('tztime');
 
-## Browser (non-AMD)
+### Browser (non-AMD)
 
 Include a script tag:
 
@@ -42,7 +42,7 @@ Include a script tag:
       var t = new TzTime();
     </script>
 
-## volo projects
+### volo projects
 
 [volo](http://volojs.org/) users can install it by using the github repository:
 
