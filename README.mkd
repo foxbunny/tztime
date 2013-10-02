@@ -237,3 +237,12 @@ The performance issues will be addressed at a later date, though.
 API documentation is available in the [doc directory](doc/tztime.mkd) in
 Markdown format.
 
+## Other libraries
+
+There are also other libraries that are more focused on time zone support
+itself (some are quite robust). If you are only interested in time zone
+support, and not so much in other TzTime features, you may want to look at:
+
+ + [tztimeJS](https://github.com/mde/timezone-js)
+ + [tzTime](https://github.com/lmaccherone/tzTime)
+
