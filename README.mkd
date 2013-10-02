@@ -243,6 +243,6 @@ There are also other libraries that are more focused on time zone support
 itself (some are quite robust). If you are only interested in time zone
 support, and not so much in other TzTime features, you may want to look at:
 
- + [tztimeJS](https://github.com/mde/timezone-js)
+ + [TimezoneJS](https://github.com/mde/timezone-js)
  + [tzTime](https://github.com/lmaccherone/tzTime)
 
