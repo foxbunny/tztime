@@ -91,7 +91,9 @@ The setter-getter combo still works if you prefer that.
 ### Time zone support
 
 Yes, for real. The time zone support is finally available in JavaScript, and
-it's simpler than you'd think.
+it's simpler than you'd think. (Yeah, it's not the first time ever that we have
+time zones in JavaScript, but TzTime offers a more Date-like interface for
+it.)
 
 The `getTimezoneOffset()` now has a `setTimezoneOffset()` counterpart that
 works as expected. There is also a `timezone` attribute that you can use.
@@ -101,7 +103,7 @@ works as expected. There is also a `timezone` attribute that you can use.
     v.getUTCHours() == 14; // true
 
     v.timezone = 120;
-    v.hours == 12; // Hours remain constant, we have just change the time zone
+    v.hours == 12; // Hours remain constant, we have just changed the time zone
 
     v.getUTCHours() == 10; // true
 
